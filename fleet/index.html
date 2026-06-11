@@ -11,11 +11,11 @@
           </svg>
         {% endif %}
       </span>
-      {{ site.name }}<span>&nbsp;Journal</span>
+      {{ site.name }}
     </a>
     <div class="nav-links">
       <a href="{{ site.website }}">Home</a>
-      <a href="{{ site.blog_prefix }}/">Journal</a>
+      <a href="{{ site.blog_prefix }}/">Blog</a>
       <a href="{{ site.website }}">Visit website</a>
     </div>
     <a href="{{ site.website }}" class="nav-cta">
@@ -29,7 +29,6 @@
 {# ---- blog hero ---- #}
 <header class="blog-hero">
   <div class="wrap">
-    <span class="eyebrow"><span class="dot"></span>The Journal</span>
     <h1>Fresh reads from <span class="hl">{{ site.name }}</span>.</h1>
     <p class="lede">Guides, stories, and updates — written with the same care we put into everything we do.</p>
   </div>
@@ -98,7 +97,7 @@
               </svg>
             {% endif %}
           </span>
-          {{ site.name }}<span>&nbsp;Journal</span>
+          {{ site.name }}
         </a>
         <p>Stories and guides from the {{ site.name }} team — straight from the source.</p>
       </div>
@@ -113,7 +112,7 @@
         <h5>{{ site.name }}</h5>
         <ul>
           <li><a href="{{ site.website }}">Visit website</a></li>
-          <li><a href="{{ site.public_blog_url() }}">The Journal</a></li>
+          <li><a href="{{ site.public_blog_url() }}">Blog</a></li>
         </ul>
       </div>
     </div>

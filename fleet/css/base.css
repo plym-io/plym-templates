@@ -134,7 +134,7 @@ body{margin:0;background:var(--color-background)}
 }
 .nav-cta:hover{background:var(--green-600);color:#fff}
 .nav-cta .pulse{
-  width:6px;height:6px;border-radius:50%;background:var(--green-300);
+  width:6px;height:6px;border-radius:50%;background:var(--green-300);color:#fff;
   box-shadow:0 0 0 0 color-mix(in srgb, var(--green-300) 70%, transparent);
   animation:pulse 1.6s infinite;
 }

@@ -1,0 +1,99 @@
+<header class="nb-header">
+  <a class="nb-brand" href="/">
+    {% if site.logo %}
+      <img class="nb-logo" src="{{ site.logo }}" alt="{{ site.name }}">
+    {% else %}
+      <span class="nb-brand-mark">{{ site.name }}</span>
+    {% endif %}
+  </a>
+  <a class="nb-back" href="{{ site.blog_prefix }}/">← Index</a>
+</header>
+
+{% macro render_toc(items) %}
+  <ol class="nb-toc-list">
+    {% for item in items %}
+      <li>
+        <a href="#{{ item.id }}">{{ item.name }}</a>
+        {% if item.children %}{{ render_toc(item.children) }}{% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+{% endmacro %}
+
+<main class="nb-post-layout">
+
+  <aside class="nb-toc-col">
+    {% if post.toc and post.toc|length > 1 %}
+      <nav class="nb-toc" aria-label="Table of contents">
+        <p class="nb-toc-label">Contents</p>
+        {{ render_toc(post.toc) }}
+      </nav>
+    {% endif %}
+  </aside>
+
+  <article class="nb-article-col">
+
+    {% if post.tags %}
+      <ul class="nb-tags nb-article-tags">
+        {% for tag in post.tags %}<li>{{ tag.name }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+
+    <h1 class="nb-article-title">{{ post.title }}</h1>
+
+    {% if post.excerpt %}
+      <p class="nb-article-lede">{{ post.excerpt }}</p>
+    {% endif %}
+
+    <p class="nb-meta nb-article-meta">
+      <span>{{ post.author.display_name }}</span>
+      {% if post.published_at %}
+        <span class="nb-meta-sep" aria-hidden="true">/</span>
+        <time datetime="{{ post.published_at }}">{{ post.published_at.strftime('%B %d, %Y') }}</time>
+      {% endif %}
+      <span class="nb-meta-sep" aria-hidden="true">/</span>
+      <span>{{ post.reading_time }} min read</span>
+    </p>
+
+    {% if post.cover %}
+      <figure class="nb-cover">
+        <img src="{{ post.cover }}" alt="" fetchpriority="high" decoding="async">
+      </figure>
+    {% endif %}
+
+    <div class="nb-content">
+      {{ post.content | safe }}
+    </div>
+
+    <div class="nb-author">
+      {% if post.author.avatar_url %}
+        <img class="nb-author-avatar"
+             src="{{ post.author.avatar_url }}"
+             alt="{{ post.author.display_name }}"
+             loading="lazy" decoding="async">
+      {% else %}
+        <div class="nb-author-avatar nb-author-initials" aria-hidden="true">
+          {{ post.author.display_name[0] | upper }}
+        </div>
+      {% endif %}
+      <div class="nb-author-body">
+        <p class="nb-author-kicker">Written by</p>
+        <p class="nb-author-name">{{ post.author.display_name }}</p>
+        {% if post.published_at %}
+          <p class="nb-author-date">
+            <time datetime="{{ post.published_at }}">{{ post.published_at.strftime('%B %d, %Y') }}</time>
+          </p>
+        {% endif %}
+      </div>
+    </div>
+
+  </article>
+
+  <div class="nb-right-col" aria-hidden="true"></div>
+
+</main>
+
+<footer class="nb-footer">
+  <span>{{ site.name }}</span>
+  <span>Powered by <a href="https://plym.io">plym</a></span>
+</footer>

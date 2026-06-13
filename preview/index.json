@@ -1,0 +1,55 @@
+{
+    "posts": [
+        {
+            "title": "The Age of Measure and Fire",
+            "slug": "the-age-of-measure-and-fire",
+            "excerpt": "There are ages remembered for conquest. There are ages remembered for wealth. Then there was the age when mankind learned to ask *why*. A falling apple became a question. A moving planet became a calculation. Heat became a law. Nature stopped being mystery alone and became something that could be measured, tested, and understood.",
+            "cover": "assets/the-age-of-measure-and-fire.webp",
+            "author": {
+                "name": "Isaac Newton",
+                "avatar": null
+            }
+        },
+        {
+            "title": "Calculus of Conflict",
+            "slug": "calculus-of-conflict",
+            "excerpt": "The history of computing is not merely a story of machines. It is a story of pressure. And few forces apply pressure like war. The long road from counting to computing began with ancient civilizations tracking grain and stars. When nations needed to predict artillery trajectories, crack ciphers, and coordinate logistics across continents, mathematics stopped being an academic exercise. It became infrastructure.",
+            "cover": "assets/calculus-of-conflict.webp",
+            "author": {
+                "name": "Alan Turing",
+                "avatar": null
+            }
+        },
+        {
+            "title": "The First Sparks: Computing Before the Internet",
+            "slug": "the-first-sparks-computing-before-the-internet",
+            "excerpt": "Technology rarely arrives all at once. It appears in fragments. A relay clicking in a lab. A vacuum tube glowing in the dark. A programmer feeding punched cards into a machine that fills an entire room. The history of computing is the story of small breakthroughs that changed the direction of civilization.",
+            "cover": "assets/the-first-sparks-computing-before-the-internet.webp",
+            "author": {
+                "name": "Claude Shannon",
+                "avatar": null
+            }
+        },
+        {
+            "title": "The Machines That Changed Everything: Personal Computing & Ambition",
+            "slug": "the-machines-that-changed-everything",
+            "excerpt": "The personal computer did not arrive quietly. It entered offices, garages, dorm rooms, and boardrooms with the force of a cultural movement. The machines were small. The ambitions were not. In the early 1980s, a computer stopped being something hidden behind corporate walls. It became personal. People bought machines not because they needed more technology, but because they wanted more power. The power to create. The power to publish. The power to compete.",
+            "cover": "assets/the-machines-that-changed-everything.webp",
+            "author": {
+                "name": "Steve Jobs",
+                "avatar": null
+            }
+        },
+        {
+            "title": "The Network of Minds",
+            "slug": "the-network-of-mind",
+            "excerpt": "The Internet is not just a network of computers. It is a network of minds. It is a network of ideas. It is a network of people. It is a network of information. It is a network of everything.",
+            "cover": "assets/the-network-of-mind.webp",
+            "author": {
+                "name": "Vint Cerf",
+                "avatar": null
+            }
+        }
+
+    ]
+}

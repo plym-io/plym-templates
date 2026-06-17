@@ -1,8 +1,5 @@
 name: Render template previews
 
-# Renders demo output for any template that is new (no demo/<name> yet) or
-# whose files changed in the push, then commits the generated demo/<name>
-# back into the repository.
 on:
   push:
     branches: [main]
@@ -10,11 +7,9 @@ on:
       - 'templates/**'
   workflow_dispatch:
 
-# Needed so the job can push the regenerated demo/ output back to the repo.
 permissions:
   contents: write
 
-# Serialize runs per branch so two pushes can't race on the demo/ commit.
 concurrency:
   group: render-previews-${{ github.ref }}
   cancel-in-progress: false
@@ -26,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0          # full history so we can diff the push range
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -45,9 +40,6 @@ jobs:
           set -euo pipefail
           out="$RUNNER_TEMP/targets.txt"
           : > "$out"
-
-          # 1) Templates whose files changed in this push (needs a valid base SHA;
-          #    absent on a branch's first push or on workflow_dispatch).
           base=""
           if [ -n "${BEFORE:-}" ] \
              && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
@@ -59,15 +51,12 @@ jobs:
               | awk -F/ 'NF>=2 && $2!="" {print $2}' >> "$out"
           fi
 
-          # 2) Templates that have no demo/ output yet (brand-new directories).
           for d in templates/*/; do
             [ -f "${d}template.yaml" ] || continue
             name="$(basename "$d")"
             [ -d "demo/$name" ] || echo "$name" >> "$out"
           done
 
-          # De-dup, drop blanks, and keep only templates that still exist
-          # (a deletion shows up in the diff but must not be rendered).
           : > "$out.final"
           sort -u "$out" | sed '/^$/d' | while IFS= read -r n; do
             [ -f "templates/$n/template.yaml" ] && echo "$n" >> "$out.final"
@@ -85,7 +74,7 @@ jobs:
       - name: Render previews
         if: steps.pick.outputs.has == 'true'
         run: |
-          set -uo pipefail        # no -e: one bad template must not skip the rest
+          set -uo pipefail
           fail=0
           while IFS= read -r name; do
             [ -n "$name" ] || continue
@@ -107,7 +96,6 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Stage only the demo dirs we actually rendered.
           while IFS= read -r name; do
             [ -n "$name" ] || continue
             [ -d "demo/$name" ] && git add "demo/$name"
@@ -117,7 +105,6 @@ jobs:
             echo "No demo changes to commit."
           else
             git commit -m "chore: render demo previews [skip ci]"
-            # Reconcile with any concurrent push, then push back to this branch.
             git pull --rebase --autostash origin "$GITHUB_REF_NAME"
             git push origin "HEAD:$GITHUB_REF_NAME"
           fi

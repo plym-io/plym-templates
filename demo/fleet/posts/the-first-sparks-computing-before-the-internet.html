@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The First Sparks: Computing Before the Internet — fleet</title>
+<link rel="icon" href="../../../preview/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;900&family=Plus+Jakarta+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<style>
+:root{
+  --color-primary:#0B1220;
+  --color-secondary:#5B667A;
+  --color-accent:#0FA958;
+  --color-background:#FAFAF7;
+  --font-heading:'Bricolage Grotesque';
+  --font-body:'Plus Jakarta Sans';
+}
+html,body{margin:0}
+.plym-index,
+.plym-post{
+  /* core, straight from plym config */
+  --ink:        var(--color-primary);
+  --paper:      var(--color-background);
+  --accent:     var(--color-accent);
+
+  /* ink scale (text on paper) */
+  --ink-2: color-mix(in srgb, var(--color-primary) 86%, var(--color-background));
+  --ink-3: var(--color-secondary);
+  --ink-4: color-mix(in srgb, var(--color-secondary) 65%, var(--color-background));
+
+  /* paper / surface scale */
+  --surface: color-mix(in srgb, #ffffff 78%, var(--color-background));
+  --paper-2: color-mix(in srgb, var(--color-primary)  5%, var(--color-background));
+  --paper-3: color-mix(in srgb, var(--color-primary) 10%, var(--color-background));
+  --line:    color-mix(in srgb, var(--color-primary) 12%, var(--color-background));
+  --line-2:  color-mix(in srgb, var(--color-primary) 20%, var(--color-background));
+
+  /* green scale, all derived from the accent */
+  --green-50:  color-mix(in srgb, var(--color-accent)  9%, var(--color-background));
+  --green-100: color-mix(in srgb, var(--color-accent) 18%, var(--color-background));
+  --green-200: color-mix(in srgb, var(--color-accent) 36%, var(--color-background));
+  --green-300: color-mix(in srgb, var(--color-accent) 60%, var(--color-background));
+  --green-600: color-mix(in srgb, var(--color-accent) 86%, #000);
+  --green-700: color-mix(in srgb, var(--color-accent) 64%, #000);
+  --green-800: color-mix(in srgb, var(--color-accent) 48%, #000);
+  --green-900: color-mix(in srgb, var(--color-accent) 32%, #000);
+
+  /* fixed decorative brand highlights (not representable from config) */
+  --gold-soft:#FFE08A;
+  --gold:#C99A3F;
+  --warm: color-mix(in srgb, #FFE08A 22%, var(--color-background));
+
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  --shadow-card:0 1px 0 rgba(13,30,15,.04), 0 8px 22px -10px rgba(13,30,15,.12);
+  --shadow-deep:0 30px 60px -30px rgba(8,55,30,.25), 0 6px 16px -8px rgba(8,55,30,.12);
+
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body), "Plus Jakarta Sans", system-ui, sans-serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+body{margin:0;background:var(--color-background)}
+.plym-index *,
+.plym-post *{box-sizing:border-box}
+
+.plym-index img,
+.plym-post img{max-width:100%;display:block}
+.plym-index a,
+.plym-post a{color:inherit;text-decoration:none}
+
+/* keyboard accessibility — visible focus everywhere */
+.plym-index a:focus-visible,
+.plym-index button:focus-visible,
+.plym-post a:focus-visible,
+.plym-post button:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+  border-radius:4px;
+}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+.wrap-narrow{max-width:760px;margin:0 auto;padding:0 28px}
+
+/* shared display heading look */
+.plym-index h1,.plym-index h2,
+.plym-post h1,.plym-post h2,.plym-post h3,.plym-post h4{
+  font-family:var(--font-heading), "Bricolage Grotesque", serif;
+  letter-spacing:-.025em;
+  font-weight:700;
+}
+
+/* eyebrow pill ------------------------------------------------ */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-mono);
+  font-size:12px;font-weight:700;
+  color:var(--green-700);
+  text-transform:uppercase;letter-spacing:.12em;
+  background:var(--green-50);
+  border:1px solid var(--green-100);
+  padding:6px 12px;border-radius:999px;
+  margin-bottom:18px;
+}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+/* gold highlight on a word */
+.hl{
+  background:linear-gradient(180deg, transparent 62%, var(--gold-soft) 62%);
+  padding:0 6px;border-radius:4px;
+}
+.accent-ink{color:var(--green-700)}
+
+/* ============ NAV ============ */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb, var(--paper) 82%, transparent);
+  backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 0;gap:24px;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-heading), "Bricolage Grotesque", serif;
+  font-weight:700;font-size:22px;letter-spacing:-.02em;
+  color:var(--ink);
+}
+.logo .mark{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg, var(--accent), var(--green-700));
+  display:grid;place-items:center;color:#fff;overflow:hidden;
+  box-shadow:0 4px 12px -4px color-mix(in srgb, var(--accent) 50%, transparent), inset 0 1px 0 rgba(255,255,255,.25);
+  flex-shrink:0;
+}
+.logo .mark svg{width:18px;height:18px}
+.logo .mark img{width:100%;height:100%;object-fit:cover}
+/* when a real logo image is supplied, drop the decorative chip (gradient/shadow/rounding) */
+.logo .mark:has(img){background:none;border-radius:0;box-shadow:none}
+.logo span{color:var(--green-700)}
+.nav-links{display:flex;gap:30px;align-items:center}
+.nav-links a{font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.nav-links a:hover{color:var(--green-700)}
+a.nav-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--ink);color:#fff;
+  padding:10px 16px;border-radius:999px;
+  font-size:13px;font-weight:700;flex-shrink:0;
+}
+.nav-cta:hover{background:var(--green-600);color:#fff}
+.nav-cta .pulse{
+  width:6px;height:6px;border-radius:50%;background:var(--green-300);color:#fff;
+  box-shadow:0 0 0 0 color-mix(in srgb, var(--green-300) 70%, transparent);
+  animation:pulse 1.6s infinite;
+}
+.nav-cta svg{width:13px;height:13px}
+@keyframes pulse{70%{box-shadow:0 0 0 6px color-mix(in srgb, var(--green-300) 0%, transparent)}}
+
+/* ============ BLOG HERO (index) ============ */
+.blog-hero{
+  position:relative;overflow:hidden;
+  padding:84px 0 56px;
+}
+.blog-hero::before{
+  content:"";position:absolute;
+  top:-160px;right:-160px;width:560px;height:560px;
+  background:radial-gradient(circle, color-mix(in srgb, var(--green-200) 60%, transparent), transparent 60%);
+  border-radius:50%;z-index:0;
+}
+.blog-hero::after{
+  content:"";position:absolute;
+  bottom:-220px;left:-180px;width:480px;height:480px;
+  background:radial-gradient(circle, color-mix(in srgb, var(--gold-soft) 45%, transparent), transparent 60%);
+  border-radius:50%;z-index:0;
+}
+.blog-hero .wrap{position:relative;z-index:2}
+.blog-hero h1{
+  font-size:clamp(40px, 6vw, 76px);
+  line-height:1;letter-spacing:-.035em;
+  margin:0;max-width:14ch;
+}
+.blog-hero .lede{
+  font-size:18px;color:var(--ink-3);
+  max-width:560px;margin:22px 0 0;line-height:1.55;
+}
+
+/* ============ POSTS GRID (index) ============ */
+.blog-main{padding:8px 0 100px}
+.posts-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+}
+.post-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:22px;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.post-card:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--shadow-deep);
+  border-color:var(--green-200);
+}
+.post-card .cover{
+  display:block;aspect-ratio:16/10;overflow:hidden;
+  background:var(--paper-2);
+}
+.post-card .cover img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .4s ease;
+}
+.post-card:hover .cover img{transform:scale(1.04)}
+.post-card .card-body{
+  padding:22px;display:flex;flex-direction:column;flex:1;gap:0;
+}
+.post-card.no-cover .card-body{padding-top:26px}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.tag{
+  font-family:var(--font-mono);
+  font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--green-700);
+  background:var(--green-50);
+  border:1px solid var(--green-100);
+  padding:4px 9px;border-radius:999px;
+}
+.post-card h2{
+  font-size:21px;line-height:1.18;margin:0 0 10px;
+}
+.post-card h2 a{color:var(--ink)}
+.post-card h2 a:hover{color:var(--green-700)}
+.post-card .excerpt{
+  font-size:14px;color:var(--ink-3);line-height:1.55;margin:0 0 18px;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.card-foot{
+  margin-top:auto;padding-top:16px;
+  border-top:1px dashed var(--line-2);
+  display:flex;align-items:center;gap:11px;
+}
+.avatar{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  display:grid;place-items:center;overflow:hidden;
+  color:#fff;font-weight:700;font-size:15px;
+  font-family:var(--font-heading), "Bricolage Grotesque", serif;
+  background:linear-gradient(135deg, var(--green-300), var(--green-700));
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.byline{display:flex;flex-direction:column;min-width:0}
+.byline .name{font-size:13.5px;font-weight:700;color:var(--ink-2)}
+.byline .meta{
+  font-family:var(--font-mono);
+  font-size:11px;color:var(--ink-3);margin-top:2px;
+}
+
+/* featured (first) post — full width, horizontal */
+.post-card.feature{
+  grid-column:1 / -1;
+  flex-direction:row;
+  align-items:stretch;
+}
+.post-card.feature .cover{
+  flex:1.1;aspect-ratio:auto;min-height:340px;
+}
+.post-card.feature .card-body{
+  flex:1;justify-content:center;padding:40px;
+}
+.post-card.feature.no-cover .card-body{align-items:flex-start}
+.post-card.feature h2{font-size:clamp(26px, 3vw, 38px);line-height:1.05;margin-bottom:14px}
+.post-card.feature .excerpt{font-size:16px;-webkit-line-clamp:4;max-width:52ch}
+.feature-flag{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--font-mono);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--green-700);
+  margin-bottom:16px;
+}
+.feature-flag .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+/* empty state */
+.empty{
+  grid-column:1 / -1;
+  text-align:center;padding:80px 24px;
+  border:1px dashed var(--line-2);border-radius:22px;
+  background:var(--surface);
+  color:var(--ink-3);
+}
+.empty .em{font-size:40px;display:block;margin-bottom:14px}
+.empty h2{font-size:24px;color:var(--ink);margin:0 0 6px}
+
+/* ============ POST PAGE ============ */
+.post-main{padding:48px 0 100px}
+.post-head{max-width:760px;margin:0 auto;padding:0 28px;text-align:center}
+.back-link{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:700;color:var(--ink-3);
+  margin-bottom:26px;
+}
+.back-link:hover{color:var(--green-700)}
+.back-link svg{width:15px;height:15px}
+.post-head .tags{justify-content:center;margin-bottom:18px}
+.post-head h1{
+  font-size:clamp(34px, 5vw, 60px);
+  line-height:1.04;margin:0;color:var(--ink);
+}
+.post-meta{
+  display:inline-flex;align-items:center;gap:12px;
+  margin-top:26px;
+}
+.post-meta .byline .name{font-size:14px}
+.post-meta .byline{text-align:left}
+.post-cover{
+  margin:48px auto 0;max-width:1000px;padding:0 28px;
+}
+.post-cover img{
+  width:100%;border-radius:24px;
+  box-shadow:var(--shadow-deep);
+  aspect-ratio:16/8;object-fit:cover;
+}
+
+/* table of contents */
+.toc{
+  max-width:760px;margin:48px auto 0;padding:0 28px;
+}
+.toc-inner{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-left:3px solid var(--accent);
+  border-radius:14px;padding:18px 22px;
+}
+.toc-inner .toc-title{
+  font-family:var(--font-mono);
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 10px;
+}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc ul ul{padding-left:16px;margin-top:6px}
+.toc li{margin:6px 0}
+.toc a{font-size:14px;color:var(--ink-2);font-weight:600}
+.toc a:hover{color:var(--green-700)}
+.toc ul ul a{font-size:13px;font-weight:500;color:var(--ink-3)}
+
+/* desktop: lift the TOC out of the centre column into a sticky right sidebar */
+@media (min-width:1001px){
+  .post-body{
+    display:grid;
+    grid-template-columns:minmax(0,760px) 300px;
+    justify-content:center;
+    column-gap:56px;
+    align-items:start;
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+  .post-body .prose{
+    grid-column:1;
+    grid-row:1;
+    margin:54px 0 0;
+    max-width:none;
+    padding:0;
+  }
+  .post-body .toc{
+    grid-column:2;
+    grid-row:1;
+    position:sticky;
+    top:96px;
+    margin:54px 0 0;
+    padding:0;
+    max-width:none;
+    width:auto;
+  }
+}
+
+/* ============ PROSE (rendered markdown) ============ */
+.prose{
+  max-width:760px;margin:54px auto 0;padding:0 28px;
+  font-size:18px;line-height:1.75;color:var(--ink-2);
+}
+.prose > *:first-child{margin-top:0}
+.prose p{margin:0 0 1.4em}
+.prose h2,.prose h3,.prose h4{
+  color:var(--ink);scroll-margin-top:90px;line-height:1.15;
+}
+.prose h2{font-size:30px;margin:2em 0 .6em}
+.prose h3{font-size:23px;margin:1.8em 0 .5em}
+.prose h4{font-size:19px;margin:1.6em 0 .5em}
+.prose h2 .toclink,
+.prose h3 .toclink,
+.prose h4 .toclink{color:inherit}
+.prose h2 .toclink:hover,
+.prose h3 .toclink:hover,
+.prose h4 .toclink:hover{color:var(--green-700)}
+.prose a{
+  color:var(--green-700);font-weight:600;
+  text-decoration:underline;text-decoration-color:var(--green-200);
+  text-underline-offset:3px;
+}
+.prose a:hover{text-decoration-color:var(--green-600)}
+.prose strong{color:var(--ink);font-weight:700}
+.prose ul,.prose ol{margin:0 0 1.4em;padding-left:1.4em}
+.prose li{margin:.5em 0}
+.prose li::marker{color:var(--green-600)}
+.prose img{
+  border-radius:16px;margin:2em auto;box-shadow:var(--shadow-card);
+}
+.prose blockquote{
+  margin:2em 0;padding:6px 24px;
+  border-left:3px solid var(--accent);
+  background:var(--green-50);
+  border-radius:0 14px 14px 0;
+  font-family:var(--font-heading), "Bricolage Grotesque", serif;
+  font-size:21px;font-weight:500;color:var(--ink);line-height:1.45;
+}
+.prose blockquote p{margin:.6em 0}
+.prose hr{
+  border:none;height:1px;background:var(--line-2);margin:3em 0;
+}
+
+/* code */
+.prose :not(pre) > code{
+  font-family:var(--font-mono);font-size:.86em;
+  background:var(--paper-3);
+  color:var(--green-800);
+  padding:.15em .45em;border-radius:6px;
+  border:1px solid var(--line);
+}
+.prose pre{
+  margin:2em 0;padding:20px 22px;
+  background:var(--ink);
+  border-radius:16px;overflow-x:auto;
+  box-shadow:var(--shadow-card);
+  font-size:14.5px;line-height:1.6;
+}
+.prose pre code{
+  font-family:var(--font-mono);
+  background:none;border:none;padding:0;color:#e7e9ee;
+}
+
+/* tables */
+.prose table{
+  width:100%;border-collapse:collapse;margin:2em 0;
+  font-size:15px;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;
+}
+.prose th,.prose td{
+  padding:11px 16px;text-align:left;
+  border-bottom:1px solid var(--line);
+}
+.prose thead th{
+  background:var(--paper-2);
+  font-family:var(--font-mono);font-size:11.5px;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);
+}
+.prose tbody tr:last-child td{border-bottom:none}
+.prose tbody tr:hover{background:var(--paper-2)}
+
+/* task lists, strikethrough, footnotes */
+.prose .task-list-item{list-style:none;margin-left:-1.4em}
+.prose .task-list-item input{
+  margin-right:.6em;accent-color:var(--accent);
+}
+.prose del{color:var(--ink-4)}
+.prose sup a{
+  text-decoration:none;font-weight:700;color:var(--green-700);
+  padding:0 2px;
+}
+.prose .footnote{font-size:14px;color:var(--ink-3)}
+
+/* article footer / tags */
+.post-end{
+  max-width:760px;margin:64px auto 0;padding:40px 28px 0;
+  border-top:1px dashed var(--line-2);
+  text-align:center;
+}
+.post-end .author-card{
+  display:inline-flex;align-items:center;gap:14px;text-align:left;
+}
+.post-end .avatar{width:52px;height:52px;font-size:20px}
+.post-end .name{font-size:16px;font-weight:700;color:var(--ink)}
+.post-end .meta{font-family:var(--font-mono);font-size:12px;color:var(--ink-3);margin-top:3px}
+
+/* ============ FOOTER ============ */
+.site-footer{
+  background:var(--ink);color:#fff;
+  padding:80px 0 36px;margin-top:40px;
+}
+.footer-top{
+  display:grid;grid-template-columns:1.6fr 1fr 1fr;
+  gap:48px;padding-bottom:44px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.footer-brand .logo{color:#fff;margin-bottom:18px}
+.footer-brand .logo span{color:var(--green-300)}
+.footer-brand p{
+  font-size:14px;color:rgba(255,255,255,.6);
+  line-height:1.6;margin:0;max-width:300px;
+}
+.footer-col h5{
+  font-family:var(--font-heading), "Bricolage Grotesque", serif;
+  font-size:14px;font-weight:700;margin:0 0 16px;color:#fff;
+}
+.footer-col ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px}
+.footer-col li a{font-size:13.5px;color:rgba(255,255,255,.6)}
+.footer-col li a:hover{color:#fff}
+.footer-bottom{
+  padding-top:30px;display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:18px;
+}
+.footer-bottom .copy{
+  font-family:var(--font-mono);
+  font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.04em;
+}
+.footer-bottom .copy span{color:var(--gold-soft)}
+.footer-curtain{
+  text-align:center;margin-top:54px;overflow:hidden;
+}
+.footer-curtain .big{
+  font-family:var(--font-heading), "Bricolage Grotesque", serif;
+  font-size:clamp(56px, 14vw, 200px);
+  font-weight:800;letter-spacing:-.05em;line-height:.85;
+  white-space:nowrap;
+  background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.01));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1000px){
+  .posts-grid{grid-template-columns:repeat(2,1fr)}
+  .post-card.feature{flex-direction:column}
+  .post-card.feature .cover{min-height:280px}
+  .post-card.feature .card-body{padding:32px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+  .footer-brand{grid-column:1 / -1}
+}
+@media (max-width:680px){
+  .wrap,.wrap-narrow{padding:0 18px}
+  .nav-links{display:none}
+  .blog-hero{padding:52px 0 40px}
+  .posts-grid{grid-template-columns:1fr}
+  .prose,.toc,.post-head{padding-left:18px;padding-right:18px}
+  .footer-top{grid-template-columns:1fr 1fr}
+  .post-cover{padding:0 18px}
+}
+
+/* ============ MOTION ============ */
+@media (prefers-reduced-motion: reduce){
+  .plym-index *,.plym-post *{
+    animation:none !important;
+    transition:none !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+</style>
+</head>
+<body class="plym-post">
+
+
+
+
+<nav class="nav" aria-label="Primary">
+  <div class="wrap nav-inner">
+    <a href="../index.html" class="logo">
+      <span class="mark">
+        
+          <img src="../../../preview/logo.webp" alt="">
+        
+      </span>
+      fleet
+    </a>
+    <div class="nav-links">
+      <a href="https://plym.io">Home</a>
+      <a href="../index.html">Blog</a>
+      <a href="https://plym.io">Visit website</a>
+    </div>
+    <a href="https://plym.io" class="nav-cta">
+      <span class="pulse"></span>
+      Visit fleet
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</nav>
+
+<main class="post-main">
+  <article>
+    <div class="post-head">
+      <a class="back-link" href="../index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        All posts
+      </a>
+
+      
+        <div class="tags">
+          <span class="tag">Getting Started</span>
+        </div>
+      
+
+      <h1>The First Sparks: Computing Before the Internet</h1>
+
+      <div class="post-meta">
+        <span class="avatar">
+          
+            C
+          
+        </span>
+        <span class="byline">
+          <span class="name">Claude Shannon</span>
+          <span class="meta">
+            May 29, 2026 · 3 min read
+          </span>
+        </span>
+      </div>
+    </div>
+
+    
+      <figure class="post-cover">
+        <img src="../../../preview/assets/the-first-sparks-computing-before-the-internet.webp" alt="" loading="eager" decoding="async">
+      </figure>
+    
+
+    <div class="post-body">
+      
+        <nav class="toc" aria-label="Table of contents">
+          <div class="toc-inner">
+            <p class="toc-title">On this page</p>
+            
+  <ul>
+    
+      <li>
+        <a href="#from-calculation-to-computation">From Calculation to Computation</a>
+        
+  <ul>
+    
+      <li>
+        <a href="#mechanical-beginnings">Mechanical Beginnings</a>
+        
+      </li>
+    
+      <li>
+        <a href="#key-milestones">Key Milestones</a>
+        
+      </li>
+    
+  </ul>
+
+      </li>
+    
+      <li>
+        <a href="#the-age-of-vacuum-tubes">The Age of Vacuum Tubes</a>
+        
+  <ul>
+    
+      <li>
+        <a href="#characteristics">Characteristics</a>
+        
+  <ul>
+    
+      <li>
+        <a href="#a-different-scale">A Different Scale</a>
+        
+      </li>
+    
+  </ul>
+
+      </li>
+    
+  </ul>
+
+      </li>
+    
+      <li>
+        <a href="#programming-emerges">Programming Emerges</a>
+        
+  <ul>
+    
+      <li>
+        <a href="#early-languages">Early Languages</a>
+        
+  <ul>
+    
+      <li>
+        <a href="#why-c-changed-everything">Why C Changed Everything</a>
+        
+      </li>
+    
+  </ul>
+
+      </li>
+    
+  </ul>
+
+      </li>
+    
+      <li>
+        <a href="#networks-connect-the-world">Networks Connect the World</a>
+        
+  <ul>
+    
+      <li>
+        <a href="#before-the-web">Before the Web</a>
+        
+      </li>
+    
+      <li>
+        <a href="#building-blocks">Building Blocks</a>
+        
+      </li>
+    
+  </ul>
+
+      </li>
+    
+      <li>
+        <a href="#lessons-from-early-computing">Lessons From Early Computing</a>
+        
+  <ul>
+    
+      <li>
+        <a href="#patterns-that-repeat">Patterns That Repeat</a>
+        
+  <ul>
+    
+      <li>
+        <a href="#a-final-thought">A Final Thought</a>
+        
+      </li>
+    
+  </ul>
+
+      </li>
+    
+  </ul>
+
+      </li>
+    
+  </ul>
+
+          </div>
+        </nav>
+      
+
+      <div class="prose">
+        <p>Technology rarely arrives all at once. It appears in fragments. A relay clicking in a lab. A vacuum tube glowing in the dark. A programmer feeding punched cards into a machine that fills an entire room.</p>
+<p>The history of computing is the story of small breakthroughs that changed the direction of civilization.</p>
+<h2 id="from-calculation-to-computation">From Calculation to Computation</h2>
+<p>Long before laptops and cloud servers, engineers were trying to solve a simple problem: how do we calculate faster?</p>
+<h3 id="mechanical-beginnings">Mechanical Beginnings</h3>
+<p>Early machines were designed to reduce human effort.</p>
+<ul>
+<li>The abacus accelerated arithmetic.</li>
+<li>Mechanical calculators reduced manual errors.</li>
+<li>Programmable looms introduced the idea of instructions controlling machines.</li>
+<li>Punched cards became a medium for storing information.</li>
+</ul>
+<blockquote>
+<p>Every great technological revolution begins by solving a small, practical problem.</p>
+</blockquote>
+<h3 id="key-milestones">Key Milestones</h3>
+<table>
+<thead>
+<tr>
+<th>Year</th>
+<th>Innovation</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1801</td>
+<td>Jacquard Loom</td>
+<td>Introduced programmable patterns</td>
+</tr>
+<tr>
+<td>1837</td>
+<td>Analytical Engine</td>
+<td>Conceptual foundation of general-purpose computing</td>
+</tr>
+<tr>
+<td>1890</td>
+<td>Hollerith Tabulator</td>
+<td>Automated census processing</td>
+</tr>
+<tr>
+<td>1946</td>
+<td>ENIAC</td>
+<td>Large-scale electronic computation</td>
+</tr>
+<tr>
+<td>1971</td>
+<td>Microprocessor</td>
+<td>Computing became personal</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-age-of-vacuum-tubes">The Age of Vacuum Tubes</h2>
+<p>Electronic computing started with machines that consumed enormous amounts of power.</p>
+<h3 id="characteristics">Characteristics</h3>
+<ul>
+<li>Room-sized hardware</li>
+<li>High heat generation</li>
+<li>Frequent component failures</li>
+<li>Limited memory</li>
+<li>Revolutionary performance for the time</li>
+</ul>
+<h4 id="a-different-scale">A Different Scale</h4>
+<p>A modern smartphone performs billions of operations per second while fitting into a pocket.</p>
+<p>Early computers needed dedicated operators, specialized cooling, and entire facilities.</p>
+<p><code>miniaturization</code> became one of the defining themes of technological progress.</p>
+<h2 id="programming-emerges">Programming Emerges</h2>
+<p>Hardware alone was not enough.</p>
+<p>The real breakthrough came when humans learned to communicate with machines through software.</p>
+<h3 id="early-languages">Early Languages</h3>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Introduced</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Assembly</td>
+<td>1940s</td>
+<td>Low-level machine control</td>
+</tr>
+<tr>
+<td>FORTRAN</td>
+<td>1957</td>
+<td>Scientific computing</td>
+</tr>
+<tr>
+<td>COBOL</td>
+<td>1959</td>
+<td>Business applications</td>
+</tr>
+<tr>
+<td>C</td>
+<td>1972</td>
+<td>Systems programming</td>
+</tr>
+</tbody>
+</table>
+<h4 id="why-c-changed-everything">Why C Changed Everything</h4>
+<p>C balanced performance with portability.</p>
+<p>Many operating systems, compilers, and embedded platforms trace their roots to it.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf(&quot;Hello, World!\n&quot;);
+
+    for (int i = 0; i &lt; 5; i++) {
+        printf(&quot;Iteration %d\n&quot;, i);
+    }
+
+    return 0;
+}
+</code></pre>
+<h2 id="networks-connect-the-world">Networks Connect the World</h2>
+<p>Computers became useful.</p>
+<p>Networks made them transformative.</p>
+<h3 id="before-the-web">Before the Web</h3>
+<p>Researchers connected machines to share information across distances.</p>
+<p>What started as academic experimentation evolved into global infrastructure.</p>
+<blockquote>
+<p>The most important technologies do not replace people. They connect them.</p>
+</blockquote>
+<h3 id="building-blocks">Building Blocks</h3>
+<ul>
+<li>Packet switching</li>
+<li>Routing protocols</li>
+<li>Distributed systems</li>
+<li>Error correction</li>
+<li>Standardized communication</li>
+</ul>
+<h2 id="lessons-from-early-computing">Lessons From Early Computing</h2>
+<p>Technology advances in layers.</p>
+<p>One generation builds the foundation. The next generation builds on top of it.</p>
+<h3 id="patterns-that-repeat">Patterns That Repeat</h3>
+<ol>
+<li>Hardware becomes cheaper.</li>
+<li>Software becomes more capable.</li>
+<li>Networks become faster.</li>
+<li>Access becomes broader.</li>
+<li>New industries emerge.</li>
+</ol>
+<h4 id="a-final-thought">A Final Thought</h4>
+<p>The pioneers of computing were not trying to build social networks, smartphones, or artificial intelligence.</p>
+<p>They were trying to solve difficult problems with limited tools.</p>
+<p>Their success reminds us of a timeless principle:</p>
+<blockquote>
+<p>Great innovations often begin as humble experiments.</p>
+</blockquote>
+      </div>
+    </div>
+
+    <div class="post-end">
+      <div class="author-card">
+        <span class="avatar">
+          
+            C
+          
+        </span>
+        <span class="byline">
+          <span class="name">Claude Shannon</span>
+          <span class="meta">
+            Published May 29, 2026 · 3 min read
+          </span>
+        </span>
+      </div>
+    </div>
+  </article>
+</main>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="https://plym.io" class="logo">
+          <span class="mark">
+            
+              <img src="../../../preview/logo.webp" alt="">
+            
+          </span>
+          fleet
+        </a>
+        <p>Stories and guides from the fleet team — straight from the source.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Explore</h5>
+        <ul>
+          <li><a href="../index.html">All posts</a></li>
+          <li><a href="https://plym.io">Home</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>fleet</h5>
+        <ul>
+          <li><a href="https://plym.io">Visit website</a></li>
+          <li><a href="../index.html">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="copy">© FLEET · MADE WITH ♥️ USING <a href="https://plym.io">PLYM</a></div>
+    </div>
+    <div class="footer-curtain" aria-hidden="true">
+      <div class="big">fleet</div>
+    </div>
+  </div>
+</footer>
+<style>@keyframes plymPvIn{from{opacity:0;transform:translateY(-100%)}to{opacity:1;transform:translateY(0)}}.plym-preview-banner{position:fixed;top:0;left:0;right:0;z-index:2147483647;box-sizing:border-box;width:100%;padding:11px 44px;text-align:center;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:13px;font-weight:600;line-height:1.45;letter-spacing:.01em;color:#241400;background:linear-gradient(180deg,#ffc24b,#ff9e2c);border-bottom:1px solid rgba(0,0,0,.18);box-shadow:0 4px 14px rgba(0,0,0,.18);animation:plymPvIn .4s ease 1s both}.plym-preview-banner strong{font-weight:800}.plym-preview-banner button{position:absolute;top:50%;right:12px;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border:0;border-radius:6px;cursor:pointer;background:rgba(0,0,0,.08);color:#241400;font-size:17px;line-height:1;opacity:.55;transition:opacity .15s,background .15s}.plym-preview-banner button:hover{opacity:1;background:rgba(0,0,0,.16)}</style><div class="plym-preview-banner" role="alert">Preview only — the template's design, <strong>NOT</strong> a page built by the <strong>plym</strong> engine. A real <strong>plym</strong> blog with this template will look identical but with SEO and optimizations baked in.<button type="button" aria-label="Dismiss this notice" onclick="this.parentNode.remove()">&times;</button></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

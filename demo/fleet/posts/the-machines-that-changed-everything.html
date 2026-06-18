@@ -297,14 +297,7 @@ a.nav-cta{
 
 /* ============ POST PAGE ============ */
 .post-main{padding:48px 0 100px}
-.post-head{max-width:760px;margin:0 auto;padding:0 28px;text-align:center}
-.back-link{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:13px;font-weight:700;color:var(--ink-3);
-  margin-bottom:26px;
-}
-.back-link:hover{color:var(--green-700)}
-.back-link svg{width:15px;height:15px}
+.post-head{max-width:920px;margin:0 auto;padding:0 28px;text-align:center}
 .post-head .tags{justify-content:center;margin-bottom:18px}
 .post-head h1{
   font-size:clamp(34px, 5vw, 60px);
@@ -347,11 +340,11 @@ a.nav-cta{
 .toc a:hover{color:var(--green-700)}
 .toc ul ul a{font-size:13px;font-weight:500;color:var(--ink-3)}
 
-/* desktop: lift the TOC out of the centre column into a sticky right sidebar */
+/* desktop: lift the TOC out of the centre column into a sticky left sidebar */
 @media (min-width:1001px){
   .post-body{
     display:grid;
-    grid-template-columns:minmax(0,760px) 300px;
+    grid-template-columns:300px minmax(0,760px);
     justify-content:center;
     column-gap:56px;
     align-items:start;
@@ -359,15 +352,8 @@ a.nav-cta{
     margin:0 auto;
     padding:0 28px;
   }
-  .post-body .prose{
-    grid-column:1;
-    grid-row:1;
-    margin:54px 0 0;
-    max-width:none;
-    padding:0;
-  }
   .post-body .toc{
-    grid-column:2;
+    grid-column:1;
     grid-row:1;
     position:sticky;
     top:96px;
@@ -375,6 +361,13 @@ a.nav-cta{
     padding:0;
     max-width:none;
     width:auto;
+  }
+  .post-body .prose{
+    grid-column:2;
+    grid-row:1;
+    margin:54px 0 0;
+    max-width:none;
+    padding:0;
   }
 }
 
@@ -391,12 +384,15 @@ a.nav-cta{
 .prose h2{font-size:30px;margin:2em 0 .6em}
 .prose h3{font-size:23px;margin:1.8em 0 .5em}
 .prose h4{font-size:19px;margin:1.6em 0 .5em}
-.prose h2 .toclink,
-.prose h3 .toclink,
-.prose h4 .toclink{color:inherit}
-.prose h2 .toclink:hover,
-.prose h3 .toclink:hover,
-.prose h4 .toclink:hover{color:var(--green-700)}
+/* heading anchors (scroll links) must look like plain headings, never links */
+.prose h2 a,.prose h2 .toclink,
+.prose h3 a,.prose h3 .toclink,
+.prose h4 a,.prose h4 .toclink{
+  color:inherit;font-weight:inherit;text-decoration:none;
+}
+.prose h2 a:hover,.prose h2 .toclink:hover,
+.prose h3 a:hover,.prose h3 .toclink:hover,
+.prose h4 a:hover,.prose h4 .toclink:hover{color:var(--green-700)}
 .prose a{
   color:var(--green-700);font-weight:600;
   text-decoration:underline;text-decoration-color:var(--green-200);
@@ -592,14 +588,9 @@ a.nav-cta{
 <main class="post-main">
   <article>
     <div class="post-head">
-      <a class="back-link" href="../index.html">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        All posts
-      </a>
-
       
         <div class="tags">
-          <span class="tag">Deployment</span>
+          <span class="tag">Courage</span>
         </div>
       
 

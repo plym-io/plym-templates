@@ -2,9 +2,11 @@ name: Render template previews
 
 on:
   push:
-    branches: ['main']
+    branches:
+      - main
     paths:
       - 'templates/**'
+      - 'preview/index.json'
   workflow_dispatch:
 
 permissions:
@@ -17,6 +19,7 @@ concurrency:
 jobs:
   render:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,22 +38,31 @@ jobs:
         id: pick
         env:
           BEFORE: ${{ github.event.before }}
-          AFTER:  ${{ github.sha }}
+          AFTER: ${{ github.sha }}
         run: |
           set -euo pipefail
+
           out="$RUNNER_TEMP/targets.txt"
           : > "$out"
-          base=""
+
+          # If preview/index.json changed, render everything
           if [ -n "${BEFORE:-}" ] \
              && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
              && git rev-parse -q --verify "$BEFORE^{commit}" >/dev/null; then
-            base="$BEFORE"
-          fi
-          if [ -n "$base" ]; then
-            git diff --name-only "$base" "$AFTER" -- templates/ \
-              | awk -F/ 'NF>=2 && $2!="" {print $2}' >> "$out"
+
+            if git diff --name-only "$BEFORE" "$AFTER" -- preview/index.json | grep -q .; then
+              echo "preview/index.json changed -> rendering all templates"
+              for d in templates/*/; do
+                [ -f "${d}template.yaml" ] || continue
+                basename "$d" >> "$out"
+              done
+            else
+              git diff --name-only "$BEFORE" "$AFTER" -- templates/ \
+                | awk -F/ 'NF>=2 && $2!="" {print $2}' >> "$out"
+            fi
           fi
 
+          # Also render templates that don't yet have demo output
           for d in templates/*/; do
             [ -f "${d}template.yaml" ] || continue
             name="$(basename "$d")"
@@ -65,7 +77,8 @@ jobs:
 
           if [ -s "$out" ]; then
             echo "has=true" >> "$GITHUB_OUTPUT"
-            echo "Templates to render:"; cat "$out"
+            echo "Templates to render:"
+            cat "$out"
           else
             echo "has=false" >> "$GITHUB_OUTPUT"
             echo "No new or changed templates."
@@ -76,24 +89,30 @@ jobs:
         run: |
           set -uo pipefail
           fail=0
+
           while IFS= read -r name; do
             [ -n "$name" ] || continue
+
             echo "::group::preview.sh $name"
+
             if bash preview.sh "$name"; then
               echo "✓ rendered $name"
             else
               echo "::error::preview.sh failed for '$name'"
               fail=1
             fi
+
             echo "::endgroup::"
           done < "$RUNNER_TEMP/targets.txt"
+
           echo "RENDER_FAIL=$fail" >> "$GITHUB_ENV"
 
       - name: Commit rendered demo output
         if: steps.pick.outputs.has == 'true'
         run: |
           set -euo pipefail
-          git config user.name  "github-actions[bot]"
+
+          git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           while IFS= read -r name; do

@@ -41,11 +41,6 @@
 <main class="post-main">
   <article>
     <div class="post-head">
-      <a class="back-link" href="{{ site.blog_prefix }}/">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        All posts
-      </a>
-
       {% if post.tags %}
         <div class="tags">
           {% for tag in post.tags %}<span class="tag">{{ tag.name }}</span>{% endfor %}

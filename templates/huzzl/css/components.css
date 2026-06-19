@@ -1,3 +1,10 @@
+/* ============================================================
+   Huzzl · components
+   Topbar, hero, post cards, byline, tags, buttons,
+   table of contents (left rail) and the Get-started CTA (right rail).
+   ============================================================ */
+
+/* ---- Buttons -------------------------------------------------------- */
 .hz-btn {
   display: inline-flex;
   align-items: center;
@@ -17,20 +24,21 @@
 }
 .hz-btn:hover {
   transform: translateY(-1px);
-  color: #0b1726;                
-  background: var(--hz-accent);  
+  color: #0b1726;                 /* navy ink on orange — AA legible */
+  background: var(--hz-accent);   /* brand orange on hover */
   box-shadow: 0 14px 30px color-mix(in srgb, var(--hz-accent) 42%, transparent);
 }
 .hz-btn--sm { padding: 0.55em 1.05em; font-size: 0.88rem; }
 .hz-btn--block { width: 100%; justify-content: center; }
 
+/* light button — for use on dark surfaces (e.g. the CTA card) */
 .hz-btn--light {
   color: var(--hz-primary);
   background: #fff;
   box-shadow: 0 12px 26px rgba(4, 16, 28, .28);
 }
 .hz-btn--light:hover {
-  background: var(--hz-accent);  
+  background: var(--hz-accent);   /* matches primary buttons: orange on hover */
   color: #0b1726;
   box-shadow: 0 16px 34px color-mix(in srgb, var(--hz-accent) 46%, transparent);
 }
@@ -38,6 +46,7 @@
 .hz-btn .hz-arrow { transition: transform .15s ease; }
 .hz-btn:hover .hz-arrow { transform: translateX(3px); }
 
+/* ---- Topbar --------------------------------------------------------- */
 .hz-topbar {
   border-bottom: 1px solid var(--hz-line);
   background: color-mix(in srgb, var(--hz-bg) 80%, #fff);
@@ -62,7 +71,14 @@
   color: var(--hz-heading);
   letter-spacing: -0.01em;
 }
-.hz-brand__logo { height: 30px; width: auto; display: block; }
+.hz-brand__logo {
+  height: auto;
+  width: auto;
+  max-height: 30px;
+  max-width: 124px;
+  object-fit: contain;
+  display: block;
+}
 .hz-brand__mark {
   width: 28px;
   height: 28px;
@@ -79,6 +95,7 @@
 }
 .hz-topbar__link:hover { color: var(--hz-accent); }
 
+/* ---- Tags & badges -------------------------------------------------- */
 .hz-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .hz-tag {
   display: inline-block;
@@ -107,6 +124,7 @@
   border-radius: var(--hz-pill);
 }
 
+/* ---- Byline --------------------------------------------------------- */
 .hz-byline {
   display: flex;
   align-items: center;
@@ -126,7 +144,9 @@
 }
 .hz-dot { color: var(--hz-line); }
 
+/* =====================  INDEX PAGE  ================================== */
 
+/* ---- Hero ----------------------------------------------------------- */
 .hz-hero {
   position: relative;
   overflow: hidden;
@@ -134,7 +154,7 @@
   background: var(--hz-hero);
 }
 .hz-hero::after {
- 
+  /* soft radial sheen, top-right */
   content: "";
   position: absolute;
   inset: 0;
@@ -167,6 +187,7 @@
   color: rgba(255, 255, 255, .82);
 }
 
+/* ---- Feed (post list) ----------------------------------------------- */
 .hz-feed {
   max-width: 940px;
   margin: -44px auto 0;
@@ -222,6 +243,7 @@
 .hz-card__excerpt { color: var(--hz-muted); font-size: 0.98rem; margin: 0; }
 .hz-card__body .hz-byline { margin-top: auto; }
 
+/* Empty state */
 .hz-empty {
   max-width: 540px;
   margin: 64px auto;
@@ -229,9 +251,10 @@
   color: var(--hz-muted);
 }
 
+/* ---- Closing CTA band (index) --------------------------------------- */
 .hz-band {
   max-width: 940px;
-  margin: 40px auto 88px;  
+  margin: 40px auto 88px;   /* breathing room before the footer */
   padding: 0 24px;
 }
 .hz-band__inner {
@@ -260,7 +283,9 @@
 .hz-band__sub { margin-top: 8px; color: rgba(255, 255, 255, .82); max-width: 46ch; }
 .hz-band .hz-btn { position: relative; z-index: 1; }
 
+/* =====================  POST PAGE  ================================== */
 
+/* ---- Post header ---------------------------------------------------- */
 .hz-post__head { margin-bottom: 26px; }
 .hz-post__head .hz-tags { margin-bottom: 16px; }
 .hz-post__title {
@@ -282,6 +307,7 @@
   box-shadow: var(--hz-shadow);
 }
 
+/* ---- Left rail · Table of contents ---------------------------------- */
 .hz-toc {
   padding: 22px 20px;
   background: var(--hz-surface);
@@ -318,6 +344,7 @@
 .hz-toc__item--l3 .hz-toc__link { font-size: 0.85rem; }
 .hz-toc__item--l4 .hz-toc__link { font-size: 0.82rem; color: color-mix(in srgb, var(--hz-muted) 88%, #fff); }
 
+/* ---- Right rail · Get-started CTA ----------------------------------- */
 .hz-cta {
   position: relative;
   overflow: hidden;
@@ -376,7 +403,7 @@
   padding-left: 24px;
 }
 .hz-cta__list li::before {
-  content: "\2713";         
+  content: "\2713";          /* check mark */
   position: absolute;
   left: 0;
   top: 0;
@@ -384,6 +411,7 @@
   font-weight: 700;
 }
 
+/* ---- Footer --------------------------------------------------------- */
 .hz-footer {
   border-top: 1px solid var(--hz-line);
   background: color-mix(in srgb, var(--hz-bg) 60%, #fff);
@@ -407,8 +435,9 @@
 .hz-footer__name { color: var(--hz-text); font-weight: 600; }
 .hz-footer__tag { color: var(--hz-muted); font-size: 0.84rem; }
 
+/* ---- Responsive ----------------------------------------------------- */
 @media (max-width: 1080px) {
- 
+  /* On the post page, surface the CTA before the TOC when stacked */
   .hz-rail--cta { order: 2; }
   .hz-main { order: 1; }
   .hz-rail--toc { order: 3; }

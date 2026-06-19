@@ -1,0 +1,16 @@
+# Huzzl — design defaults
+# Mirrors the huzzl.ai brand: petrol-blue primary, orange accent,
+# slate secondary text, and a cool off-white surface.
+
+fonts:
+  heading: Inter
+  body: Inter
+
+colors:
+  primary: "#0f4c6e"     # petrol / teal blue — brand core
+  secondary: "#6b7a89"   # muted slate — meta & supporting text
+  accent: "#ff812d"      # signature orange — CTAs & highlights
+  background: "#f9fbfd"  # cool off-white surface
+
+prism:
+  theme: tomorrow        # dark code blocks that pair with the navy palette

@@ -1,0 +1,89 @@
+/* =============================================================
+   MEMOIR · index.css   (scoped to .plym-index — the blog index)
+   A quiet table of contents for the whole journal: a list of
+   entries set as a book's front matter, divided by leaf rules.
+   ============================================================= */
+
+.plym-index .memoir-index {
+  max-width: var(--m-measure);
+  margin: 0 auto;
+  padding: 1.5rem 1.2rem 2rem;
+}
+
+.plym-index .entry {
+  padding: 1.6rem 0;
+}
+
+.plym-index .entry-kicker {
+  margin: 0 0 .35rem;
+  font-variant: small-caps;
+  letter-spacing: .16em;
+  font-size: .76rem;
+  color: var(--color-accent);
+}
+
+.plym-index .entry-title {
+  margin: 0 0 .4rem;
+  font-size: clamp(1.5rem, 1.2rem + 1.1vw, 2rem);
+  line-height: 1.16;
+}
+.plym-index .entry-title a {
+  color: var(--color-primary);
+  text-decoration: none;
+  background-image: linear-gradient(var(--m-rule-soft), var(--m-rule-soft));
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size .3s var(--m-ease), color .2s var(--m-ease);
+}
+.plym-index .entry-title a:hover {
+  color: var(--color-accent);
+  background-size: 100% 1px;
+}
+
+.plym-index .entry-byline {
+  margin: 0 0 .7rem;
+  font-variant: small-caps;
+  letter-spacing: .06em;
+  font-size: .82rem;
+  color: var(--color-secondary);
+}
+
+.plym-index .entry-excerpt {
+  margin: 0 0 .7rem;
+  text-align: justify;
+  hyphens: auto;
+  text-align-last: left;
+  color: color-mix(in srgb, var(--color-primary) 88%, var(--color-background));
+}
+
+.plym-index .entry-more {
+  font-variant: small-caps;
+  letter-spacing: .1em;
+  font-size: .82rem;
+  text-decoration: none;
+  color: var(--color-accent);
+}
+.plym-index .entry-more::after {
+  content: " \2192";                       /* → */
+  transition: margin-left .2s var(--m-ease);
+}
+.plym-index .entry-more:hover::after { margin-left: .25em; }
+
+.plym-index .memoir-empty {
+  text-align: center;
+  font-style: italic;
+  color: var(--color-secondary);
+  padding: 3rem 0;
+}
+
+.plym-index .memoir-foot {
+  max-width: var(--m-measure);
+  margin: 0 auto;
+  padding: 1rem 1.2rem 3rem;
+  text-align: center;
+  font-variant: small-caps;
+  letter-spacing: .18em;
+  font-size: .75rem;
+  color: var(--color-secondary);
+}

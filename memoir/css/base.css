@@ -1,0 +1,277 @@
+/* =============================================================
+   MEMOIR · base.css
+   A plym template — old-world, e-ink, grainy paper, inked serif.
+   Every colour and typeface is driven by plym's injected
+   variables (var(--color-*), var(--font-*)); tints are derived
+   from them with color-mix so the whole sheet re-themes cleanly.
+   ============================================================= */
+
+:root {
+  --m-measure: 40rem;                                                   /* page block width  */
+  --m-text: 34rem;                                                      /* reading measure   */
+  --m-rule:      color-mix(in srgb, var(--color-secondary) 42%, transparent);
+  --m-rule-soft: color-mix(in srgb, var(--color-secondary) 20%, transparent);
+  --m-tint:      color-mix(in srgb, var(--color-secondary) 8%,  transparent);
+  --m-edge:      color-mix(in srgb, var(--color-primary)   9%,  transparent);
+  --m-ease: cubic-bezier(.2,.7,.2,1);
+
+  /* a single sepia leaf flanked by hair-rules — the ornament for every <hr> */
+  --m-leaf: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20260%2044'%3E%3Cg%20fill='none'%20stroke='%235e5040'%20stroke-width='1.1'%20stroke-linecap='round'%3E%3Cpath%20d='M6%2022%20H104'/%3E%3Cpath%20d='M156%2022%20H254'/%3E%3Ccircle%20cx='110'%20cy='22'%20r='1.7'%20fill='%235e5040'%20stroke='none'/%3E%3Ccircle%20cx='150'%20cy='22'%20r='1.7'%20fill='%235e5040'%20stroke='none'/%3E%3Cpath%20d='M130%206%20C117%2017%20117%2027%20130%2038%20C143%2027%20143%2017%20130%206%20Z'%20fill='%235e504018'%20stroke-width='1.2'/%3E%3Cpath%20d='M130%209%20L130%2035'/%3E%3Cpath%20d='M130%2016%20L122%2019%20M130%2016%20L138%2019%20M130%2023%20L121%2027%20M130%2023%20L139%2027'/%3E%3Cpath%20d='M130%2038%20L130%2043'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-primary);
+  font-family: var(--font-body), Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: clamp(1.05rem, 0.93rem + 0.5vw, 1.2rem);
+  line-height: 1.72;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1, "onum" 1, "calt" 1;        /* old-style figures */
+}
+
+/* --- the paper -------------------------------------------------------
+   One faint fractal-noise fibre layer + a soft corner vignette, pinned
+   to the viewport so the page reads as one continuous sheet of stock.
+   Both overlays float above the type at a whisper of opacity, exactly
+   the way ink sits down into an uncoated page. -------------------- */
+.plym-index::before,
+.plym-post::before,
+.plym-index::after,
+.plym-post::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+.plym-index::before,
+.plym-post::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='180'%20height='180'%3E%3Cfilter%20id='p'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.85'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23p)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: .07;
+  mix-blend-mode: multiply;
+}
+.plym-index::after,
+.plym-post::after {
+  background:
+    radial-gradient(140% 100% at 50% -12%, transparent 60%, var(--m-edge)),
+    radial-gradient(140% 120% at 50% 112%, transparent 66%, var(--m-edge));
+}
+
+/* --- headings --------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  line-height: 1.14;
+  color: var(--color-primary);
+  letter-spacing: .004em;
+  text-wrap: balance;
+}
+h1 { font-weight: 900; }
+
+/* headings inside rendered markdown carry an anchor (a.toclink) */
+.post-content :where(h2, h3, h4)[id] { scroll-margin-top: 2.5rem; }
+.post-content .toclink {
+  color: inherit;
+  text-decoration: none;
+  background: none;
+}
+.post-content :where(h2, h3, h4):hover .toclink::after {
+  content: " §";
+  color: var(--m-rule);
+  font-weight: 400;
+}
+
+/* --- prose ------------------------------------------------------------ */
+p { margin: 0 0 1.15em; text-wrap: pretty; }
+
+a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 38%, transparent);
+  text-underline-offset: .16em;
+  text-decoration-thickness: .07em;
+  transition: text-decoration-color .2s var(--m-ease), color .2s var(--m-ease);
+}
+a:hover { text-decoration-color: var(--color-accent); }
+
+strong { font-weight: 600; }
+em { font-style: italic; }                                              /* faux italic, by design */
+del { color: var(--color-secondary); }
+small { font-size: .85em; color: var(--color-secondary); }
+mark { background: color-mix(in srgb, var(--color-accent) 18%, transparent); color: inherit; }
+
+ul, ol { padding-left: 1.3em; margin: 0 0 1.15em; }
+li { margin: .25em 0; }
+li::marker { color: var(--color-secondary); }
+
+/* GitHub-style task lists from the markdown renderer */
+.post-content .task-list-item { list-style: none; margin-left: -1.3em; }
+.post-content .task-list-item input { margin-right: .5em; accent-color: var(--color-accent); }
+
+blockquote {
+  margin: 1.6em 0;
+  padding: .1em 0 .1em 1.3em;
+  border-left: 2px solid var(--m-rule);
+  color: var(--color-secondary);
+  font-style: italic;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+/* --- the leaf rule ---------------------------------------------------- */
+hr {
+  border: 0;
+  height: 2.6em;
+  width: min(100%, 22rem);
+  margin: 2.6em auto;
+  background: center / contain no-repeat var(--m-leaf);
+}
+
+/* --- figures & plates ------------------------------------------------- */
+img { max-width: 100%; height: auto; }
+.post-content img {
+  display: block;
+  margin: 1.9em auto;
+  padding: .45rem;
+  background: var(--color-background);
+  border: 1px solid var(--m-rule-soft);
+  box-shadow: 0 1px 0 var(--m-rule-soft);
+}
+figure { margin: 1.9em 0; }
+figcaption {
+  margin-top: .6em;
+  text-align: center;
+  font-size: .88em;
+  font-style: italic;
+  color: var(--color-secondary);
+}
+
+/* --- code ------------------------------------------------------------- */
+code, kbd, pre, samp {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+}
+:not(pre) > code {
+  font-size: .86em;
+  padding: .1em .38em;
+  border-radius: 3px;
+  background: var(--m-tint);
+  border: 1px solid var(--m-rule-soft);
+}
+pre {
+  margin: 1.7em 0;
+  padding: 1.1em 1.2em;
+  overflow-x: auto;
+  font-size: .9em;
+  line-height: 1.55;
+  background: color-mix(in srgb, var(--color-secondary) 7%, var(--color-background));
+  border: 1px solid var(--m-rule-soft);
+  border-radius: 4px;
+}
+pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+kbd {
+  font-size: .82em;
+  padding: .08em .45em;
+  border: 1px solid var(--m-rule);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--color-background);
+}
+
+/* --- tables ----------------------------------------------------------- */
+.post-content table {
+  width: 100%;
+  margin: 1.7em 0;
+  border-collapse: collapse;
+  font-size: .94em;
+}
+.post-content th, .post-content td {
+  padding: .55em .7em;
+  border-bottom: 1px solid var(--m-rule-soft);
+  text-align: left;
+}
+.post-content thead th {
+  font-family: var(--font-heading), serif;
+  font-weight: 600;
+  border-bottom: 1.5px solid var(--m-rule);
+}
+.post-content tbody tr:last-child td { border-bottom: 0; }
+
+/* --- footnotes -------------------------------------------------------- */
+.post-content sup[id^="fnref"] a { text-decoration: none; padding: 0 .1em; }
+.post-content .footnote,
+.post-content [role="doc-endnotes"] {
+  margin-top: 2.4em;
+  padding-top: .4em;
+  font-size: .9em;
+  color: var(--color-secondary);
+}
+.post-content .footnote hr { width: 8rem; margin: 0 0 1.2em; }
+
+/* --- shared chrome: masthead ----------------------------------------- */
+.memoir-masthead {
+  max-width: var(--m-measure);
+  margin: 0 auto;
+  padding: clamp(2.2rem, 5vw, 4rem) 1.2rem 0;
+  text-align: center;
+}
+.memoir-wordmark {
+  display: inline-block;
+  font-family: var(--font-heading), serif;
+  font-weight: 900;
+  font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem);
+  letter-spacing: .02em;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+.memoir-wordmark:hover { color: var(--color-accent); }
+.memoir-subtitle {
+  margin: .5em 0 0;
+  font-variant: small-caps;
+  letter-spacing: .22em;
+  text-transform: lowercase;
+  font-size: .8rem;
+  color: var(--color-secondary);
+}
+
+/* --- accessibility ---------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: .6em 1em;
+  background: var(--color-primary);
+  color: var(--color-background);
+  z-index: 10000;
+}
+.skip-link:focus { left: .6rem; top: .6rem; }
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+::selection { background: color-mix(in srgb, var(--color-accent) 22%, transparent); }
+
+/* --- the two overlays must never fight a print job ------------------- */
+@media print {
+  .plym-index::before, .plym-index::after,
+  .plym-post::before,  .plym-post::after,
+  .memoir-toc, .skip-link { display: none !important; }
+  body { background: #fff; color: #000; }
+  a { color: #000; text-decoration: underline; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

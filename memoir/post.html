@@ -1,0 +1,116 @@
+{%- macro toc_tree(items) -%}
+<ul>
+  {%- for item in items %}
+  <li>
+    <a href="#{{ item.id }}">{{ item.name }}</a>
+    {%- if item.children %}{{ toc_tree(item.children) }}{% endif -%}
+  </li>
+  {%- endfor %}
+</ul>
+{%- endmacro -%}
+
+<a class="skip-link" href="#main">Skip to the writing</a>
+
+<header class="memoir-masthead" role="banner">
+  <a class="memoir-wordmark" href="{{ site.blog_prefix }}/">{{ site.name }}</a>
+</header>
+
+<div class="memoir-shell">
+  {% if post.toc %}
+    <details class="memoir-toc" open>
+      <summary>Contents</summary>
+      <nav aria-label="Table of contents">
+        {{ toc_tree(post.toc) }}
+      </nav>
+    </details>
+  {% endif %}
+
+  <article class="memoir-article" id="main">
+    <header class="memoir-head">
+      {% if post.tags %}
+        <p class="memoir-kicker">{{ post.tags[0].name }}</p>
+      {% endif %}
+
+      <h1>{{ post.title }}</h1>
+
+      <p class="memoir-byline">
+        By {{ post.author.display_name }}{% if post.published_at %} &middot; {{ post.published_at.strftime('%d %B %Y') }}{% endif %}{% if post.reading_time %} &middot; {{ post.reading_time }} min read{% endif %}
+      </p>
+    </header>
+
+    {% if post.cover %}
+      <figure class="memoir-plate">
+        <img src="{{ post.cover }}" alt="" loading="lazy" decoding="async">
+      </figure>
+    {% endif %}
+
+    <div class="post-content">
+      {{ post.content | safe }}
+    </div>
+
+    <footer class="memoir-colophon">
+      <hr>
+      {% if post.tags %}
+        <p class="memoir-tags">
+          Filed under
+          {% for tag in post.tags %}{{ tag.name }}{% if not loop.last %} &middot; {% endif %}{% endfor %}
+        </p>
+      {% endif %}
+      <p class="memoir-setin">
+        {{ site.name }}{% if post.published_at %}, {{ post.published_at.strftime('%Y') }}{% endif %}
+      </p>
+      <p><a class="memoir-back" href="{{ site.blog_prefix }}/">Return to the index</a></p>
+    </footer>
+  </article>
+</div>
+
+<script>
+  (function () {
+    var toc = document.querySelector('.memoir-toc');
+    if (!toc) return;
+
+    var links = Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'));
+    if (!links.length) return;
+
+    var byId = {};
+    links.forEach(function (a) { byId[decodeURIComponent(a.hash.slice(1))] = a; });
+
+    /* collapse the panel on small screens, hold it open as a rail on wide */
+    var wide = window.matchMedia('(min-width: 64rem)');
+    function syncOpen() { toc.open = wide.matches; }
+    syncOpen();
+    if (wide.addEventListener) wide.addEventListener('change', syncOpen);
+    else if (wide.addListener) wide.addListener(syncOpen);
+
+    var heads = Array.prototype.slice
+      .call(document.querySelectorAll('.memoir-article [id]'))
+      .filter(function (el) { return /^H[2-4]$/.test(el.tagName) && byId[el.id]; });
+
+    if (!('IntersectionObserver' in window) || !heads.length) return;
+
+    var seen = {};
+    function light() {
+      var current;
+      for (var i = 0; i < heads.length; i++) {
+        if (seen[heads[i].id]) { current = heads[i].id; break; }
+      }
+      if (!current) {
+        for (var j = heads.length - 1; j >= 0; j--) {
+          if (heads[j].getBoundingClientRect().top < 140) { current = heads[j].id; break; }
+        }
+      }
+      links.forEach(function (a) { a.classList.remove('is-active'); a.removeAttribute('aria-current'); });
+      if (current && byId[current]) {
+        byId[current].classList.add('is-active');
+        byId[current].setAttribute('aria-current', 'true');
+      }
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { seen[e.target.id] = e.isIntersecting; });
+      light();
+    }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+
+    heads.forEach(function (h) { io.observe(h); });
+  })();
+</script>

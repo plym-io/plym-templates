@@ -1,0 +1,16 @@
+# memoir — design defaults
+# Old-world, e-ink reading: inked serif on grainy cream paper.
+# Operators may override any of these in their own config.yaml.
+
+fonts:
+  heading: Playfair Display   # high-contrast didone display, weights 600/900
+  body: EB Garamond           # warm old-style book serif, weight 400
+
+colors:
+  primary: "#2a2118"          # ink — near-black walnut brown
+  secondary: "#5e5040"        # sepia — faded marginalia
+  accent: "#8a2b22"           # claret — rubricated links & flourishes
+  background: "#f3ecdf"       # cream — uncoated laid paper
+
+prism:
+  theme: solarizedlight       # a warm, light code theme that sits on parchment

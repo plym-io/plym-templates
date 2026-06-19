@@ -1,0 +1,193 @@
+/* =============================================================
+   MEMOIR · post.css   (scoped to .plym-post — a single essay)
+   The reading surface: a centred column of justified, inked
+   serif, opened by a drop-cap and a small-caps first line, with
+   a leaf-marked left rail of contents that follows the scroll.
+   ============================================================= */
+
+/* --- the page frame --------------------------------------------------- */
+.plym-post .memoir-shell {
+  max-width: var(--m-text);
+  margin: 0 auto;
+  padding: 1.5rem 1.2rem 0;
+}
+
+.plym-post .memoir-article { min-width: 0; }
+
+/* --- title block ------------------------------------------------------ */
+.plym-post .memoir-head {
+  text-align: center;
+  margin: 1rem 0 2.4rem;
+}
+.plym-post .memoir-kicker {
+  margin: 0 0 .7rem;
+  font-variant: small-caps;
+  letter-spacing: .2em;
+  font-size: .78rem;
+  color: var(--color-accent);
+}
+.plym-post .memoir-head h1 {
+  margin: 0;
+  font-size: clamp(2rem, 1.4rem + 2.6vw, 3.2rem);
+  line-height: 1.08;
+}
+.plym-post .memoir-byline {
+  margin: 1rem 0 0;
+  font-variant: small-caps;
+  letter-spacing: .07em;
+  font-size: .86rem;
+  color: var(--color-secondary);
+}
+.plym-post .memoir-byline a { color: inherit; }
+
+/* opening leaf rule under the title block */
+.plym-post .memoir-head::after {
+  content: "";
+  display: block;
+  height: 2.2em;
+  width: 14rem;
+  margin: 1.4rem auto 0;
+  background: center / contain no-repeat var(--m-leaf);
+}
+
+/* --- cover plate ------------------------------------------------------ */
+.plym-post .memoir-plate { margin: 0 0 2.2rem; }
+.plym-post .memoir-plate img {
+  width: 100%;
+  margin: 0;
+  padding: .5rem;
+  background: var(--color-background);
+  border: 1px solid var(--m-rule-soft);
+  box-shadow: 0 1px 0 var(--m-rule-soft);
+}
+
+/* --- the prose -------------------------------------------------------- */
+.plym-post .post-content {
+  text-align: justify;
+  hyphens: auto;
+  text-align-last: left;
+}
+.plym-post .post-content > h2 { margin: 2em 0 .6em; font-size: clamp(1.45rem, 1.2rem + 1vw, 1.9rem); }
+.plym-post .post-content > h3 { margin: 1.7em 0 .5em; font-size: 1.32rem; }
+.plym-post .post-content > h4 { margin: 1.5em 0 .4em; font-size: 1.12rem; font-variant: small-caps; letter-spacing: .04em; }
+
+/* illuminated opening: drop-cap initial + small-caps first line,
+   the way an old chapter lifts off the page. */
+.plym-post .post-content > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-heading), serif;
+  font-weight: 900;
+  font-size: 3.5em;
+  line-height: .76;
+  padding: .04em .1em 0 0;
+  margin: .02em .06em 0 0;
+  color: var(--color-primary);
+}
+.plym-post .post-content > p:first-of-type::first-line {
+  font-variant: small-caps;
+  letter-spacing: .03em;
+}
+
+/* --- colophon --------------------------------------------------------- */
+.plym-post .memoir-colophon {
+  margin-top: 2.6rem;
+  text-align: center;
+}
+.plym-post .memoir-tags {
+  margin: 0 0 .6rem;
+  font-variant: small-caps;
+  letter-spacing: .1em;
+  font-size: .82rem;
+  color: var(--color-secondary);
+}
+.plym-post .memoir-setin {
+  margin: 0 0 1rem;
+  font-style: italic;
+  font-size: .85rem;
+  color: var(--color-secondary);
+}
+.plym-post .memoir-back {
+  font-variant: small-caps;
+  letter-spacing: .12em;
+  font-size: .82rem;
+  text-decoration: none;
+  color: var(--color-accent);
+}
+.plym-post .memoir-back::before { content: "\2190 \00a0"; }   /* ← */
+
+/* --- table of contents ------------------------------------------------
+   Mobile: a collapsible bordered card above the article.
+   Wide screens: a sticky left rail that the scroll-spy lights. */
+.plym-post .memoir-toc {
+  margin: 0 0 2.2rem;
+  padding: .3rem 1rem .7rem;
+  background: var(--m-tint);
+  border: 1px solid var(--m-rule-soft);
+  border-radius: 4px;
+}
+.plym-post .memoir-toc summary {
+  list-style: none;
+  cursor: pointer;
+  padding: .5rem 0;
+  font-variant: small-caps;
+  letter-spacing: .14em;
+  font-size: .92rem;
+  color: var(--color-secondary);
+}
+.plym-post .memoir-toc summary::-webkit-details-marker { display: none; }
+.plym-post .memoir-toc summary::before { content: "\2767\00a0\00a0"; color: var(--color-accent); }  /* ❧ */
+
+/* one continuous rail down the whole list; nested items indent their
+   text only, so the line never breaks or jogs. the active section lights
+   its own 2px claret segment straddling that single rail. */
+.plym-post .memoir-toc nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid var(--m-rule-soft);
+}
+.plym-post .memoir-toc nav ul ul { border-left: 0; padding-left: 0; }
+.plym-post .memoir-toc nav li { margin: 0; }
+.plym-post .memoir-toc nav a {
+  display: block;
+  margin-left: -1px;
+  padding: .22rem 0 .22rem .9rem;
+  border-left: 2px solid transparent;
+  color: var(--color-secondary);
+  text-decoration: none;
+  font-size: .9rem;
+  line-height: 1.35;
+  transition: color .2s var(--m-ease), border-color .2s var(--m-ease);
+}
+.plym-post .memoir-toc nav ul ul a { padding-left: 1.7rem; }
+.plym-post .memoir-toc nav a:hover { color: var(--color-primary); }
+.plym-post .memoir-toc nav a.is-active {
+  color: var(--color-accent);
+  border-left-color: var(--color-accent);
+}
+
+@media (min-width: 64rem) {
+  .plym-post .memoir-shell {
+    max-width: 72rem;
+    display: grid;
+    grid-template-columns: 13rem minmax(0, var(--m-text)) 13rem;
+    column-gap: 2rem;
+    justify-content: center;
+    align-items: start;
+  }
+  .plym-post .memoir-article { grid-column: 2; }
+  .plym-post .memoir-toc {
+    grid-column: 1;
+    grid-row: 1;
+    position: sticky;
+    top: 2.5rem;
+    align-self: start;
+    max-height: calc(100vh - 5rem);
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+  }
+  .plym-post .memoir-toc summary { pointer-events: none; padding-bottom: .8rem; }
+}

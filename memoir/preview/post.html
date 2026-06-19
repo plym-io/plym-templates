@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>memoir · preview · post</title>
+<!-- PREVIEW ONLY. Mimics plym's output: injected CSS vars + body.plym-post.
+     plym fetches the fonts itself in production; here we load them so the
+     typeface vibe shows. Not shipped to plym. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400&family=Playfair+Display:wght@600;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2a2118;
+    --color-secondary: #5e5040;
+    --color-accent: #8a2b22;
+    --color-background: #f3ecdf;
+    --font-heading: "Playfair Display";
+    --font-body: "EB Garamond";
+  }
+</style>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/index.css">
+<link rel="stylesheet" href="../css/post.css">
+</head>
+<body class="plym-post">
+
+<a class="skip-link" href="#main">Skip to the writing</a>
+
+<header class="memoir-masthead" role="banner">
+  <a class="memoir-wordmark" href="/">The Quiet Press</a>
+</header>
+
+<div class="memoir-shell">
+  <details class="memoir-toc" open>
+    <summary>Contents</summary>
+    <nav aria-label="Table of contents">
+      <ul>
+        <li><a href="#the-harbour">The Harbour at Dawn</a>
+          <ul>
+            <li><a href="#first-light">First Light</a></li>
+            <li><a href="#the-tide">The Turning Tide</a></li>
+          </ul>
+        </li>
+        <li><a href="#a-note-on-ink">A Note on Ink</a></li>
+        <li><a href="#provisions">Provisions &amp; Marginalia</a></li>
+      </ul>
+    </nav>
+  </details>
+
+  <article class="memoir-article" id="main">
+    <header class="memoir-head">
+      <p class="memoir-kicker">Essays</p>
+      <h1>On the Keeping of a Sea Journal</h1>
+      <p class="memoir-byline">By Eleanor A. Fairweather &middot; 19 June 2026 &middot; 7 min read</p>
+    </header>
+
+    <div class="post-content">
+      <p>Whenever I find myself growing grim about the mouth, I take to the margins
+      of an old ledger and there set down the weather. The practice is older than
+      either of us; sailors kept their reckonings in ink that would not run, on
+      paper that would not rot, and trusted the page to remember what the mind,
+      salt-tired, could not. A journal is a kind of ballast — it steadies the day.</p>
+
+      <p>What follows is less an instruction than a confession: the small rituals by
+      which a blank book becomes a companion, and how the hand learns to love the
+      uncoated grain of a good cream sheet.</p>
+
+      <hr>
+
+      <h2 id="the-harbour"><a class="toclink" href="#the-harbour">The Harbour at Dawn</a></h2>
+      <p>There is an hour before the gulls when the water lies like poured pewter and
+      the masts make their slow arithmetic against the sky. I write then, because the
+      light is honest and the ink behaves. The first entry of any day ought to be
+      <em>plain</em> — the temperature, the wind, the colour of the east — before the
+      mind is tempted into ornament.</p>
+
+      <blockquote>
+        <p>Keep the record as you would keep a watch: faithfully, and without
+        embellishment. The flourish can wait for the fair copy.</p>
+      </blockquote>
+
+      <h3 id="first-light"><a class="toclink" href="#first-light">First Light</a></h3>
+      <p>A few practical observances, gathered over many crossings:</p>
+      <ul>
+        <li>Rule the page the night before; a margin drawn in haste is a margin regretted.</li>
+        <li>Date everything. The sea erases days faster than you would credit.</li>
+        <li>Note the <code>barometer</code> first, the mood second.</li>
+      </ul>
+
+      <h3 id="the-tide"><a class="toclink" href="#the-tide">The Turning Tide</a></h3>
+      <p>When the tide turns it does so all at once, and the harbour exhales. The figures
+      below are the ones I keep at the front of every journal, copied by hand each season.</p>
+
+      <table>
+        <thead>
+          <tr><th>Glass</th><th>Wind</th><th>Likely</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Rising</td><td>Backing west</td><td>Fair, freshening</td></tr>
+          <tr><td>Steady</td><td>Light airs</td><td>Settled</td></tr>
+          <tr><td>Falling</td><td>Veering south</td><td>Weather coming</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="a-note-on-ink"><a class="toclink" href="#a-note-on-ink">A Note on Ink</a></h2>
+      <p>Iron gall darkens as it dries, which is to say the page you write is never quite
+      the page you keep.<sup id="fnref:1"><a href="#fn:1">1</a></sup> I have come to like
+      this. A good carbon ink, by contrast, is faithful from the first stroke. For setting
+      a recipe in a margin I prefer a small fixed block:</p>
+
+      <pre><code class="language-yaml">ink:
+  base: carbon
+  binder: gum arabic
+  note: "darkens little; trust the first stroke"</code></pre>
+
+      <figure>
+        <img alt="A small engraved leaf" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='240' viewBox='0 0 520 240'%3E%3Crect width='520' height='240' fill='%23ece2cf'/%3E%3Cg fill='none' stroke='%235e5040' stroke-width='2'%3E%3Cpath d='M260 40 C200 110 200 150 260 210 C320 150 320 110 260 40 Z'/%3E%3Cpath d='M260 56 L260 196'/%3E%3Cpath d='M260 96 L214 116 M260 96 L306 116 M260 132 L210 156 M260 132 L310 156'/%3E%3C/g%3E%3C/svg%3E">
+        <figcaption>Plate I — the device of the press, cut in pear-wood.</figcaption>
+      </figure>
+
+      <h2 id="provisions"><a class="toclink" href="#provisions">Provisions &amp; Marginalia</a></h2>
+      <p>A journal, like a ship, runs on small disciplines. Below, the manifest I keep
+      taped inside the cover — checked, struck through, checked again.</p>
+      <ul>
+        <li class="task-list-item"><input type="checkbox" disabled checked> Spare nib, wrapped in oilcloth</li>
+        <li class="task-list-item"><input type="checkbox" disabled checked> Blotting card, <del>two</del> three</li>
+        <li class="task-list-item"><input type="checkbox" disabled> A second journal, untouched</li>
+      </ul>
+      <p>And that is the whole of it. The rest the weather will teach you.</p>
+
+      <div class="footnote">
+        <hr>
+        <ol>
+          <li id="fn:1">Iron gall ink oxidises on contact with air, deepening from a pale
+          grey to near-black over a day or two. <a href="#fnref:1">&#8617;</a></li>
+        </ol>
+      </div>
+    </div>
+
+    <footer class="memoir-colophon">
+      <hr>
+      <p class="memoir-tags">Filed under Essays &middot; Craft &middot; The Sea</p>
+      <p class="memoir-setin">The Quiet Press, 2026</p>
+      <p><a class="memoir-back" href="/">Return to the index</a></p>
+    </footer>
+  </article>
+</div>
+
+<script>
+  (function () {
+    var toc = document.querySelector('.memoir-toc');
+    if (!toc) return;
+    var links = Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'));
+    if (!links.length) return;
+    var byId = {};
+    links.forEach(function (a) { byId[decodeURIComponent(a.hash.slice(1))] = a; });
+    var wide = window.matchMedia('(min-width: 64rem)');
+    function syncOpen() { toc.open = wide.matches; }
+    syncOpen();
+    if (wide.addEventListener) wide.addEventListener('change', syncOpen);
+    var heads = Array.prototype.slice
+      .call(document.querySelectorAll('.memoir-article [id]'))
+      .filter(function (el) { return /^H[2-4]$/.test(el.tagName) && byId[el.id]; });
+    if (!('IntersectionObserver' in window) || !heads.length) return;
+    var seen = {};
+    function light() {
+      var current;
+      for (var i = 0; i < heads.length; i++) { if (seen[heads[i].id]) { current = heads[i].id; break; } }
+      if (!current) { for (var j = heads.length - 1; j >= 0; j--) { if (heads[j].getBoundingClientRect().top < 140) { current = heads[j].id; break; } } }
+      links.forEach(function (a) { a.classList.remove('is-active'); a.removeAttribute('aria-current'); });
+      if (current && byId[current]) { byId[current].classList.add('is-active'); byId[current].setAttribute('aria-current', 'true'); }
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { seen[e.target.id] = e.isIntersecting; });
+      light();
+    }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+    heads.forEach(function (h) { io.observe(h); });
+  })();
+</script>
+</body>
+</html>

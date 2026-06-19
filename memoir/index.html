@@ -1,0 +1,38 @@
+<a class="skip-link" href="#main">Skip to the writing</a>
+
+<header class="memoir-masthead" role="banner">
+  <a class="memoir-wordmark" href="{{ site.blog_prefix }}/">{{ site.name }}</a>
+  <p class="memoir-subtitle">Selected writing</p>
+</header>
+
+<main class="memoir-index" id="main">
+  {% for post in posts %}
+    <article class="entry">
+      {% if post.tags %}
+        <p class="entry-kicker">{{ post.tags[0].name }}</p>
+      {% endif %}
+
+      <h2 class="entry-title">
+        <a href="{{ site.blog_prefix }}/{{ post.slug }}">{{ post.title }}</a>
+      </h2>
+
+      <p class="entry-byline">
+        {{ post.author.display_name }}{% if post.published_at %} &middot; {{ post.published_at.strftime('%d %B %Y') }}{% endif %}{% if post.reading_time %} &middot; {{ post.reading_time }} min{% endif %}
+      </p>
+
+      {% if post.excerpt %}
+        <p class="entry-excerpt">{{ post.excerpt }}</p>
+      {% endif %}
+
+      <a class="entry-more" href="{{ site.blog_prefix }}/{{ post.slug }}">Continue reading</a>
+    </article>
+
+    {% if not loop.last %}<hr>{% endif %}
+  {% else %}
+    <p class="memoir-empty">The pages are blank, for now.</p>
+  {% endfor %}
+</main>
+
+<footer class="memoir-foot">
+  <p>{{ site.name }}</p>
+</footer>

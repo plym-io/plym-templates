@@ -163,8 +163,8 @@ a.nav-cta{
 .blog-hero .wrap{position:relative;z-index:2}
 .blog-hero h1{
   font-size:clamp(40px, 6vw, 76px);
-  line-height:1;letter-spacing:-.035em;
-  margin:0;max-width:14ch;
+  line-height:1.02;letter-spacing:-.035em;
+  margin:0;max-width:22ch;text-wrap:balance;
 }
 .blog-hero .lede{
   font-size:18px;color:var(--ink-3);
@@ -276,11 +276,12 @@ a.nav-cta{
 
 /* ============ POST PAGE ============ */
 .post-main{padding:48px 0 100px}
-.post-head{max-width:920px;margin:0 auto;padding:0 28px;text-align:center}
+.post-head{max-width:1040px;margin:0 auto;padding:0 28px;text-align:center}
 .post-head .tags{justify-content:center;margin-bottom:18px}
 .post-head h1{
   font-size:clamp(34px, 5vw, 60px);
   line-height:1.04;margin:0;color:var(--ink);
+  text-wrap:balance;
 }
 .post-meta{
   display:inline-flex;align-items:center;gap:12px;

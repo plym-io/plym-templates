@@ -1,0 +1,165 @@
+{# ============================================================
+   AURELLE · navbar.html — shared navigation (included by index + post)
+   Included via {% include "navbar.html" %}
+   ============================================================ #}
+
+{# ---- NAVBAR MENU: edit this JSON to change the navigation ----
+   Each item: { "label", "href", "children": [ ... ] }
+   "children" can nest as deep as you like (nested dropdowns).
+   Any item with a real href (not "#") opens in a new tab.            #}
+<script type="application/json" id="plym-nav-data">
+{
+  "items": [
+    { "label": "Home", "href": "{{ site.website }}" },
+    {
+      "label": "Collections", "href": "#",
+      "children": [
+        {
+          "label": "Rings", "href": "#",
+          "children": [
+            { "label": "Engagement", "href": "#" },
+            { "label": "Wedding Bands", "href": "#" },
+            { "label": "Signature", "href": "#" }
+          ]
+        },
+        { "label": "Necklaces", "href": "#" },
+        { "label": "Earrings", "href": "#" },
+        { "label": "Bracelets", "href": "#" }
+      ]
+    },
+    {
+      "label": "Maison", "href": "#",
+      "children": [
+        { "label": "Our Story", "href": "#" },
+        { "label": "Craftsmanship", "href": "#" },
+        { "label": "Sustainability", "href": "#" }
+      ]
+    },
+    { "label": "Journal", "href": "{{ site.blog_prefix }}/" },
+    { "label": "Boutiques", "href": "#" },
+    { "label": "Contact", "href": "#" }
+  ]
+}
+</script>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="{{ site.website }}" target="_blank" rel="noopener noreferrer">
+      {% if site.logo %}<img class="nav-logo" src="{{ site.logo }}" alt="{{ site.name }}">{% else %}{{ site.name }}{% endif %}
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-menu" id="primary-menu" aria-label="Primary navigation"></nav>
+  </div>
+</header>
+
+{# ---------------- Navbar builder (inline, no external JS) ---------- #}
+<script>
+(function () {
+  var dataEl = document.getElementById("plym-nav-data");
+  var menu = document.getElementById("primary-menu");
+  var nav = document.querySelector(".site-nav");
+  var toggle = document.querySelector(".nav-toggle");
+  if (!dataEl || !menu || !nav) return;
+
+  var data;
+  try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
+  var items = (data && data.items) || [];
+  var CARET = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg>';
+
+  function build(list, depth) {
+    var ul = document.createElement("ul");
+    ul.className = depth === 0 ? "nav-list" : "submenu";
+    list.forEach(function (item) {
+      var li = document.createElement("li");
+      li.className = "nav-item";
+
+      var a = document.createElement("a");
+      a.className = "nav-link";
+      var href = item.href || "#";
+      a.href = href;
+      a.textContent = item.label || "";
+      // Real links open in a new tab; placeholder "#" links don't.
+      if (href !== "#") {
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+      }
+      li.appendChild(a);
+
+      var kids = item.children && item.children.length ? item.children : null;
+      if (kids) {
+        li.classList.add("has-children");
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "nav-caret";
+        btn.setAttribute("aria-expanded", "false");
+        btn.setAttribute("aria-label", (item.label || "menu") + " submenu");
+        btn.innerHTML = CARET;
+        li.appendChild(btn);
+        li.appendChild(build(kids, depth + 1));
+
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var open = li.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(open));
+          // close sibling dropdowns
+          var siblings = li.parentNode.children;
+          for (var i = 0; i < siblings.length; i++) {
+            if (siblings[i] !== li && siblings[i].classList) {
+              siblings[i].classList.remove("open");
+              var sb = siblings[i].querySelector(":scope > .nav-caret");
+              if (sb) sb.setAttribute("aria-expanded", "false");
+            }
+          }
+        });
+      }
+      ul.appendChild(li);
+    });
+    return ul;
+  }
+
+  menu.appendChild(build(items, 0));
+
+  // Edge-aware dropdowns: flip any panel that would spill past the right
+  // viewport edge so it never gets clipped (desktop only; the drawer stacks).
+  function applyFlips() {
+    var subs = menu.querySelectorAll(".submenu");
+    subs.forEach(function (s) { s.classList.remove("flip-x"); });
+    if (window.innerWidth < 1025) return;
+    subs.forEach(function (s) {
+      var r = s.getBoundingClientRect();           // laid out even while hidden
+      if (r.right > window.innerWidth - 8) s.classList.add("flip-x");
+    });
+  }
+  applyFlips();
+  var rt;
+  window.addEventListener("resize", function () {
+    clearTimeout(rt);
+    rt = setTimeout(applyFlips, 150);
+  });
+
+  // Hamburger
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var open = nav.classList.toggle("nav-open");
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    });
+  }
+
+  // Close everything on Escape / outside click
+  function closeAll() {
+    nav.classList.remove("nav-open");
+    if (toggle) { toggle.setAttribute("aria-expanded", "false"); toggle.setAttribute("aria-label", "Open menu"); }
+    menu.querySelectorAll(".nav-item.open").forEach(function (el) {
+      el.classList.remove("open");
+      var b = el.querySelector(":scope > .nav-caret");
+      if (b) b.setAttribute("aria-expanded", "false");
+    });
+  }
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeAll(); });
+  document.addEventListener("click", function (e) { if (!nav.contains(e.target)) closeAll(); });
+})();
+</script>

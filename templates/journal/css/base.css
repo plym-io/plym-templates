@@ -42,7 +42,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Space Grotesk', ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+  font-family: var(--font-body), 'Space Grotesk', ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
   font-size: 18px;
   line-height: 1.7;
   color: var(--color-primary);
@@ -56,7 +56,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Archivo', 'Arial Black', system-ui, sans-serif;
+  font-family: var(--font-heading), 'Archivo', 'Arial Black', system-ui, sans-serif;
   font-weight: 900;
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -103,7 +103,7 @@ a:hover {
 .nb-brand:hover { background: transparent; }
 
 .nb-brand-mark {
-  font-family: 'Archivo', 'Arial Black', sans-serif;
+  font-family: var(--font-heading), 'Archivo', 'Arial Black', sans-serif;
   font-size: 1.15rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -168,7 +168,7 @@ a:hover {
   border: var(--nb-border);
   box-shadow: var(--nb-shadow);
   border-radius: var(--nb-radius);
-  font-family: 'Archivo', sans-serif;
+  font-family: var(--font-heading), 'Archivo', sans-serif;
   font-size: 1rem;
   font-weight: 900;
   letter-spacing: -0.01em;
@@ -177,7 +177,7 @@ a:hover {
 
 .nb-brand-tag,
 .nb-back {
-  font-family: 'Archivo', sans-serif;
+  font-family: var(--font-heading), 'Archivo', sans-serif;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -198,7 +198,7 @@ a:hover {
   margin: 4rem auto 0;
   padding: 1.5rem;
   border-top: var(--nb-border);
-  font-family: 'Archivo', sans-serif;
+  font-family: var(--font-heading), 'Archivo', sans-serif;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -208,7 +208,7 @@ a:hover {
 .nb-footer a { color: var(--color-primary); text-decoration-thickness: 2px; }
 
 .nb-meta {
-  font-family: 'Archivo', sans-serif;
+  font-family: var(--font-heading), 'Archivo', sans-serif;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.1em;

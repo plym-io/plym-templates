@@ -53,6 +53,10 @@ body {
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Off-screen dropdown panels must never make the PAGE scroll sideways.
+     `clip` (not `hidden`) clips overflow without becoming a scroll
+     container, so position:sticky on the navbar + ToC keep working. */
+  overflow-x: clip;
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -120,17 +124,27 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
+  min-width: 0;            /* allow children to shrink instead of overflow */
 }
 .nav-brand {
   font-family: var(--font-body), sans-serif;
   font-weight: 600;
-  font-size: 1.15rem;
-  letter-spacing: .34em;
+  font-size: clamp(.95rem, .4vw + .85rem, 1.15rem);
+  letter-spacing: .28em;
   text-transform: uppercase;
   text-decoration: none;
   color: var(--ink);
+  /* Keep the navbar a single, fixed-height line for any brand length.
+     min-width:0 defeats the flex `min-width:auto` default that otherwise
+     lets a long name overflow (and grow the bar over the sticky ToC);
+     long names truncate with an ellipsis instead. */
+  min-width: 0;
+  flex: 0 1 auto;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+.nav-menu { flex: 0 0 auto; }
 .nav-brand:hover { color: var(--rose-deep); }
 .nav-logo { height: 38px; width: auto; max-width: 220px; display: block; object-fit: contain; }
 @media (max-width: 520px) { .nav-logo { height: 32px; } }
@@ -179,18 +193,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 .nav-link:hover { color: var(--rose-deep); }
 
-/* Top-level underline flourish */
+/* Top-level underline flourish — absolutely positioned + transform-animated
+   so it can NEVER change the link's box size (no layout shift / wobble). */
+.nav-list > .nav-item > .nav-link { position: relative; }
 .nav-list > .nav-item > .nav-link::after {
   content: "";
-  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
   height: 1px;
-  width: 0;
   background: var(--grad-rose);
-  transition: width .35s var(--ease);
-  margin-top: 2px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .35s var(--ease);
 }
 .nav-list > .nav-item:hover > .nav-link::after,
-.nav-list > .nav-item:focus-within > .nav-link::after { width: 100%; }
+.nav-list > .nav-item:focus-within > .nav-link::after { transform: scaleX(1); }
 
 /* Caret button for items with children */
 .nav-caret {
@@ -229,7 +248,7 @@ h1, h2, h3, h4, h5, h6 {
 .submenu .nav-item > .submenu { flex: 1 0 100%; }
 
 /* ----- Desktop dropdown behaviour (hover + focus) ----- */
-@media (min-width: 901px) {
+@media (min-width: 1025px) {
   .submenu {
     position: absolute;
     top: 100%;
@@ -264,10 +283,22 @@ h1, h2, h3, h4, h5, h6 {
   .nav-item:focus-within > .nav-caret svg { transform: rotate(180deg); }
   .submenu .has-children:hover > .nav-caret svg,
   .submenu .has-children:focus-within > .nav-caret svg { transform: rotate(-90deg); }
+
+  /* Edge-aware: panels that would run past the right viewport edge open
+     the other way instead (the navbar JS adds .flip-x). */
+  .nav-item > .submenu.flip-x { left: auto; right: 0; }
+  .submenu .nav-item > .submenu.flip-x {
+    left: auto; right: 100%;
+    margin: 0 .4rem 0 0;
+    transform: translateX(-8px);
+  }
+  .submenu .nav-item:hover > .submenu.flip-x,
+  .submenu .nav-item:focus-within > .submenu.flip-x,
+  .submenu .nav-item.open > .submenu.flip-x { transform: translateX(0); }
 }
 
 /* ----- Mobile menu ----- */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .nav-toggle { display: flex; }
   .nav-menu {
     position: fixed;
@@ -440,17 +471,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 .post-row:hover .post-cover img { transform: scale(1.06); }
 
-/* Elegant placeholder when no cover */
-.post-cover.is-empty {
-  display: grid; place-items: center;
+/* No cover → a clean, full-width text card (no placeholder image) */
+.post-row.no-cover { grid-template-columns: 1fr; }
+.post-row.no-cover .post-body {
+  padding: clamp(1.5rem, 3vw, 2.4rem) clamp(1.4rem, 2.2vw, 2.4rem);
+  text-align: center;
+  align-items: center;
 }
-.post-cover.is-empty .monogram {
-  font-family: var(--font-heading), serif;
-  font-weight: 900;
-  font-size: 3.4rem;
-  color: color-mix(in srgb, var(--rose-deep) 55%, transparent);
-  letter-spacing: .05em;
-}
+.post-row.no-cover .post-tags,
+.post-row.no-cover .post-meta { justify-content: center; }
+.post-row.no-cover .post-excerpt { margin-inline: auto; }
 
 .post-body {
   padding: clamp(1.2rem, 2vw, 1.9rem) clamp(1.4rem, 2.2vw, 2.4rem) clamp(1.2rem, 2vw, 1.9rem) 0;
@@ -585,7 +615,7 @@ h1, h2, h3, h4, h5, h6 {
 .prose { max-width: 72ch; margin-inline: auto; font-size: 1.08rem; }
 .post-layout.has-toc .prose { margin-inline: 0; }
 .prose > * + * { margin-top: 1.3em; }
-.prose h2, .prose h3, .prose h4 { margin-top: 2em; }
+.prose h2, .prose h3, .prose h4 { margin-top: 2em; scroll-margin-top: 90px; }
 .prose h2 { font-size: 1.7rem; }
 .prose h3 { font-size: 1.35rem; }
 .prose h4 { font-size: 1.12rem; }
@@ -672,19 +702,6 @@ h1, h2, h3, h4, h5, h6 {
     radial-gradient(800px 400px at 12% 0%, color-mix(in srgb, var(--rose) 70%, transparent), transparent 60%),
     linear-gradient(165deg, #5a3a47, #3a262d 60%, #2c1d23);
   overflow: hidden;
-}
-.footer-watermark {
-  position: absolute;
-  bottom: -3vw; right: 2vw;
-  font-family: var(--font-heading), serif;
-  font-weight: 900;
-  font-size: clamp(6rem, 22vw, 20rem);
-  line-height: .8;
-  letter-spacing: .02em;
-  color: rgba(255,255,255,.045);
-  pointer-events: none;
-  user-select: none;
-  white-space: nowrap;
 }
 .footer-top {
   position: relative;

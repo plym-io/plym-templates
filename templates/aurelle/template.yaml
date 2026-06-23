@@ -1,0 +1,17 @@
+# Aurelle — a luxury jewellery template for plym
+# These are design defaults. An operator's config.yaml can override them.
+
+fonts:
+  # Elegant, high-contrast luxury serif for headings (weights 600 & 900 are fetched)
+  heading: Playfair Display
+  # Clean, neutral companion for body copy & small labels (weight 400)
+  body: Mulish
+
+colors:
+  primary: "#3D2B31"     # deep plum-mauve — headings & body text
+  secondary: "#AB828F"   # signature muted rose
+  accent: "#8A5366"      # deep rose — links & interactive (AA on the pink bg)
+  background: "#FCEDF0"  # soft pink off-white
+
+prism:
+  theme: tomorrow

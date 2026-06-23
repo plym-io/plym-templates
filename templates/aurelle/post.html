@@ -1,0 +1,257 @@
+{# ============================================================
+   AURELLE · post.html — single post
+   ============================================================ #}
+
+{# ---- NAVBAR MENU: edit this JSON to change the navigation ---- #}
+<script type="application/json" id="plym-nav-data">
+{
+  "items": [
+    { "label": "Home", "href": "{{ site.website }}" },
+    {
+      "label": "Collections", "href": "#",
+      "children": [
+        {
+          "label": "Rings", "href": "#",
+          "children": [
+            { "label": "Engagement", "href": "#" },
+            { "label": "Wedding Bands", "href": "#" },
+            { "label": "Signature", "href": "#" }
+          ]
+        },
+        { "label": "Necklaces", "href": "#" },
+        { "label": "Earrings", "href": "#" },
+        { "label": "Bracelets", "href": "#" }
+      ]
+    },
+    {
+      "label": "Maison", "href": "#",
+      "children": [
+        { "label": "Our Story", "href": "#" },
+        { "label": "Craftsmanship", "href": "#" },
+        { "label": "Sustainability", "href": "#" }
+      ]
+    },
+    { "label": "Journal", "href": "{{ site.blog_prefix }}/" },
+    { "label": "Boutiques", "href": "#" },
+    { "label": "Contact", "href": "#" }
+  ]
+}
+</script>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="{{ site.website }}">
+      {% if site.logo %}<img class="nav-logo" src="{{ site.logo }}" alt="{{ site.name }}">{% else %}{{ site.name }}{% endif %}
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-menu" id="primary-menu" aria-label="Primary navigation"></nav>
+  </div>
+</header>
+
+{# ---------------- POST HERO ------------------------------ #}
+<article class="plym-post">
+  <header class="post-hero">
+    <span class="eyebrow">The Journal</span>
+    <h1>{{ post.title }}</h1>
+    <div class="post-meta">
+      {% if post.author.avatar_url %}
+        <img class="avatar" src="{{ post.author.avatar_url }}" alt="" loading="lazy">
+      {% endif %}
+      <span class="author">{{ post.author.display_name }}</span>
+      {% if post.published_at %}
+        <span class="dot" aria-hidden="true"></span>
+        <span>{{ post.published_at.strftime('%B %d, %Y') }}</span>
+      {% endif %}
+      <span class="dot" aria-hidden="true"></span>
+      <span>{{ post.reading_time }} min read</span>
+    </div>
+  </header>
+
+  {% if post.cover %}
+  <div class="post-cover-banner">
+    <img src="{{ post.cover }}" alt="" decoding="async">
+  </div>
+  {% endif %}
+
+  {# ---------------- BODY (+ optional TOC) ---------------- #}
+  <div class="post-layout {% if post.toc %}has-toc{% endif %}">
+    {% if post.toc %}
+    <aside class="toc" aria-label="Table of contents">
+      <span class="eyebrow">Contents</span>
+      <ul>
+        {% for item in post.toc %}
+        <li class="lvl-{{ item.level }}"><a href="#{{ item.id }}">{{ item.name }}</a></li>
+          {% for child in item.children %}
+          <li class="lvl-{{ child.level }}"><a href="#{{ child.id }}">{{ child.name }}</a></li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </aside>
+    {% endif %}
+
+    <div class="prose">
+      {{ post.content | safe }}
+
+      <footer class="post-footer">
+        {% if post.tags %}
+        <span class="footer-tags-label">Filed under</span>
+        <div class="post-tags">
+          {% for tag in post.tags %}<span class="tag">{{ tag.name }}</span>{% endfor %}
+        </div>
+        {% endif %}
+        <a class="back-link" href="{{ site.blog_prefix }}/">
+          <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path d="M24 6H2M7 1 2 6l5 5"/>
+          </svg>
+          Back to the Journal
+        </a>
+      </footer>
+    </div>
+  </div>
+</article>
+
+{# ---------------- BIG FOOTER ----------------------------- #}
+<footer class="site-footer">
+  <span class="footer-watermark" aria-hidden="true">{{ site.name }}</span>
+  <div class="footer-top">
+    <div class="footer-brand">
+      {% if site.logo %}
+        <img class="f-logo" src="{{ site.logo }}" alt="{{ site.name }}">
+      {% else %}
+        <p class="f-name">{{ site.name }}</p>
+      {% endif %}
+      <p>Crafted for those who cherish the extraordinary — jewellery designed to be treasured for generations.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" aria-label="Pinterest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 19c-.5-1.5 0-3 .5-5 .3-1.2.8-3 .8-3s-.3-.6-.3-1.5c0-1.4.8-2.4 1.8-2.4.9 0 1.3.7 1.3 1.5 0 .9-.6 2.2-.9 3.4-.3 1 .5 1.9 1.5 1.9 1.8 0 3-2.3 3-5 0-2.1-1.4-3.6-3.9-3.6A4.4 4.4 0 0 0 8 9.7c0 .8.3 1.4.7 1.8.2.2.2.3.1.5l-.2.8c-.1.3-.3.4-.6.2-1.1-.5-1.6-1.8-1.6-3.3C6.4 6.9 8.5 4 12.4 4 15.6 4 18 6.3 18 9.3c0 3.3-1.9 5.8-4.6 5.8-.9 0-1.8-.5-2.1-1l-.6 2.2c-.2.8-.7 1.8-1.1 2.5z"/></svg>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M15 8h-2a2 2 0 0 0-2 2v10M8 12h6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h3>Collections</h3>
+      <ul>
+        <li><a href="#">Rings</a></li>
+        <li><a href="#">Necklaces</a></li>
+        <li><a href="#">Earrings</a></li>
+        <li><a href="#">Bracelets</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>Maison</h3>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Craftsmanship</a></li>
+        <li><a href="{{ site.blog_prefix }}/">Journal</a></li>
+        <li><a href="#">Boutiques</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>Client Care</h3>
+      <ul>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Care Guide</a></li>
+        <li><a href="#">Appointments</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© {{ site.name }}. All rights reserved.</span>
+    <span>Designed with care · <a href="{{ site.website }}">{{ site.website }}</a></span>
+  </div>
+</footer>
+
+{# ---------------- Navbar builder (inline, no external JS) ---------- #}
+<script>
+(function () {
+  var dataEl = document.getElementById("plym-nav-data");
+  var menu = document.getElementById("primary-menu");
+  var nav = document.querySelector(".site-nav");
+  var toggle = document.querySelector(".nav-toggle");
+  if (!dataEl || !menu || !nav) return;
+
+  var data;
+  try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
+  var items = (data && data.items) || [];
+  var CARET = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg>';
+
+  function build(list, depth) {
+    var ul = document.createElement("ul");
+    ul.className = depth === 0 ? "nav-list" : "submenu";
+    list.forEach(function (item) {
+      var li = document.createElement("li");
+      li.className = "nav-item";
+
+      var a = document.createElement("a");
+      a.className = "nav-link";
+      a.href = item.href || "#";
+      a.textContent = item.label || "";
+      li.appendChild(a);
+
+      var kids = item.children && item.children.length ? item.children : null;
+      if (kids) {
+        li.classList.add("has-children");
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "nav-caret";
+        btn.setAttribute("aria-expanded", "false");
+        btn.setAttribute("aria-label", (item.label || "menu") + " submenu");
+        btn.innerHTML = CARET;
+        li.appendChild(btn);
+        li.appendChild(build(kids, depth + 1));
+
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var open = li.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(open));
+          var siblings = li.parentNode.children;
+          for (var i = 0; i < siblings.length; i++) {
+            if (siblings[i] !== li && siblings[i].classList) {
+              siblings[i].classList.remove("open");
+              var sb = siblings[i].querySelector(":scope > .nav-caret");
+              if (sb) sb.setAttribute("aria-expanded", "false");
+            }
+          }
+        });
+      }
+      ul.appendChild(li);
+    });
+    return ul;
+  }
+
+  menu.appendChild(build(items, 0));
+
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var open = nav.classList.toggle("nav-open");
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    });
+  }
+
+  function closeAll() {
+    nav.classList.remove("nav-open");
+    if (toggle) { toggle.setAttribute("aria-expanded", "false"); toggle.setAttribute("aria-label", "Open menu"); }
+    menu.querySelectorAll(".nav-item.open").forEach(function (el) {
+      el.classList.remove("open");
+      var b = el.querySelector(":scope > .nav-caret");
+      if (b) b.setAttribute("aria-expanded", "false");
+    });
+  }
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeAll(); });
+  document.addEventListener("click", function (e) { if (!nav.contains(e.target)) closeAll(); });
+})();
+</script>

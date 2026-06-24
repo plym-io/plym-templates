@@ -367,8 +367,12 @@ h3 {
 .hero-inner { position: relative; z-index: 1; display: grid; justify-items: center; gap: 1rem; }
 
 .hero-logo {
-  width: clamp(130px, 20vw, 220px);
-  height: auto;
+  /* Fixed HEIGHT (the flow dimension) reserves vertical space before the
+     logo loads → no layout shift of the content below. Width stays auto so
+     the aspect ratio is preserved for any logo. */
+  height: clamp(58px, 8vw, 96px);
+  width: auto;
+  max-width: min(78vw, 280px);
   filter: drop-shadow(0 16px 32px rgba(122, 66, 86, .22));
 }
 .hero-wordmark {
@@ -578,6 +582,9 @@ h3 {
 }
 .post-cover-banner img {
   width: 100%;
+  /* Reserve the box BEFORE the image loads so it can't push the
+     article (.post-layout) down on load — eliminates the CLS. */
+  aspect-ratio: 16 / 9;
   max-height: 560px;
   object-fit: cover;
   border-radius: var(--radius);

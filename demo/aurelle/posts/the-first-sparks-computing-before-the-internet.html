@@ -1,0 +1,1300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The First Sparks: Computing Before the Internet — aurelle</title>
+<link rel="icon" href="../../../preview/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;900&family=Mulish&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<style>
+:root{
+  --color-primary:#3D2B31;
+  --color-secondary:#AB828F;
+  --color-accent:#8A5366;
+  --color-background:#FCEDF0;
+  --font-heading:'Playfair Display';
+  --font-body:'Mulish';
+}
+html,body{margin:0}
+/* ============================================================
+   AURELLE — Luxury Jewellery template for plym
+   A soft, off-white-pink palette with rose gradients,
+   elegant geometric sans headings and generous whitespace.
+   ============================================================ */
+
+/* ---------- 1. Tokens ------------------------------------- */
+:root {
+  /* Operator-overridable palette (wired to plym's injected vars) */
+  --ink:        var(--color-primary, #3D2B31);
+  --rose:       var(--color-secondary, #AB828F);
+  --rose-deep:  var(--color-accent, #8A5366);
+  --cream:      var(--color-background, #FCEDF0);
+
+  /* Derived brand shades for gradients & decoration */
+  --rose-light: #E3B6BA;
+  --rose-mist:  #F2D2D8;
+  --rose-veil:  #FAE2E7;
+  --gold:       #C8A26A;
+
+  --ink-soft:   color-mix(in srgb, var(--ink) 64%, transparent);
+  --line:       color-mix(in srgb, var(--rose) 40%, transparent);
+  --line-rose:  color-mix(in srgb, var(--rose) 62%, transparent);
+
+  --shadow-sm:  0 10px 30px -18px rgba(122, 66, 86, .55);
+  --shadow-lg:  0 34px 70px -34px rgba(122, 66, 86, .50);
+
+  --grad-rose:  linear-gradient(135deg, var(--rose-deep), var(--rose) 48%, var(--rose-light));
+  --grad-soft:  linear-gradient(160deg, var(--rose-veil), var(--rose-mist));
+
+  --maxw: 1180px;
+  --pad:  clamp(1.25rem, 5.5vw, 5.5rem);
+  --radius: 4px;
+  --ease: cubic-bezier(.22, .61, .36, 1);
+
+  --eyebrow: .26em;   /* luxury wide tracking */
+}
+
+/* ---------- 2. Reset & base ------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 400;
+  font-size: clamp(1rem, .55vw + .9rem, 1.075rem);
+  line-height: 1.7;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 720px at 84% -10%, var(--rose-mist), transparent 58%),
+    radial-gradient(1000px 620px at -12% 4%, var(--rose-light), transparent 42%),
+    linear-gradient(176deg, var(--rose-veil) 0%, var(--cream) 46%, var(--rose-mist) 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Off-screen dropdown panels must never make the PAGE scroll sideways.
+     `clip` (not `hidden`) clips overflow without becoming a scroll
+     container, so position:sticky on the navbar + ToC keep working. */
+  overflow-x: clip;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--rose-deep); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), serif;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.12;
+  margin: 0 0 .6em;
+}
+
+h3 {
+  font-weight: 100;
+  font-variation-settings: "wght" 100;
+}
+
+/* Shared luxury "eyebrow" label */
+.eyebrow {
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: .72rem;
+  letter-spacing: var(--eyebrow);
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  margin: 0 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .7rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.shell { max-width: var(--maxw); margin-inline: auto; padding-inline: var(--pad); }
+
+/* Visually-hidden but screen-reader available */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Focus visibility */
+:focus-visible {
+  outline: 2px solid var(--rose-deep);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------- 3. Navbar + nested dropdowns ------------------ */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--rose-veil) 86%, transparent);
+  -webkit-backdrop-filter: saturate(150%) blur(14px);
+  backdrop-filter: saturate(150%) blur(14px);
+  border-bottom: 1px solid var(--line-rose);
+}
+.nav-inner {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding: .85rem var(--pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-width: 0;            /* allow children to shrink instead of overflow */
+}
+.nav-brand {
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: clamp(.95rem, .4vw + .85rem, 1.15rem);
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  /* Keep the navbar a single, fixed-height line for any brand length.
+     min-width:0 defeats the flex `min-width:auto` default that otherwise
+     lets a long name overflow (and grow the bar over the sticky ToC);
+     long names truncate with an ellipsis instead. */
+  min-width: 0;
+  flex: 0 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav-menu { flex: 0 0 auto; }
+.nav-brand:hover { color: var(--rose-deep); }
+.nav-logo { height: 38px; width: auto; max-width: 220px; display: block; object-fit: contain; }
+@media (max-width: 520px) { .nav-logo { height: 32px; } }
+
+/* Hamburger */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  width: 42px; height: 42px;
+  padding: 0 9px;
+  align-items: center; justify-content: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block; width: 100%; height: 1.5px;
+  background: var(--ink);
+  transition: transform .35s var(--ease), opacity .25s var(--ease);
+}
+.site-nav.nav-open .nav-toggle span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.site-nav.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+.site-nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Menu lists (built by inline JS from the JSON block) */
+.nav-list, .submenu { list-style: none; margin: 0; padding: 0; }
+.nav-list { display: flex; align-items: center; gap: clamp(1rem, 2vw, 2.1rem); }
+
+.nav-item { position: relative; }
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: .82rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  padding: .55rem 0;
+  transition: color .25s var(--ease);
+}
+.nav-link:hover { color: var(--rose-deep); }
+
+/* Top-level underline flourish — absolutely positioned + transform-animated
+   so it can NEVER change the link's box size (no layout shift / wobble). */
+.nav-list > .nav-item > .nav-link { position: relative; }
+.nav-list > .nav-item > .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--grad-rose);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .35s var(--ease);
+}
+.nav-list > .nav-item:hover > .nav-link::after,
+.nav-list > .nav-item:focus-within > .nav-link::after { transform: scaleX(1); }
+
+/* Caret button for items with children */
+.nav-caret {
+  background: transparent;
+  border: 0;
+  padding: 6px;
+  margin: 0;
+  cursor: pointer;
+  color: var(--ink-soft);
+  display: inline-flex;
+  line-height: 0;
+}
+.nav-caret svg { width: 11px; height: 11px; transition: transform .3s var(--ease); }
+
+/* Dropdown panels */
+.submenu {
+  background: color-mix(in srgb, var(--rose-veil) 78%, #fff);
+  border: 1px solid var(--line-rose);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: .5rem;
+  min-width: 230px;
+}
+.submenu .nav-link {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: .62rem .85rem;
+  font-size: .76rem;
+  border-radius: 3px;
+}
+.submenu .nav-link:hover { background: var(--rose-veil); color: var(--rose-deep); }
+.submenu .nav-item { display: flex; flex-wrap: wrap; align-items: center; }
+.submenu .nav-item > .nav-link { flex: 1; }
+/* nested submenu always takes its own full-width row (wraps below the link) */
+.submenu .nav-item > .submenu { flex: 1 0 100%; }
+
+/* ----- Desktop dropdown behaviour (hover + focus) ----- */
+@media (min-width: 1025px) {
+  .submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: .6rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity .26s var(--ease), transform .26s var(--ease), visibility .26s;
+  }
+  .nav-item:hover > .submenu,
+  .nav-item:focus-within > .submenu,
+  .nav-item.open > .submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  /* Nested (flyout to the right) */
+  .submenu .submenu {
+    top: -.55rem;
+    left: 100%;
+    margin: 0 0 0 .4rem;
+    transform: translateX(8px);
+  }
+  .submenu .nav-item:hover > .submenu,
+  .submenu .nav-item:focus-within > .submenu,
+  .submenu .nav-item.open > .submenu { transform: translateX(0); }
+
+  /* Caret in nested items points right */
+  .submenu .has-children > .nav-caret svg { transform: rotate(-90deg); }
+  .nav-item:hover > .nav-caret svg,
+  .nav-item:focus-within > .nav-caret svg { transform: rotate(180deg); }
+  .submenu .has-children:hover > .nav-caret svg,
+  .submenu .has-children:focus-within > .nav-caret svg { transform: rotate(-90deg); }
+
+  /* Edge-aware: panels that would run past the right viewport edge open
+     the other way instead (the navbar JS adds .flip-x). */
+  .nav-item > .submenu.flip-x { left: auto; right: 0; }
+  .submenu .nav-item > .submenu.flip-x {
+    left: auto; right: 100%;
+    margin: 0 .4rem 0 0;
+    transform: translateX(-8px);
+  }
+  .submenu .nav-item:hover > .submenu.flip-x,
+  .submenu .nav-item:focus-within > .submenu.flip-x,
+  .submenu .nav-item.open > .submenu.flip-x { transform: translateX(0); }
+}
+
+/* ----- Mobile menu ----- */
+@media (max-width: 1024px) {
+  .nav-toggle { display: flex; }
+  .nav-menu {
+    position: fixed;
+    inset: 64px 0 auto 0;
+    max-height: calc(100dvh - 64px);
+    overflow-y: auto;
+    background: color-mix(in srgb, var(--rose-veil) 88%, #fff);
+    border-bottom: 1px solid var(--line-rose);
+    box-shadow: var(--shadow-lg);
+    padding: 1rem var(--pad) 2rem;
+    transform: translateY(-12px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s;
+  }
+  .site-nav.nav-open .nav-menu { opacity: 1; visibility: visible; transform: none; }
+
+  .nav-list { flex-direction: column; align-items: stretch; gap: 0; }
+  .nav-item { border-bottom: 1px solid var(--line); }
+  .submenu .nav-item:last-child { border-bottom: 0; }
+  .nav-link { padding: .95rem 0; font-size: .9rem; }
+
+  .submenu {
+    position: static;
+    box-shadow: none;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    min-width: 0;
+    padding: 0 0 .4rem 1rem;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s var(--ease);
+  }
+  .nav-item.open > .submenu { max-height: 1200px; }
+  .nav-item.open > .nav-caret svg { transform: rotate(180deg); }
+  .nav-caret { padding: 12px; margin-left: auto; }
+}
+
+/* ---------- 4. Hero — big centered logo ------------------- */
+.hero {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: clamp(2rem, 4.5vw, 3.25rem) var(--pad) clamp(.6rem, 1.6vw, 1rem);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  /* soft rose halo behind the logo */
+  content: "";
+  position: absolute;
+  width: min(540px, 80vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--rose-mist), transparent 62%);
+  filter: blur(8px);
+  z-index: 0;
+}
+.hero-inner { position: relative; z-index: 1; display: grid; justify-items: center; gap: 1rem; }
+
+.hero-logo {
+  /* Fixed HEIGHT (the flow dimension) reserves vertical space before the
+     logo loads → no layout shift of the content below. Width stays auto so
+     the aspect ratio is preserved for any logo. */
+  height: clamp(58px, 8vw, 96px);
+  width: auto;
+  max-width: min(78vw, 280px);
+  filter: drop-shadow(0 16px 32px rgba(122, 66, 86, .22));
+}
+.hero-wordmark {
+  margin: 0;
+  font-weight: 900;
+  font-size: clamp(2.4rem, 8vw, 5.5rem);
+  letter-spacing: .02em;
+  line-height: .98;
+  background: var(--grad-rose);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* fallback if clip unsupported */
+  -webkit-text-fill-color: transparent;
+}
+@supports not (background-clip: text) {
+  .hero-wordmark { color: var(--rose-deep); -webkit-text-fill-color: currentColor; }
+}
+
+.hero-tagline {
+  margin: 0;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: clamp(.82rem, 1.6vw, 1rem);
+  letter-spacing: var(--eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.hero-divider {
+  width: 1px;
+  height: 38px;
+  background: linear-gradient(var(--gold), transparent);
+  margin-top: .2rem;
+}
+/* ---------- 5. Index — vertical post list ----------------- */
+.section-head {
+  max-width: var(--maxw);
+  margin: .25rem auto 1.5rem;
+  padding-inline: var(--pad);
+  text-align: center;
+}
+.section-head h2 {
+  font-weight: 600;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  letter-spacing: .01em;
+}
+.section-head .eyebrow { justify-content: center; }
+.section-head .eyebrow::after {
+  content: "";
+  width: 30px; height: 1px; background: var(--gold);
+}
+
+.post-list {
+  list-style: none;
+  margin: 0 auto 5rem;
+  padding-inline: var(--pad);
+  max-width: var(--maxw);
+  display: grid;
+  gap: clamp(1.1rem, 2vw, 1.7rem);
+}
+
+.post-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 36%) 1fr;
+  gap: clamp(1.4rem, 3vw, 2.75rem);
+  align-items: stretch;
+  background: linear-gradient(150deg, color-mix(in srgb, var(--rose-veil) 70%, #fff), color-mix(in srgb, var(--rose-mist) 45%, #fff));
+  border: 1px solid var(--line-rose);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
+}
+/* Luxurious inset frame — a delicate gold hairline within the rose border */
+.post-row::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid color-mix(in srgb, var(--gold) 52%, transparent);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 3;
+  transition: inset .45s var(--ease), border-color .45s var(--ease);
+}
+.post-row:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--rose);
+}
+.post-row:hover::after { inset: 6px; border-color: color-mix(in srgb, var(--gold) 85%, transparent); }
+
+.post-cover {
+  position: relative;
+  display: block;
+  min-height: 190px;
+  overflow: hidden;
+  background: var(--grad-soft);
+}
+.post-cover img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: absolute; inset: 0;
+  transition: transform .8s var(--ease);
+}
+.post-row:hover .post-cover img { transform: scale(1.06); }
+
+/* No cover → a clean, full-width text card (no placeholder image), left-aligned */
+.post-row.no-cover { grid-template-columns: 1fr; }
+.post-row.no-cover .post-body {
+  padding: clamp(1.5rem, 3vw, 2.4rem) clamp(1.4rem, 2.2vw, 2.4rem);
+  text-align: left;
+  align-items: flex-start;
+}
+.post-row.no-cover .post-tags,
+.post-row.no-cover .post-meta { justify-content: flex-start; }
+.post-row.no-cover .post-excerpt { margin-inline: 0; }
+
+.post-body {
+  padding: clamp(1.2rem, 2vw, 1.9rem) clamp(1.4rem, 2.2vw, 2.4rem) clamp(1.2rem, 2vw, 1.9rem) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.post-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }
+.tag {
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: .64rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  background: var(--rose-veil);
+  border: 1px solid var(--line-rose);
+  padding: .28rem .7rem;
+  border-radius: 100px;
+}
+
+.post-title {
+  margin: 0 0 .55rem;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  line-height: 1.16;
+}
+.post-title a { color: inherit; text-decoration: none; background-image: linear-gradient(var(--rose-deep), var(--rose-deep)); background-size: 0% 1px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size .4s var(--ease); }
+.post-title a:hover { background-size: 100% 1px; color: var(--rose-deep); }
+
+.post-excerpt { margin: 0 0 .9rem; color: var(--ink-soft); max-width: 56ch; }
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .65rem;
+  font-size: .8rem;
+  color: var(--ink-soft);
+}
+.post-meta .avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  object-fit: cover; border: 1px solid var(--line-rose);
+}
+.post-meta .author { font-weight: 600; color: var(--ink); }
+.post-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--rose); }
+.read-more {
+  margin-top: .9rem;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: .74rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--rose-deep);
+  display: inline-flex; align-items: center; gap: .55rem;
+  align-self: flex-start;
+}
+.read-more svg { width: 16px; height: 8px; transition: transform .3s var(--ease); }
+.read-more:hover svg { transform: translateX(5px); }
+
+.empty-state {
+  max-width: var(--maxw);
+  margin: 0 auto 6rem;
+  padding: 4rem var(--pad);
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+/* ---------- 6. Post page --------------------------------- */
+.post-hero {
+  max-width: 1040px;
+  margin-inline: auto;
+  padding: clamp(2.25rem, 5vw, 4rem) var(--pad) 1.5rem;
+  text-align: center;
+}
+.post-hero h1 {
+  font-weight: 600;
+  font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+  line-height: 1.14;
+  letter-spacing: .005em;
+  margin: .6rem 0 1.2rem;
+}
+.post-hero .eyebrow { justify-content: center; }
+.post-hero .post-meta { justify-content: center; }
+
+.post-cover-banner {
+  max-width: 1080px;
+  margin: 2rem auto 0;
+  padding-inline: var(--pad);
+}
+.post-cover-banner img {
+  width: 100%;
+  /* Reserve the box BEFORE the image loads so it can't push the
+     article (.post-layout) down on load — eliminates the CLS. */
+  aspect-ratio: 16 / 9;
+  max-height: 560px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+
+.post-layout {
+  max-width: 1080px;
+  margin: 3rem auto 4rem;
+  padding-inline: var(--pad);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3rem;
+}
+.post-layout.has-toc { grid-template-columns: 240px minmax(0, 1fr); }
+
+.toc {
+  position: sticky;
+  top: 96px;
+  align-self: start;
+  font-size: .85rem;
+}
+.toc .eyebrow { margin-bottom: .9rem; }
+.toc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+.toc li { margin: 0; }
+.toc a {
+  display: block;
+  padding: .35rem 0 .35rem 1rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  transition: color .2s var(--ease), border-color .2s var(--ease);
+}
+.toc a:hover { color: var(--rose-deep); border-left-color: var(--rose); }
+.toc .lvl-3 a { padding-left: 1.8rem; font-size: .8rem; }
+.toc .lvl-4 a { padding-left: 2.5rem; font-size: .78rem; }
+
+/* Prose / markdown body */
+.prose { max-width: 72ch; margin-inline: auto; font-size: 1.08rem; }
+.post-layout.has-toc .prose { margin-inline: 0; }
+.prose > * + * { margin-top: 1.3em; }
+.prose h2, .prose h3, .prose h4 { margin-top: 2em; scroll-margin-top: 90px; }
+.prose h2 { font-size: 1.7rem; }
+.prose h3 { font-size: 1.35rem; }
+.prose h4 { font-size: 1.12rem; }
+.prose h2 .toclink, .prose h3 .toclink, .prose h4 .toclink { color: inherit; text-decoration: none; }
+.prose h2 .toclink:hover, .prose h3 .toclink:hover, .prose h4 .toclink:hover { color: var(--rose-deep); }
+.prose a { color: var(--rose-deep); text-decoration: underline; }
+.prose p, .prose li { color: var(--ink); }
+.prose img { border-radius: var(--radius); margin-inline: auto; box-shadow: var(--shadow-sm); }
+.prose blockquote {
+  margin: 1.8em 0;
+  padding: .4em 0 .4em 1.6rem;
+  border-left: 2px solid var(--gold);
+  font-family: var(--font-heading), serif;
+  font-weight: 600;
+  font-size: 1.45rem;
+  color: var(--ink);
+}
+.prose ul, .prose ol { padding-left: 1.4rem; }
+.prose li { margin-top: .4em; }
+.prose li::marker { color: var(--rose); }
+.prose hr { border: 0; height: 1px; background: var(--line-rose); margin: 2.5em 0; }
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .9em;
+  background: var(--rose-veil);
+  padding: .15em .4em;
+  border-radius: 3px;
+  color: var(--rose-deep);
+}
+.prose pre {
+  overflow-x: auto;
+  padding: 1.25rem 1.4rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: #2b2228;
+  font-size: .9rem;
+  line-height: 1.6;
+}
+.prose pre code { background: transparent; padding: 0; color: #f3e9ec; }
+.prose table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.prose th, .prose td { padding: .7rem 1rem; border-bottom: 1px solid var(--line); text-align: left; }
+.prose th { font-family: var(--font-body), sans-serif; font-weight: 600; letter-spacing: .06em; }
+.prose .task-list-item { list-style: none; }
+.prose .task-list-item input { margin-right: .5rem; accent-color: var(--rose-deep); }
+.prose del { color: var(--ink-soft); }
+.prose sup a { text-decoration: none; }
+
+.post-footer {
+  max-width: 72ch;
+  margin: 3rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line-rose);
+  text-align: center;
+}
+.post-footer .footer-tags-label {
+  display: block;
+  font-family: var(--font-body), sans-serif;
+  font-size: .68rem;
+  letter-spacing: var(--eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: .9rem;
+}
+.post-footer .post-tags { justify-content: center; margin: 0 0 1.8rem; }
+.back-link {
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: .76rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--rose-deep);
+  display: inline-flex; align-items: center; gap: .55rem;
+}
+.back-link svg { width: 16px; height: 8px; transition: transform .3s var(--ease); }
+.back-link:hover svg { transform: translateX(-5px); }
+
+/* ---------- 7. Big footer -------------------------------- */
+.site-footer {
+  position: relative;
+  margin-top: 4rem;
+  color: #fbeff1;
+  background:
+    radial-gradient(800px 400px at 12% 0%, color-mix(in srgb, var(--rose) 70%, transparent), transparent 60%),
+    linear-gradient(165deg, #5a3a47, #3a262d 60%, #2c1d23);
+  overflow: hidden;
+}
+.footer-top {
+  position: relative;
+  z-index: 1;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding: clamp(3rem, 7vw, 6rem) var(--pad) 3rem;
+  display: grid;
+  grid-template-columns: 1.4fr repeat(3, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+}
+.footer-brand .f-logo {
+  width: 150px; margin-bottom: 1.4rem;
+  filter: brightness(0) invert(1);
+  opacity: .92;
+}
+.footer-brand .f-name {
+  font-family: var(--font-heading), serif;
+  font-weight: 600;
+  font-size: 1.9rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin: 0 0 1.2rem;
+}
+.footer-brand p { color: rgba(251,239,241,.66); max-width: 34ch; margin: 0 0 1.6rem; }
+
+.footer-col h3 {
+  font-family: var(--font-body), sans-serif;
+  color: #fff;
+  font-size: .76rem;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  margin-bottom: 1.3rem;
+  opacity: .85;
+}
+.footer-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; }
+.footer-col a {
+  color: rgba(251,239,241,.72);
+  text-decoration: none;
+  font-size: .92rem;
+  transition: color .25s var(--ease), padding-left .25s var(--ease);
+}
+.footer-col a:hover { color: #fff; padding-left: 5px; }
+
+.footer-social { display: flex; gap: .8rem; }
+.footer-social a {
+  width: 40px; height: 40px;
+  display: inline-grid; place-items: center;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 50%;
+  color: rgba(251,239,241,.8);
+  transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+}
+.footer-social a:hover { background: var(--grad-rose); color: #fff; border-color: transparent; }
+.footer-social svg { width: 17px; height: 17px; }
+
+.footer-bottom {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255,255,255,.12);
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding: 1.6rem var(--pad);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .82rem;
+  color: rgba(251,239,241,.6);
+}
+.footer-bottom a { color: rgba(251,239,241,.78); }
+
+/* ---------- 8. Responsive -------------------------------- */
+@media (max-width: 820px) {
+  .post-row { grid-template-columns: 1fr; }
+  .post-cover { min-height: 220px; }
+  .post-body { padding: clamp(1.4rem, 5vw, 2rem); }
+  .post-layout.has-toc { grid-template-columns: 1fr; }
+  .toc { position: static; top: auto; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 520px) {
+  .footer-top { grid-template-columns: 1fr; }
+  .nav-brand { font-size: 1rem; letter-spacing: .22em; }
+}
+
+/* ---------- 9. Motion preferences ------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html { scroll-behavior: smooth; }
+
+</style>
+</head>
+<body class="plym-post">
+
+
+
+
+
+<script type="application/json" id="plym-nav-data">
+{
+  "items": [
+    { "label": "Home", "href": "https://plym.io" },
+    {
+      "label": "Collections", "href": "#",
+      "children": [
+        {
+          "label": "Rings", "href": "#",
+          "children": [
+            { "label": "Engagement", "href": "#" },
+            { "label": "Wedding Bands", "href": "#" },
+            { "label": "Signature", "href": "#" }
+          ]
+        },
+        { "label": "Necklaces", "href": "#" },
+        { "label": "Earrings", "href": "#" },
+        { "label": "Bracelets", "href": "#" }
+      ]
+    },
+    {
+      "label": "Maison", "href": "#",
+      "children": [
+        { "label": "Our Story", "href": "#" },
+        { "label": "Craftsmanship", "href": "#" },
+        { "label": "Sustainability", "href": "#" }
+      ]
+    },
+    { "label": "Journal", "href": "../" },
+    { "label": "Boutiques", "href": "#" },
+    { "label": "Contact", "href": "#" }
+  ]
+}
+</script>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="https://plym.io" target="_blank" rel="noopener noreferrer">
+      <img class="nav-logo" src="../../../preview/logo.webp" alt="aurelle">
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-menu" id="primary-menu" aria-label="Primary navigation"></nav>
+  </div>
+</header>
+
+
+<script>
+(function () {
+  var dataEl = document.getElementById("plym-nav-data");
+  var menu = document.getElementById("primary-menu");
+  var nav = document.querySelector(".site-nav");
+  var toggle = document.querySelector(".nav-toggle");
+  if (!dataEl || !menu || !nav) return;
+
+  var data;
+  try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
+  var items = (data && data.items) || [];
+  var CARET = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg>';
+
+  function build(list, depth) {
+    var ul = document.createElement("ul");
+    ul.className = depth === 0 ? "nav-list" : "submenu";
+    list.forEach(function (item) {
+      var li = document.createElement("li");
+      li.className = "nav-item";
+
+      var a = document.createElement("a");
+      a.className = "nav-link";
+      var href = item.href || "#";
+      a.href = href;
+      a.textContent = item.label || "";
+      // Real links open in a new tab; placeholder "#" links don't.
+      if (href !== "#") {
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+      }
+      li.appendChild(a);
+
+      var kids = item.children && item.children.length ? item.children : null;
+      if (kids) {
+        li.classList.add("has-children");
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "nav-caret";
+        btn.setAttribute("aria-expanded", "false");
+        btn.setAttribute("aria-label", (item.label || "menu") + " submenu");
+        btn.innerHTML = CARET;
+        li.appendChild(btn);
+        li.appendChild(build(kids, depth + 1));
+
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var open = li.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(open));
+          // close sibling dropdowns
+          var siblings = li.parentNode.children;
+          for (var i = 0; i < siblings.length; i++) {
+            if (siblings[i] !== li && siblings[i].classList) {
+              siblings[i].classList.remove("open");
+              var sb = siblings[i].querySelector(":scope > .nav-caret");
+              if (sb) sb.setAttribute("aria-expanded", "false");
+            }
+          }
+        });
+      }
+      ul.appendChild(li);
+    });
+    return ul;
+  }
+
+  menu.appendChild(build(items, 0));
+
+  // Edge-aware dropdowns: flip any panel that would spill past the right
+  // viewport edge so it never gets clipped (desktop only; the drawer stacks).
+  function applyFlips() {
+    var subs = menu.querySelectorAll(".submenu");
+    subs.forEach(function (s) { s.classList.remove("flip-x"); });
+    if (window.innerWidth < 1025) return;
+    subs.forEach(function (s) {
+      var r = s.getBoundingClientRect();           // laid out even while hidden
+      if (r.right > window.innerWidth - 8) s.classList.add("flip-x");
+    });
+  }
+  applyFlips();
+  var rt;
+  window.addEventListener("resize", function () {
+    clearTimeout(rt);
+    rt = setTimeout(applyFlips, 150);
+  });
+
+  // Hamburger
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var open = nav.classList.toggle("nav-open");
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    });
+  }
+
+  // Close everything on Escape / outside click
+  function closeAll() {
+    nav.classList.remove("nav-open");
+    if (toggle) { toggle.setAttribute("aria-expanded", "false"); toggle.setAttribute("aria-label", "Open menu"); }
+    menu.querySelectorAll(".nav-item.open").forEach(function (el) {
+      el.classList.remove("open");
+      var b = el.querySelector(":scope > .nav-caret");
+      if (b) b.setAttribute("aria-expanded", "false");
+    });
+  }
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeAll(); });
+  document.addEventListener("click", function (e) { if (!nav.contains(e.target)) closeAll(); });
+})();
+</script>
+
+
+<main id="content">
+<article class="plym-post">
+  <header class="post-hero">
+    <span class="eyebrow">The Journal</span>
+    <h1>The First Sparks: Computing Before the Internet</h1>
+    <div class="post-meta">
+      
+      <span class="author">Claude Shannon</span>
+      
+        <span class="dot" aria-hidden="true"></span>
+        <span>May 29, 2026</span>
+      
+      <span class="dot" aria-hidden="true"></span>
+      <span>3 min read</span>
+    </div>
+  </header>
+
+  
+  <div class="post-cover-banner">
+    <img src="../../../preview/assets/the-first-sparks-computing-before-the-internet.webp" alt="" decoding="async">
+  </div>
+  
+
+  
+  <div class="post-layout has-toc">
+    
+    <aside class="toc" aria-label="Table of contents">
+      <span class="eyebrow">Contents</span>
+      <ul>
+        
+        <li class="lvl-2"><a href="#from-calculation-to-computation">From Calculation to Computation</a></li>
+          
+          <li class="lvl-3"><a href="#mechanical-beginnings">Mechanical Beginnings</a></li>
+          
+          <li class="lvl-3"><a href="#key-milestones">Key Milestones</a></li>
+          
+        
+        <li class="lvl-2"><a href="#the-age-of-vacuum-tubes">The Age of Vacuum Tubes</a></li>
+          
+          <li class="lvl-3"><a href="#characteristics">Characteristics</a></li>
+          
+        
+        <li class="lvl-2"><a href="#programming-emerges">Programming Emerges</a></li>
+          
+          <li class="lvl-3"><a href="#early-languages">Early Languages</a></li>
+          
+        
+        <li class="lvl-2"><a href="#networks-connect-the-world">Networks Connect the World</a></li>
+          
+          <li class="lvl-3"><a href="#before-the-web">Before the Web</a></li>
+          
+          <li class="lvl-3"><a href="#building-blocks">Building Blocks</a></li>
+          
+        
+        <li class="lvl-2"><a href="#lessons-from-early-computing">Lessons From Early Computing</a></li>
+          
+          <li class="lvl-3"><a href="#patterns-that-repeat">Patterns That Repeat</a></li>
+          
+        
+      </ul>
+    </aside>
+    
+
+    <div class="prose">
+      <p>Technology rarely arrives all at once. It appears in fragments. A relay clicking in a lab. A vacuum tube glowing in the dark. A programmer feeding punched cards into a machine that fills an entire room.</p>
+<p>The history of computing is the story of small breakthroughs that changed the direction of civilization.</p>
+<h2 id="from-calculation-to-computation">From Calculation to Computation</h2>
+<p>Long before laptops and cloud servers, engineers were trying to solve a simple problem: how do we calculate faster?</p>
+<h3 id="mechanical-beginnings">Mechanical Beginnings</h3>
+<p>Early machines were designed to reduce human effort.</p>
+<ul>
+<li>The abacus accelerated arithmetic.</li>
+<li>Mechanical calculators reduced manual errors.</li>
+<li>Programmable looms introduced the idea of instructions controlling machines.</li>
+<li>Punched cards became a medium for storing information.</li>
+</ul>
+<blockquote>
+<p>Every great technological revolution begins by solving a small, practical problem.</p>
+</blockquote>
+<h3 id="key-milestones">Key Milestones</h3>
+<table>
+<thead>
+<tr>
+<th>Year</th>
+<th>Innovation</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1801</td>
+<td>Jacquard Loom</td>
+<td>Introduced programmable patterns</td>
+</tr>
+<tr>
+<td>1837</td>
+<td>Analytical Engine</td>
+<td>Conceptual foundation of general-purpose computing</td>
+</tr>
+<tr>
+<td>1890</td>
+<td>Hollerith Tabulator</td>
+<td>Automated census processing</td>
+</tr>
+<tr>
+<td>1946</td>
+<td>ENIAC</td>
+<td>Large-scale electronic computation</td>
+</tr>
+<tr>
+<td>1971</td>
+<td>Microprocessor</td>
+<td>Computing became personal</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-age-of-vacuum-tubes">The Age of Vacuum Tubes</h2>
+<p>Electronic computing started with machines that consumed enormous amounts of power.</p>
+<h3 id="characteristics">Characteristics</h3>
+<ul>
+<li>Room-sized hardware</li>
+<li>High heat generation</li>
+<li>Frequent component failures</li>
+<li>Limited memory</li>
+<li>Revolutionary performance for the time</li>
+</ul>
+<h4 id="a-different-scale">A Different Scale</h4>
+<p>A modern smartphone performs billions of operations per second while fitting into a pocket.</p>
+<p>Early computers needed dedicated operators, specialized cooling, and entire facilities.</p>
+<p><code>miniaturization</code> became one of the defining themes of technological progress.</p>
+<h2 id="programming-emerges">Programming Emerges</h2>
+<p>Hardware alone was not enough.</p>
+<p>The real breakthrough came when humans learned to communicate with machines through software.</p>
+<h3 id="early-languages">Early Languages</h3>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Introduced</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Assembly</td>
+<td>1940s</td>
+<td>Low-level machine control</td>
+</tr>
+<tr>
+<td>FORTRAN</td>
+<td>1957</td>
+<td>Scientific computing</td>
+</tr>
+<tr>
+<td>COBOL</td>
+<td>1959</td>
+<td>Business applications</td>
+</tr>
+<tr>
+<td>C</td>
+<td>1972</td>
+<td>Systems programming</td>
+</tr>
+</tbody>
+</table>
+<h4 id="why-c-changed-everything">Why C Changed Everything</h4>
+<p>C balanced performance with portability.</p>
+<p>Many operating systems, compilers, and embedded platforms trace their roots to it.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf(&quot;Hello, World!\n&quot;);
+
+    for (int i = 0; i &lt; 5; i++) {
+        printf(&quot;Iteration %d\n&quot;, i);
+    }
+
+    return 0;
+}
+</code></pre>
+<h2 id="networks-connect-the-world">Networks Connect the World</h2>
+<p>Computers became useful.</p>
+<p>Networks made them transformative.</p>
+<h3 id="before-the-web">Before the Web</h3>
+<p>Researchers connected machines to share information across distances.</p>
+<p>What started as academic experimentation evolved into global infrastructure.</p>
+<blockquote>
+<p>The most important technologies do not replace people. They connect them.</p>
+</blockquote>
+<h3 id="building-blocks">Building Blocks</h3>
+<ul>
+<li>Packet switching</li>
+<li>Routing protocols</li>
+<li>Distributed systems</li>
+<li>Error correction</li>
+<li>Standardized communication</li>
+</ul>
+<h2 id="lessons-from-early-computing">Lessons From Early Computing</h2>
+<p>Technology advances in layers.</p>
+<p>One generation builds the foundation. The next generation builds on top of it.</p>
+<h3 id="patterns-that-repeat">Patterns That Repeat</h3>
+<ol>
+<li>Hardware becomes cheaper.</li>
+<li>Software becomes more capable.</li>
+<li>Networks become faster.</li>
+<li>Access becomes broader.</li>
+<li>New industries emerge.</li>
+</ol>
+<h4 id="a-final-thought">A Final Thought</h4>
+<p>The pioneers of computing were not trying to build social networks, smartphones, or artificial intelligence.</p>
+<p>They were trying to solve difficult problems with limited tools.</p>
+<p>Their success reminds us of a timeless principle:</p>
+<blockquote>
+<p>Great innovations often begin as humble experiments.</p>
+</blockquote>
+
+      <footer class="post-footer">
+        
+        <span class="footer-tags-label">Filed under</span>
+        <div class="post-tags">
+          <span class="tag">AI</span>
+        </div>
+        
+        <a class="back-link" href="../index.html">
+          <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path d="M24 6H2M7 1 2 6l5 5"/>
+          </svg>
+          Back to the Journal
+        </a>
+      </footer>
+    </div>
+  </div>
+</article>
+</main>
+
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      
+        <img class="f-logo" src="../../../preview/logo.webp" alt="aurelle">
+      
+      <p>Crafted for those who cherish the extraordinary — jewellery designed to be treasured for generations.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" aria-label="Pinterest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 19c-.5-1.5 0-3 .5-5 .3-1.2.8-3 .8-3s-.3-.6-.3-1.5c0-1.4.8-2.4 1.8-2.4.9 0 1.3.7 1.3 1.5 0 .9-.6 2.2-.9 3.4-.3 1 .5 1.9 1.5 1.9 1.8 0 3-2.3 3-5 0-2.1-1.4-3.6-3.9-3.6A4.4 4.4 0 0 0 8 9.7c0 .8.3 1.4.7 1.8.2.2.2.3.1.5l-.2.8c-.1.3-.3.4-.6.2-1.1-.5-1.6-1.8-1.6-3.3C6.4 6.9 8.5 4 12.4 4 15.6 4 18 6.3 18 9.3c0 3.3-1.9 5.8-4.6 5.8-.9 0-1.8-.5-2.1-1l-.6 2.2c-.2.8-.7 1.8-1.1 2.5z"/></svg>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M15 8h-2a2 2 0 0 0-2 2v10M8 12h6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h3>Collections</h3>
+      <ul>
+        <li><a href="#">Rings</a></li>
+        <li><a href="#">Necklaces</a></li>
+        <li><a href="#">Earrings</a></li>
+        <li><a href="#">Bracelets</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>Maison</h3>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Craftsmanship</a></li>
+        <li><a href="../index.html">Journal</a></li>
+        <li><a href="#">Boutiques</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>Client Care</h3>
+      <ul>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Care Guide</a></li>
+        <li><a href="#">Appointments</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© aurelle. All rights reserved.</span>
+    <span>Designed with care · <a href="https://plym.io">https://plym.io</a></span>
+  </div>
+</footer>
+<style>@keyframes plymPvIn{from{opacity:0;transform:translateY(-100%)}to{opacity:1;transform:translateY(0)}}.plym-preview-banner{position:fixed;top:0;left:0;right:0;z-index:2147483647;box-sizing:border-box;width:100%;padding:11px 44px;text-align:center;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:13px;font-weight:600;line-height:1.45;letter-spacing:.01em;color:#241400;background:linear-gradient(180deg,#ffc24b,#ff9e2c);border-bottom:1px solid rgba(0,0,0,.18);box-shadow:0 4px 14px rgba(0,0,0,.18);animation:plymPvIn .4s ease 1s both}.plym-preview-banner strong{font-weight:800}.plym-preview-banner button{position:absolute;top:50%;right:12px;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border:0;border-radius:6px;cursor:pointer;background:rgba(0,0,0,.08);color:#241400;font-size:17px;line-height:1;opacity:.55;transition:opacity .15s,background .15s}.plym-preview-banner button:hover{opacity:1;background:rgba(0,0,0,.16)}</style><div class="plym-preview-banner" role="alert">Preview only — the template's design, <strong>NOT</strong> a page built by the <strong>plym</strong> engine. A real <strong>plym</strong> blog with this template will look identical but with SEO and optimizations baked in.<button type="button" aria-label="Dismiss this notice" onclick="this.parentNode.remove()">&times;</button></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

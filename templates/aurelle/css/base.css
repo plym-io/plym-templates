@@ -71,6 +71,11 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 0 .6em;
 }
 
+h3 {
+  font-weight: 100;
+  font-variation-settings: "wght" 100;
+}
+
 /* Shared luxury "eyebrow" label */
 .eyebrow {
   font-family: var(--font-body), sans-serif;
@@ -471,16 +476,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 .post-row:hover .post-cover img { transform: scale(1.06); }
 
-/* No cover → a clean, full-width text card (no placeholder image) */
+/* No cover → a clean, full-width text card (no placeholder image), left-aligned */
 .post-row.no-cover { grid-template-columns: 1fr; }
 .post-row.no-cover .post-body {
   padding: clamp(1.5rem, 3vw, 2.4rem) clamp(1.4rem, 2.2vw, 2.4rem);
-  text-align: center;
-  align-items: center;
+  text-align: left;
+  align-items: flex-start;
 }
 .post-row.no-cover .post-tags,
-.post-row.no-cover .post-meta { justify-content: center; }
-.post-row.no-cover .post-excerpt { margin-inline: auto; }
+.post-row.no-cover .post-meta { justify-content: flex-start; }
+.post-row.no-cover .post-excerpt { margin-inline: 0; }
 
 .post-body {
   padding: clamp(1.2rem, 2vw, 1.9rem) clamp(1.4rem, 2.2vw, 2.4rem) clamp(1.2rem, 2vw, 1.9rem) 0;

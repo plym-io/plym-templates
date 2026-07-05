@@ -72,7 +72,7 @@
         </header>
 
         {% if post.cover %}
-          <img class="hz-post__cover" src="{{ post.cover }}" alt="" loading="lazy" decoding="async">
+          <img class="hz-post__cover" src="{{ post.cover }}" alt="" fetchpriority="high" decoding="async">
         {% endif %}
 
         <div class="hz-prose">

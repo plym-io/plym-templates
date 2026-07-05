@@ -302,6 +302,10 @@
 .hz-post__head .hz-byline { margin-top: 22px; }
 .hz-post__cover {
   width: 100%;
+  /* Reserve the box before the image loads → no layout shift (CLS).
+     Covers vary ~3:2–16:9; 16/9 + cover crops gracefully to a stable hero. */
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   border-radius: var(--hz-radius);
   margin-bottom: 32px;
   box-shadow: var(--hz-shadow);

@@ -605,6 +605,10 @@ html { scroll-behavior: smooth; scroll-padding-top: 28px; }
 .hz-post__head .hz-byline { margin-top: 22px; }
 .hz-post__cover {
   width: 100%;
+  /* Reserve the box before the image loads → no layout shift (CLS).
+     Covers vary ~3:2–16:9; 16/9 + cover crops gracefully to a stable hero. */
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   border-radius: var(--hz-radius);
   margin-bottom: 32px;
   box-shadow: var(--hz-shadow);
@@ -840,7 +844,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 28px; }
         </header>
 
         
-          <img class="hz-post__cover" src="../../../preview/assets/calculus-of-conflict.webp" alt="" loading="lazy" decoding="async">
+          <img class="hz-post__cover" src="../../../preview/assets/calculus-of-conflict.webp" alt="" fetchpriority="high" decoding="async">
         
 
         <div class="hz-prose">

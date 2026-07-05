@@ -42,6 +42,20 @@
   --hz-content: 720px;
 }
 
+/* ---- Font-swap CLS guard -------------------------------------------- */
+/* Metric-matched fallback for Inter (the brand face). While Inter is still
+   loading, text renders in this size-adjusted local Arial instead of raw
+   system-ui, so the swap to Inter reflows ~0px → no layout shift (CLS).
+   Metrics per next/font; retune if the brand heading/body font changes. */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial");
+  ascent-override: 90.44%;
+  descent-override: 22.52%;
+  line-gap-override: 0.00%;
+  size-adjust: 107.12%;
+}
+
 /* ---- Reset ---------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -54,7 +68,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 28px; }
   min-height: 100vh;
   margin: 0;
   color: var(--hz-text);
-  font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-family: var(--font-body), "Inter Fallback", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   font-weight: 400;
   line-height: 1.65;
   font-size: 17px;
@@ -72,7 +86,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 28px; }
 /* :where() keeps these defaults at zero specificity so single-class
    component rules (e.g. white titles/buttons on dark) always win. */
 :where(.hz-page) :is(h1, h2, h3, h4) {
-  font-family: var(--font-heading), system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-family: var(--font-heading), "Inter Fallback", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   color: var(--hz-heading);
   line-height: 1.2;
   letter-spacing: -0.015em;

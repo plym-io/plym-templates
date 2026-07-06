@@ -44,13 +44,13 @@ PREVIEW_DIR="$SCRIPT_DIR/preview"
 [ -f "$PREVIEW_DIR/index.json" ] || { echo "error: missing $PREVIEW_DIR/index.json" >&2; exit 1; }
 [ -d "$PREVIEW_DIR/content" ]    || { echo "error: missing $PREVIEW_DIR/content/" >&2; exit 1; }
 
-python3 -c "import jinja2, yaml, markdown" 2>/dev/null || {
+/opt/homebrew/bin/python3.10 -c "import jinja2, yaml, markdown" 2>/dev/null || {
   echo "→ installing jinja2 + pyyaml + markdown ..."
-  pip3 install --quiet jinja2 pyyaml markdown
+  /opt/homebrew/bin/pip3.10 install --quiet jinja2 pyyaml markdown
 }
 
 DEMO_DIR="$SCRIPT_DIR/demo"
-TEMPLATE_DIR="$DIR" TEMPLATE_NAME="$NAME" PREVIEW_DIR="$PREVIEW_DIR" DEMO_DIR="$DEMO_DIR" SHOT="$SHOT" python3 <<'PY'
+TEMPLATE_DIR="$DIR" TEMPLATE_NAME="$NAME" PREVIEW_DIR="$PREVIEW_DIR" DEMO_DIR="$DEMO_DIR" SHOT="$SHOT" /opt/homebrew/bin/python3.10 <<'PY'
 import os, re, glob, json, datetime, pathlib, shutil, yaml
 import markdown as md_lib
 from jinja2 import Environment, FileSystemLoader, StrictUndefined

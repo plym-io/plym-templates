@@ -1,13 +1,16 @@
+/* ============================================================
+   journal2 — neo-brutalism on white graph paper
+   The journal template on gallery-white: white paper, grey dots,
+   neutral ink, one orange accent. Hard ink borders, hard offset
+   shadows, sharp corners, dotted paper up top, and two hairline
+   rails framing the page — bisected by the bar's and footer's
+   full-bleed rules, leaving a square cutout in each corner (the
+   plym.io move).
+   Everything derives from the injected --color-* / --font-* vars.
+   Heading = Space Grotesk (600 / 900) · Body = Archivo (400)
+   ============================================================ */
+
 *, *::before, *::after { box-sizing: border-box; }
-
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-*::-webkit-scrollbar {
-  display: none;
-}
 
 html {
   -webkit-text-size-adjust: 100%;
@@ -23,45 +26,100 @@ html {
 }
 
 :root {
-  --nb-ink:        #111111;
-  --nb-shadow:     4px 4px 0 var(--nb-ink);
-  --nb-shadow-lg:  7px 7px 0 var(--nb-ink);
-  --nb-shadow-sm:  3px 3px 0 var(--nb-ink);
-  --nb-border:     3px solid var(--nb-ink);
-  --nb-border-thin:2px solid var(--nb-ink);
-  --nb-radius:     2px;
+  /* ink — text on paper */
+  --ink:    var(--color-primary);
+  --ink-2:  color-mix(in srgb, var(--color-primary) 78%, var(--color-background));
+  --dim:    var(--color-secondary);
 
-  --nb-surface:    color-mix(in srgb, var(--color-background) 86%, var(--nb-ink) 0%);
-  --nb-paper:      #ffffff;
-  --nb-muted:      color-mix(in srgb, var(--color-primary) 62%, var(--color-background));
-  --nb-highlight:  color-mix(in srgb, var(--color-accent) 28%, var(--color-background));
+  /* warm surfaces — near-white cards on light cream paper */
+  --paper:   var(--color-background);
+  --card:    color-mix(in srgb, var(--color-background) 22%, #ffffff);
 
-  --nb-maxw:       72rem;
-  --nb-readw:      40rem;
+  /* neo-brutalist ink structure (hard 2px) + hairlines (1px, quiet) */
+  --border:      2px solid var(--ink);
+  --line:        color-mix(in srgb, var(--color-primary) 26%, transparent);
+  --line-soft:   color-mix(in srgb, var(--color-primary) 14%, transparent);
+  --rail:        color-mix(in srgb, var(--color-primary) 15%, transparent);
+  --shadow:      4px 4px 0 var(--ink);
+  --shadow-sm:   3px 3px 0 var(--ink);
+  --shadow-xs:   2px 2px 0 var(--ink);
+
+  /* the one accent + readable/tinted derivations */
+  --accent:      var(--color-accent);
+  --accent-ink:  color-mix(in srgb, var(--color-accent) 60%, var(--color-primary));
+  --accent-tint: color-mix(in srgb, var(--color-accent) 12%, var(--color-background));
+  --accent-line: color-mix(in srgb, var(--color-accent) 34%, var(--color-background));
+
+  --r:    3px;   /* sharp — neo-brutalist */
+  --r-sm: 2px;
+
+  --nb-maxw:  76rem;
+  --nb-readw: 42rem;
+  --nb-bar-h: 4.25rem;  /* bar height = rail inset → square corner cutouts */
 }
 
 body {
+  position: relative;
   margin: 0;
-  font-family: var(--font-body), 'Space Grotesk', ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+  font-family: var(--font-body), 'Archivo', system-ui, -apple-system, sans-serif;
   font-size: 18px;
   line-height: 1.7;
-  color: var(--color-primary);
-  background: var(--color-background);
+  color: var(--ink);
+  background-color: var(--paper);
+  overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* dotted paper texture — the journal signature. It lives at the top of
+   the page only and fades out before the reading zone starts. */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52rem;
+  pointer-events: none;
+  z-index: 0;
   background-image: radial-gradient(
-    color-mix(in srgb, var(--nb-ink) 9%, transparent) 1px,
+    color-mix(in srgb, var(--color-primary) 10%, transparent) 1px,
     transparent 1px);
   background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
+}
+
+/* geometric rails — two fixed hairlines inset one bar-height from the
+   viewport edges. The bar's bottom rule bisects them (a square cutout in
+   each top corner); the footer's top rule does the same at the bottom.
+   Drawn above the bar so they visibly cross it, exactly as on plym.io. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0 var(--nb-bar-h);
+  border-left:  1px solid var(--rail);
+  border-right: 1px solid var(--rail);
+  pointer-events: none;
+  z-index: 60;
+}
+@media (max-width: 87rem) { body::after { display: none; } }
+
+/* page content sits above the dotted layer */
+.nb-bar,
+.nb-index-main,
+.nb-post-layout,
+.nb-footer {
+  position: relative;
+  z-index: 1;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading), 'Archivo', 'Arial Black', system-ui, sans-serif;
-  font-weight: 900;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  color: var(--color-primary);
+  font-family: var(--font-heading), 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--ink);
   margin: 0;
 }
 
@@ -69,151 +127,48 @@ p { margin: 0 0 1.25em; }
 
 img { max-width: 100%; height: auto; display: block; }
 
-a {
-  color: var(--color-primary);
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--color-accent);
-  transition: background-color 0.12s ease, color 0.12s ease;
-}
-a:hover {
-  background: var(--color-accent);
-  color: var(--nb-ink);
-  text-decoration-color: var(--nb-ink);
+a { color: inherit; text-decoration: none; }
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 24%, var(--color-background));
+  color: var(--ink);
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 3px solid var(--accent);
   outline-offset: 2px;
 }
 
-.nb-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  max-width: var(--nb-maxw);
-  margin: 0 auto;
-  padding: 1.4rem 1.5rem;
-  border-bottom: var(--nb-border);
-}
-
-.nb-brand { text-decoration: none; display: inline-flex; }
-.nb-brand:hover { background: transparent; }
-
-.nb-brand-mark {
-  font-family: var(--font-heading), 'Archivo', 'Arial Black', sans-serif;
-  font-size: 1.15rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: var(--color-primary);
-  background: var(--color-accent);
-  border: var(--nb-border-thin);
-  box-shadow: var(--nb-shadow-sm);
-  padding: 0.3rem 0.7rem;
-  border-radius: var(--nb-radius);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-.nb-brand:hover .nb-brand-mark {
-  transform: translate(-2px, -2px);
-  box-shadow: var(--nb-shadow);
-}
-
-.nb-logo { max-height: 34px; width: auto; }
-
-.nb-masthead {
-  --nb-mast-h: 3rem;
-  max-width: var(--nb-maxw);
-  margin: 0 auto;
-  padding: 3.5rem 1.5rem 0;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.nb-masthead-brand {
-  display: block;
-  width: fit-content;
-  text-decoration: none;
-}
-.nb-masthead-brand:hover { background: transparent; }
-
-.nb-masthead .nb-logo {
-  display: block;
-  height: var(--nb-mast-h);
-  max-height: var(--nb-mast-h);
-  width: auto;
-}
-
-.nb-masthead-title {
-  font-size: clamp(2.6rem, 11vw, 6rem);
-  line-height: 0.9;
-  margin: 0;
-  color: var(--color-primary);
-  text-shadow: var(--nb-shadow-sm);
-}
-.nb-masthead-brand:hover .nb-masthead-title { color: var(--color-accent); }
-
-.nb-masthead-strip {
+/* eyebrow / kicker — small tracked label with an accent tick */
+.nb-eyebrow {
   display: inline-flex;
   align-items: center;
-  height: var(--nb-mast-h);
+  gap: 0.6rem;
   margin: 0;
-  padding: 0 1rem;
-  background: var(--color-accent);
-  color: var(--nb-ink);
-  border: var(--nb-border);
-  box-shadow: var(--nb-shadow);
-  border-radius: var(--nb-radius);
-  font-family: var(--font-heading), 'Archivo', sans-serif;
-  font-size: 1rem;
-  font-weight: 900;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-}
-
-.nb-brand-tag,
-.nb-back {
-  font-family: var(--font-heading), 'Archivo', sans-serif;
-  font-size: 0.7rem;
+  font-family: var(--font-heading), 'Space Grotesk', sans-serif;
   font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--nb-muted);
-  text-decoration: none;
-}
-.nb-back { color: var(--color-primary); }
-.nb-back:hover { background: var(--color-accent); color: var(--nb-ink); }
-
-.nb-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  max-width: var(--nb-maxw);
-  margin: 4rem auto 0;
-  padding: 1.5rem;
-  border-top: var(--nb-border);
-  font-family: var(--font-heading), 'Archivo', sans-serif;
   font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--nb-muted);
+  color: var(--dim);
 }
-.nb-footer a { color: var(--color-primary); text-decoration-thickness: 2px; }
+.nb-eyebrow-mark {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  background: var(--accent);
+  border: 1.5px solid var(--ink);
+}
+.nb-index-count { font-variant-numeric: tabular-nums; flex: none; }
 
+/* meta line (author / date / reading time) */
 .nb-meta {
-  font-family: var(--font-heading), 'Archivo', sans-serif;
-  font-size: 0.7rem;
+  font-family: var(--font-heading), 'Space Grotesk', sans-serif;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 0.74rem;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--nb-muted);
+  color: var(--dim);
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -221,4 +176,124 @@ a:hover {
   margin: 0;
 }
 .nb-meta time { font-variant-numeric: tabular-nums; }
-.nb-meta-sep { color: var(--color-accent); font-weight: 900; }
+.nb-meta-sep { color: var(--accent); font-weight: 900; }
+
+/* ============================================================
+   Top bar — one compact masthead strip shared by both pages.
+   Full-bleed, so its bottom rule crosses (bisects) the rails.
+   ============================================================ */
+.nb-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-bottom: var(--border);
+}
+.nb-bar-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: var(--nb-maxw);
+  height: var(--nb-bar-h);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.nb-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 0;
+  text-decoration: none;
+}
+.nb-logo { display: block; height: 2rem; width: auto; flex: none; }
+.nb-brand-mark {   /* fallback square when the site has no logo */
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
+  background: var(--accent);
+  border: 2px solid var(--ink);
+}
+.nb-masthead-title {   /* index — the nameplate lives in the bar */
+  font-size: clamp(1.5rem, 2.6vw, 1.95rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nb-brand-name {       /* post — quieter brand */
+  font-family: var(--font-heading), 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nb-brand:hover .nb-masthead-title,
+.nb-brand:hover .nb-brand-name { color: var(--accent-ink); }
+
+/* bar action ("← Index" / site link) — small neo-brutalist button */
+.nb-back {
+  flex: none;
+  font-family: var(--font-heading), 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 0.45rem 0.75rem;
+  background: var(--card);
+  border: var(--border);
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
+}
+.nb-back:hover {
+  color: var(--accent-ink);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-sm);
+}
+.nb-ext { color: var(--accent); font-weight: 900; margin-left: 0.35rem; }
+
+/* ============================================================
+   Footer — full-bleed rule bisects the rails at the bottom
+   ============================================================ */
+.nb-footer {
+  margin-top: 5rem;
+  border-top: var(--border);
+}
+.nb-footer-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  max-width: var(--nb-maxw);
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem;
+  font-family: var(--font-heading), 'Space Grotesk', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.nb-footer a { color: var(--ink); transition: color 0.15s ease; }
+.nb-footer a:hover { color: var(--accent-ink); }
+.nb-credit a { display: inline-flex; align-items: center; gap: 0.45rem; }
+.nb-credit-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
+  background: var(--accent);
+  border: 1.5px solid var(--ink);
+}
+.nb-credit-mark svg { width: 0.62rem; height: 0.52rem; color: var(--color-background); }

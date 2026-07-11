@@ -1,16 +1,27 @@
-<header class="nb-masthead">
-  <a class="nb-masthead-brand" href="{{ site.blog_prefix }}/">
-    {% if site.logo %}
-      <img class="nb-logo" src="{{ site.logo }}" alt="{{ site.name }}">
-    {% else %}
+<header class="nb-bar">
+  <div class="nb-bar-in">
+    <a class="nb-brand" href="{{ site.blog_prefix }}/">
+      {% if site.logo %}
+        <img class="nb-logo" src="{{ site.logo }}" alt="" aria-hidden="true">
+      {% else %}
+        <span class="nb-brand-mark" aria-hidden="true"></span>
+      {% endif %}
       <h1 class="nb-masthead-title">{{ site.name }}</h1>
+    </a>
+    {% if site.website %}
+      <a class="nb-back" href="{{ site.website }}">
+        {{ site.website | replace('https://', '') | replace('http://', '') | trim('/') }}<span class="nb-ext" aria-hidden="true">&#8599;</span>
+      </a>
     {% endif %}
-  </a>
-  <p class="nb-masthead-strip">{{ site.name }}</p>
+  </div>
 </header>
 
 <main class="nb-index-main">
   {% if posts %}
+    <div class="nb-index-head">
+      <p class="nb-eyebrow"><span class="nb-eyebrow-mark" aria-hidden="true"></span>Latest writing</p>
+      <p class="nb-eyebrow nb-index-count">{{ '%02d' | format(posts | length) }} {{ 'entry' if posts | length == 1 else 'entries' }}</p>
+    </div>
     <ol class="nb-entry-list">
       {% for post in posts %}
         <li class="nb-entry">
@@ -55,6 +66,10 @@
 </main>
 
 <footer class="nb-footer">
-  <span>{{ site.name }}</span>
-  <span>Powered by <a href="https://plym.io">plym</a></span>
+  <div class="nb-footer-in">
+    <span>{{ site.name }}</span>
+    <span class="nb-credit">Powered by
+      <a href="https://plym.io"><span class="nb-credit-mark" aria-hidden="true"><svg viewBox="0 0 600 500" aria-hidden="true"><path fill="currentColor" d="M121.848351,386.863037 C128.673203,369.180664 135.406433,351.462250 142.339478,333.822418 C166.499832,272.350891 190.780777,210.926605 214.829178,149.411392 C216.639206,144.781357 218.609955,142.934708 223.957001,142.948868 C307.443695,143.170120 390.931152,143.103821 474.418457,143.103821 C476.411194,143.103821 478.403961,143.103806 481.165924,143.103806 C480.413910,145.177643 479.862335,146.818375 479.229431,148.427109 C445.180298,234.971664 411.118561,321.511261 377.095459,408.066040 C376.016235,410.811584 375.151672,412.851593 371.347839,412.844849 C298.359192,412.715729 225.370255,412.749298 152.381363,412.741394 C151.758896,412.741333 151.136429,412.634583 148.906342,412.430664 C204.969757,378.281799 259.835297,344.862610 315.033051,311.241058 C308.955933,301.216003 303.120941,291.590363 297.040192,281.559296 C238.840988,316.977356 180.997849,352.178741 122.674805,387.320343 C122.079376,387.128052 121.963867,386.995544 121.848351,386.863037 z"/></svg></span>plym</a>
+    </span>
+  </div>
 </footer>

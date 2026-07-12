@@ -263,6 +263,15 @@ a.nav-cta{
 }
 .feature-flag .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
 
+/* infinite-scroll sentinel + status */
+.scroll-sentinel{height:1px}
+.load-status{
+  text-align:center;
+  font-family:var(--font-mono);
+  font-size:12px;color:var(--ink-3);letter-spacing:.04em;
+  min-height:18px;margin:32px 0 0;
+}
+
 /* empty state */
 .empty{
   grid-column:1 / -1;

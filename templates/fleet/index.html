@@ -26,6 +26,14 @@
   </div>
 </nav>
 
+{# ---- infinite-scroll config (client-side pagination) ---- #}
+<script>
+  window.PLYM = {
+    blogPrefix: "{{ site.blog_prefix }}",
+    pageSize: {{ site.pagination.page_size or 12 }}
+  };
+</script>
+
 {# ---- blog hero ---- #}
 <header class="blog-hero">
   <div class="wrap">
@@ -36,7 +44,7 @@
 
 {# ---- posts ---- #}
 <main class="wrap blog-main">
-  <div class="posts-grid">
+  <div class="posts-grid" id="postsGrid">
     {% for post in posts %}
       <article class="post-card{% if loop.first %} feature{% endif %}{% if not post.cover %} no-cover{% endif %}">
         {% if post.cover %}
@@ -80,6 +88,10 @@
       </div>
     {% endfor %}
   </div>
+  {% if posts %}
+    <div class="scroll-sentinel" id="scrollSentinel" aria-hidden="true"></div>
+    <p class="load-status" id="loadStatus" role="status" aria-live="polite"></p>
+  {% endif %}
 </main>
 
 {# ---- footer ---- #}
@@ -124,3 +136,71 @@
     </div>
   </div>
 </footer>
+
+<script>
+(function(){
+  "use strict";
+  var grid=document.getElementById("postsGrid"),
+      sentinel=document.getElementById("scrollSentinel"),
+      status=document.getElementById("loadStatus");
+  if(!grid||!sentinel||!("IntersectionObserver" in window))return;
+
+  var P=window.PLYM||{},
+      page=1,loading=false,done=false;
+
+  function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function postUrl(slug){var base=(P.blogPrefix||"").replace(/\/$/,"");return (base?base+"/":"./")+slug;}
+  function setStatus(text){if(status)status.textContent=text;}
+
+  function cardHtml(p){
+    var cover=p.cover||p.cover_url||p.image||"",
+        author=p.author||{},
+        tags=(p.tags||[]).slice(0,3).map(function(t){
+          return "<span class='tag'>"+esc(t&&t.name?t.name:t)+"</span>";
+        }).join(""),
+        avatar=author.avatar_url
+          ? "<img src='"+esc(author.avatar_url)+"' alt=''>"
+          : esc((author.display_name||"?").slice(0,1).toUpperCase()),
+        mins=p.reading_time?("<span class='meta'>"+esc(p.reading_time)+" min read</span>"):"";
+    return "<article class='post-card"+(cover?"":" no-cover")+"'>"+
+      (cover?("<a class='cover' href='"+esc(postUrl(p.slug))+"' tabindex='-1' aria-hidden='true'>"+
+        "<img src='"+esc(cover)+"' alt='' loading='lazy' decoding='async'></a>"):"")+
+      "<div class='card-body'>"+
+      (tags?("<div class='tags'>"+tags+"</div>"):"")+
+      "<h2><a href='"+esc(postUrl(p.slug))+"'>"+esc(p.title)+"</a></h2>"+
+      (p.excerpt?("<p class='excerpt'>"+esc(p.excerpt)+"</p>"):"")+
+      "<div class='card-foot'>"+
+      "<span class='avatar'>"+avatar+"</span>"+
+      "<span class='byline'><span class='name'>"+esc(author.display_name||"")+"</span>"+mins+"</span>"+
+      "</div></div></article>";
+  }
+
+  function loadMore(){
+    if(loading||done)return;
+    loading=true;
+    setStatus("Loading more posts…");
+    fetch("/api/posts?page="+(page+1)+"&include_drafts=false",{headers:{accept:"application/json"}})
+      .then(function(r){return r.json();})
+      .then(function(data){
+        var items=Array.isArray(data)?data:(data.posts||data.items||data.results||data.data||[]);
+        page++;
+        if(!items.length){
+          done=true;observer.disconnect();setStatus("You've reached the end.");
+          return;
+        }
+        grid.insertAdjacentHTML("beforeend",items.map(cardHtml).join(""));
+        setStatus("");
+        if(items.length<(P.pageSize||12)){
+          done=true;observer.disconnect();setStatus("You've reached the end.");
+        }
+      })
+      .catch(function(){done=true;observer.disconnect();setStatus("");})
+      .then(function(){loading=false;});
+  }
+
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){if(entry.isIntersecting)loadMore();});
+  },{rootMargin:"600px 0px"});
+  observer.observe(sentinel);
+})();
+</script>

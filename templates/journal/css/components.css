@@ -399,6 +399,123 @@
 }
 
 /* ============================================================
+   FAQ — accordion of hard-framed cards; each question collapses
+   by default (native <details>), opening to reveal the answer.
+   The accent + rotates to a − when a question is open.
+   ============================================================ */
+.nb-faq {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: var(--border);
+}
+.nb-faq-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading), 'Space Grotesk', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 0 0 1.15rem;
+}
+.nb-faq-tick {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  background: var(--accent);
+  border: 1.5px solid var(--ink);
+}
+
+.nb-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.nb-faq-item {
+  background: var(--card);
+  border: var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--r);
+  overflow: hidden;
+  transition: box-shadow 0.15s ease;
+}
+.nb-faq-item[open] { box-shadow: var(--shadow); }
+
+/* summary = the question row; native marker removed, custom + on the right */
+.nb-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  list-style: none;
+  padding: 1.1rem 1.3rem;
+  font-family: var(--font-heading), 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 1.06rem;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  color: var(--ink);
+  transition: color 0.15s ease, background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.nb-faq-q::-webkit-details-marker { display: none; }
+.nb-faq-q:hover { background: var(--accent-tint); color: var(--accent-ink); }
+.nb-faq-item[open] > .nb-faq-q {
+  border-bottom: 1px solid var(--line);
+}
+
+/* the +/− toggle mark — a small accent-tinted box holding two bars;
+   the vertical bar collapses when the item opens, leaving a minus */
+.nb-faq-icon {
+  position: relative;
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  background: var(--accent-tint);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  transition: background-color 0.15s ease;
+}
+.nb-faq-icon::before,
+.nb-faq-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.62rem;
+  height: 2px;
+  background: var(--accent);
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+.nb-faq-icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+.nb-faq-item[open] > .nb-faq-q .nb-faq-icon::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+}
+.nb-faq-q:hover .nb-faq-icon { background: var(--card); }
+
+.nb-faq-a {
+  padding: 1.1rem 1.3rem 1.3rem;
+  color: var(--ink-2);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.nb-faq-a > :first-child { margin-top: 0; }
+.nb-faq-a > :last-child { margin-bottom: 0; }
+.nb-faq-a a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.nb-faq-a a:hover { background: var(--accent-tint); }
+
+/* ============================================================
    Author card
    ============================================================ */
 .nb-author {

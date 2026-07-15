@@ -68,6 +68,26 @@
       {{ post.content | safe }}
     </div>
 
+    {% if post.faqs is defined and post.faqs %}
+      <section class="nb-faq" aria-labelledby="nb-faq-title">
+        <p class="nb-faq-label" id="nb-faq-title">
+          <span class="nb-faq-tick" aria-hidden="true"></span>
+          Frequently asked
+        </p>
+        <div class="nb-faq-list">
+          {% for faq in post.faqs %}
+            <details class="nb-faq-item">
+              <summary class="nb-faq-q">
+                <span class="nb-faq-q-text">{{ faq.question }}</span>
+                <span class="nb-faq-icon" aria-hidden="true"></span>
+              </summary>
+              <div class="nb-faq-a">{{ faq.answer | safe }}</div>
+            </details>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+
     <div class="nb-author">
       {% if post.author.avatar_url %}
         <img class="nb-author-avatar"

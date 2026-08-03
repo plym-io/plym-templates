@@ -23,7 +23,7 @@ jobs:
           AFTER: ${{ github.sha }}
         run: |
           if [ -z "$BEFORE" ] || ! git cat-file -e "$BEFORE" 2>/dev/null; then
-            BEFORE=$(git rev-parse "$AFTER^")
+            BEFORE=$(git rev-parse --verify -q "$AFTER^") || BEFORE=$(git hash-object -t tree /dev/null)
           fi
           added=""
           for dir in $(git diff --name-only --diff-filter=A "$BEFORE" "$AFTER" -- templates/ | awk -F/ 'NF > 2 { print $2 }' | sort -u); do

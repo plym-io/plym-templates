@@ -1,0 +1,80 @@
+{%- import "_ui.html" as ui with context -%}
+{%- set here = post.path or post.slug -%}
+{%- set stamp = post.updated_at or post.published_at -%}
+
+<script>(function(){try{var t=localStorage.getItem("plym-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}})();</script>
+
+{{ ui.masthead(site, (site.blog_prefix or '') ~ '/' ~ here) }}
+
+<div class="shell" data-page="post" data-prefix="{{ site.blog_prefix }}"
+     data-cat="{{ post.category.slug if post.category else '' }}" data-path="{{ here }}"
+     data-aside="{{ 1 if post.toc else 0 }}">
+
+  <nav class="rail" id="docnav" aria-label="Documentation sections">
+    <div data-rail-body>
+      <ul class="grp-list">
+        <li><a href="{{ site.blog_prefix or '/' }}">All pages</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="doc" id="main">
+    <article>
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="{{ site.blog_prefix or '/' }}">Docs</a>
+        {{ ui.ic_caret('') }}
+        {%- if post.category %}
+        <a href="{{ site.blog_prefix or '/' }}#{{ post.category.slug }}">{{ post.category.name }}</a>
+        {%- else %}
+        <span>Other pages</span>
+        {%- endif %}
+      </nav>
+
+      <header class="art-head">
+        <h1>{{ post.title }}</h1>
+        {%- if post.excerpt %}<p class="lede">{{ post.excerpt }}</p>{% endif %}
+        {%- if stamp %}<p class="stamp">Updated {{ stamp.strftime('%b %d, %Y') }}</p>{% endif %}
+      </header>
+
+      {%- if post.cover %}
+      <img class="cover" src="{{ post.cover }}" alt="" decoding="async" fetchpriority="high">
+      {%- endif %}
+
+      {%- if post.toc %}
+      <details class="toc-fold">
+        <summary>{{ ui.ic_toc() }} On this page {{ ui.ic_caret() }}</summary>
+        {{ ui.toc_list(post.toc) }}
+      </details>
+      {%- endif %}
+
+      <div class="prose">{{ post.content | safe }}</div>
+
+      {%- if post.faqs %}
+      <section class="faqs">
+        <h2>{{ ui.ic_question() }} Frequently asked questions</h2>
+        {%- for faq in post.faqs %}
+        <details class="faq">
+          <summary><span>{{ faq.question }}</span>{{ ui.ic_caret() }}</summary>
+          <div class="faq-body">{{ faq.answer }}</div>
+        </details>
+        {%- endfor %}
+      </section>
+      {%- endif %}
+
+      <nav class="pager" data-pager aria-label="Nearby pages"></nav>
+    </article>
+  </main>
+
+  {%- if post.toc %}
+  <aside class="aside" aria-label="On this page">
+    <p class="toc-head">{{ ui.ic_toc() }} On this page</p>
+    {{ ui.toc_list(post.toc) }}
+  </aside>
+  {%- endif %}
+</div>
+
+{{ ui.colophon(site) }}
+
+<div class="scrim" aria-hidden="true"></div>
+
+{% include "_app.html" %}

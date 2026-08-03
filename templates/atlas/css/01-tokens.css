@@ -1,0 +1,97 @@
+:root {
+  --page: var(--color-background);
+  --surface: color-mix(in srgb, var(--color-primary) 3%, var(--color-background));
+  --surface-hover: color-mix(in srgb, var(--color-primary) 6%, var(--color-background));
+
+  --ink: var(--color-primary);
+  --ink-2: var(--color-secondary);
+  --ink-3: color-mix(in srgb, var(--color-secondary) 86%, var(--color-background));
+
+  --rule: color-mix(in srgb, var(--color-primary) 15%, var(--color-background));
+  --rule-soft: color-mix(in srgb, var(--color-primary) 8%, var(--color-background));
+
+  --link: var(--color-accent);
+  --link-hover: color-mix(in srgb, var(--color-accent) 84%, var(--color-primary));
+  --accent-tint: color-mix(in srgb, var(--color-accent) 7%, transparent);
+  --accent-line: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  --on-accent: var(--color-background);
+
+  --code-bg: color-mix(in srgb, var(--color-primary) 94%, black);
+  --code-bar: color-mix(in srgb, var(--color-primary) 88%, black);
+  --code-ink: color-mix(in srgb, var(--color-background) 82%, var(--color-primary));
+  --code-dim: color-mix(in srgb, var(--color-background) 52%, var(--color-primary));
+  --code-rule: color-mix(in srgb, var(--color-background) 14%, transparent);
+
+  --dot: color-mix(in srgb, var(--color-primary) 13%, transparent);
+  --shadow: 0 18px 44px -32px color-mix(in srgb, var(--color-primary) 60%, transparent);
+
+  --sans: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: var(--font-heading), var(--font-body), system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --r-panel: 16px;
+  --r-tight: 4px;
+  --rail: 17.5rem;
+  --aside: 15rem;
+  --shell: 88rem;
+  --measure: 48rem;
+  --header-h: 3.75rem;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: color-mix(in srgb, var(--color-primary) 88%, black);
+    --surface: color-mix(in srgb, var(--color-background) 4%, var(--page));
+    --surface-hover: color-mix(in srgb, var(--color-background) 8%, var(--page));
+
+    --ink: color-mix(in srgb, var(--color-background) 93%, var(--color-secondary));
+    --ink-2: color-mix(in srgb, var(--color-background) 74%, var(--page));
+    --ink-3: color-mix(in srgb, var(--color-background) 58%, var(--page));
+
+    --rule: color-mix(in srgb, var(--color-background) 15%, var(--page));
+    --rule-soft: color-mix(in srgb, var(--color-background) 9%, var(--page));
+
+    --link: color-mix(in srgb, var(--color-accent) 68%, white);
+    --link-hover: color-mix(in srgb, var(--color-accent) 45%, white);
+    --accent-tint: color-mix(in srgb, var(--color-accent) 18%, transparent);
+    --accent-line: color-mix(in srgb, var(--color-accent) 45%, transparent);
+    --on-accent: color-mix(in srgb, var(--color-primary) 90%, black);
+
+    --code-bg: color-mix(in srgb, var(--color-background) 4%, var(--page));
+    --code-bar: color-mix(in srgb, var(--color-background) 7%, var(--page));
+
+    --dot: color-mix(in srgb, var(--color-background) 12%, transparent);
+    --shadow: 0 18px 44px -32px black;
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --page: color-mix(in srgb, var(--color-primary) 88%, black);
+  --surface: color-mix(in srgb, var(--color-background) 4%, var(--page));
+  --surface-hover: color-mix(in srgb, var(--color-background) 8%, var(--page));
+
+  --ink: color-mix(in srgb, var(--color-background) 93%, var(--color-secondary));
+  --ink-2: color-mix(in srgb, var(--color-background) 74%, var(--page));
+  --ink-3: color-mix(in srgb, var(--color-background) 58%, var(--page));
+
+  --rule: color-mix(in srgb, var(--color-background) 15%, var(--page));
+  --rule-soft: color-mix(in srgb, var(--color-background) 9%, var(--page));
+
+  --link: color-mix(in srgb, var(--color-accent) 68%, white);
+  --link-hover: color-mix(in srgb, var(--color-accent) 45%, white);
+  --accent-tint: color-mix(in srgb, var(--color-accent) 18%, transparent);
+  --accent-line: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  --on-accent: color-mix(in srgb, var(--color-primary) 90%, black);
+
+  --code-bg: color-mix(in srgb, var(--color-background) 4%, var(--page));
+  --code-bar: color-mix(in srgb, var(--color-background) 7%, var(--page));
+
+  --dot: color-mix(in srgb, var(--color-background) 12%, transparent);
+  --shadow: 0 18px 44px -32px black;
+
+  color-scheme: dark;
+}

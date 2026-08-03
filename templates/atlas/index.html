@@ -1,0 +1,98 @@
+{%- import "_ui.html" as ui with context -%}
+
+{%- set _bucket = {} -%}
+{%- set _loose = [] -%}
+{%- for p in posts -%}
+  {%- if p.category and p.category.slug -%}
+    {%- set _ = _bucket.setdefault(p.category.slug, {'cat': p.category, 'items': []}) -%}
+    {%- set _ = _bucket[p.category.slug]['items'].append(p) -%}
+  {%- else -%}
+    {%- set _ = _loose.append(p) -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- set _keys = [] -%}
+{%- for slug, g in _bucket.items() -%}
+  {%- set _ = _keys.append([g['cat'].weight if g['cat'].weight is not none else 1000000, g['cat'].name|lower, slug]) -%}
+{%- endfor -%}
+{%- set groups = [] -%}
+{%- for row in _keys|sort(attribute='0,1') -%}
+  {%- set g = _bucket[row[2]] -%}
+  {%- set _sorted = [] -%}
+  {%- for p in g['items'] -%}
+    {%- set _ = _sorted.append([p.weight if p.weight is not none else 1000000, p.title|lower, p]) -%}
+  {%- endfor -%}
+  {%- set _ = groups.append({'id': g['cat'].slug, 'name': g['cat'].name, 'items': _sorted|sort(attribute='0,1')|map(attribute='2')|list}) -%}
+{%- endfor -%}
+{%- if _loose -%}
+  {%- set _sorted = [] -%}
+  {%- for p in _loose -%}
+    {%- set _ = _sorted.append([p.weight if p.weight is not none else 1000000, p.title|lower, p]) -%}
+  {%- endfor -%}
+  {%- set _ = groups.append({'id': 'more', 'name': 'Other pages', 'items': _sorted|sort(attribute='0,1')|map(attribute='2')|list}) -%}
+{%- endif -%}
+{%- set start = groups[0]['items'][0] if groups else none -%}
+
+<script>(function(){try{var t=localStorage.getItem("plym-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}})();</script>
+
+{{ ui.masthead(site, (site.blog_prefix or '') ~ '/llms.txt') }}
+
+<div class="shell" data-page="index" data-aside="0" data-prefix="{{ site.blog_prefix }}" data-count="{{ posts|length }}">
+  <nav class="rail" id="docnav" aria-label="Sections">
+    <p class="rail-head">{{ ui.ic_book() }} Sections</p>
+    <div data-rail-body>
+      {%- if groups %}
+      <ul class="grp-list">
+        {%- for g in groups %}
+        <li><a href="#{{ g['id'] }}">{{ g['name'] }}</a></li>
+        {%- endfor %}
+      </ul>
+      {%- else %}
+      <p class="rail-empty">Nothing published yet.</p>
+      {%- endif %}
+    </div>
+  </nav>
+
+  <main class="doc" id="main">
+    <header class="hero">
+      <h1>{{ site.name }} documentation</h1>
+      <p>
+        {%- if site.description %}{{ site.description }}
+        {%- else %}Guides, references and walkthroughs for working with {{ site.name }}.{% endif -%}
+      </p>
+      {%- if start %}
+      <div class="hero-cta">
+        <a class="btn btn-accent" href="{{ site.blog_prefix }}/{{ start.path or start.slug }}">Start reading{{ ui.ic_arrow_right() }}</a>
+        <a class="btn" href="{{ ui.site_url(site) }}">{{ site.name }} home{{ ui.ic_out() }}</a>
+      </div>
+      {%- endif %}
+    </header>
+
+    <div data-sections>
+      {%- for g in groups %}
+      <section class="cat" id="{{ g['id'] }}">
+        <div class="cat-head">
+          {{ ui.cat_glyph(g['name'], g['id']) }}
+          <h2>{{ g['name'] }}</h2>
+        </div>
+        <div class="cards">
+          {%- for p in g['items'] %}
+          <a class="card" href="{{ site.blog_prefix }}/{{ p.path or p.slug }}">
+            <h3><span>{{ p.title }}</span>{{ ui.ic_arrow_right() }}</h3>
+            {%- if p.excerpt %}<p>{{ p.excerpt }}</p>{% endif %}
+          </a>
+          {%- endfor %}
+        </div>
+      </section>
+      {%- else %}
+      <p class="empty">No pages have been published yet.</p>
+      {%- endfor %}
+    </div>
+  </main>
+</div>
+
+{{ ui.cat_sprite() }}
+{{ ui.colophon(site, groups, 'index') }}
+
+<div class="scrim" aria-hidden="true"></div>
+
+{% include "_app.html" %}

@@ -1,0 +1,54 @@
+on:
+  push:
+    branches: [main]
+    paths:
+      - "templates/**"
+
+concurrency:
+  group: provision-eu-template-tenants
+  cancel-in-progress: false
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect new template folders
+        id: detect
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: |
+          if [ -z "$BEFORE" ] || ! git cat-file -e "$BEFORE" 2>/dev/null; then
+            BEFORE=$(git rev-parse "$AFTER^")
+          fi
+          added=""
+          for dir in $(git diff --name-only --diff-filter=A "$BEFORE" "$AFTER" -- templates/ | awk -F/ 'NF > 2 { print $2 }' | sort -u); do
+            if ! git ls-tree -d --name-only "$BEFORE" -- "templates/$dir" | grep -q .; then
+              added="$added $dir"
+            fi
+          done
+          added=$(echo $added | xargs || true)
+          echo "tenants=$added" >> "$GITHUB_OUTPUT"
+          echo "New template folders: ${added:-none}"
+
+      - name: Create tenants on plym-eu-templates-2
+        if: steps.detect.outputs.tenants != ''
+        env:
+          TENANTS: ${{ steps.detect.outputs.tenants }}
+          SSH_KEY: ${{ secrets.PLYM_EU_TEMPLATES_SSH_KEY }}
+          SSH_HOST: ${{ secrets.PLYM_EU_TEMPLATES_HOST }}
+          SSH_KNOWN_HOSTS: ${{ secrets.PLYM_EU_TEMPLATES_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          for tenant in $TENANTS; do
+            echo "::group::create $tenant"
+            ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes "root@$SSH_HOST" "create $tenant"
+            echo "::endgroup::"
+          done

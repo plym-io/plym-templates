@@ -1,0 +1,12 @@
+fonts:
+  heading: Space Grotesk
+  body: Archivo
+
+colors:
+  primary: "#1C1712"
+  secondary: "#5B5147"
+  accent: "#D2340A"
+  background: "#FFFFFF"
+
+prism:
+  theme: tomorrow

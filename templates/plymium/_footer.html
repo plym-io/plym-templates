@@ -5,11 +5,11 @@
     <div class="plym-footer__about">
       <a class="plym-brand" href="{{ site.blog_prefix }}/">
         {%- if site.logo %}
-        <img class="plym-brand__logo" src="{{ site.logo }}" alt="" width="24" height="24" loading="lazy" decoding="async">
+        <img class="plym-brand__logo" src="{{ site.logo }}" alt="{{ site.name }}" loading="lazy" decoding="async">
         {%- else %}
         <span class="plym-brand__mark" aria-hidden="true"></span>
-        {%- endif %}
         <span class="plym-brand__name">{{ site.name }}</span>
+        {%- endif %}
       </a>
       <p class="plym-footer__blurb">{{ site.description or 'Writing on the work, the craft and the decisions behind it.' }}</p>
 

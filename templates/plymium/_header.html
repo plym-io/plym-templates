@@ -4,11 +4,11 @@
   <div class="plym-frame plym-header__inner">
     <a class="plym-brand" href="{{ site.blog_prefix }}/">
       {%- if site.logo %}
-      <img class="plym-brand__logo" src="{{ site.logo }}" alt="" width="24" height="24" decoding="async">
+      <img class="plym-brand__logo" src="{{ site.logo }}" alt="{{ site.name }}" decoding="async">
       {%- else %}
       <span class="plym-brand__mark" aria-hidden="true"></span>
-      {%- endif %}
       <span class="plym-brand__name">{{ site.name }}</span>
+      {%- endif %}
     </a>
 
     <div class="plym-header__tools">

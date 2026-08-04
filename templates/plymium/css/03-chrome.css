@@ -32,8 +32,9 @@
 }
 
 .plym-brand__logo {
-  width: 24px;
-  height: 24px;
+  width: auto;
+  height: 34px;
+  max-width: 100%;
   border-radius: 5px;
   object-fit: contain;
 }

@@ -160,12 +160,31 @@
     return frag;
   }
 
+  function railBody() {
+    return rail ? rail.querySelector("[data-rail-body]") : null;
+  }
+
   function fillRail(groups) {
-    if (!rail) return;
-    var body = rail.querySelector("[data-rail-body]");
+    var body = railBody();
     if (!body) return;
+    if (!groups.length) return railFallback();
     body.textContent = "";
     body.appendChild(conf.page === "index" ? railJumps(groups) : railTree(groups));
+    rail.removeAttribute("aria-busy");
+  }
+
+  function railFallback() {
+    var body = railBody();
+    if (!body || !body.querySelector("[data-skel]")) return;
+    body.textContent = "";
+    var list = el("ul", "grp-list");
+    var li = el("li");
+    var a = el("a", null, "All pages");
+    a.href = PREFIX || "/";
+    li.appendChild(a);
+    list.appendChild(li);
+    body.appendChild(list);
+    rail.removeAttribute("aria-busy");
   }
 
   function indexSections(groups) {
@@ -506,7 +525,7 @@
       if (conf.page === "index" && data.posts.length > (parseInt(conf.count, 10) || 0)) {
         indexSections(groups);
       }
-    }).catch(function () {});
+    }).catch(railFallback);
   }
 })();
 </script>

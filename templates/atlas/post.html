@@ -10,11 +10,49 @@
      data-cat="{{ post.category.slug if post.category else '' }}" data-path="{{ here }}"
      data-aside="{{ 1 if post.toc else 0 }}">
 
-  <nav class="rail" id="docnav" aria-label="Documentation sections">
+  <nav class="rail" id="docnav" aria-label="Documentation sections" aria-busy="true">
     <div data-rail-body>
-      <ul class="grp-list">
-        <li><a href="{{ site.blog_prefix or '/' }}">All pages</a></li>
-      </ul>
+      <div class="skel" data-skel aria-hidden="true">
+        <div class="skel-grp">
+          <span class="skel-bar skel-cat"></span>
+          <div class="skel-docs">
+            <span class="skel-bar"></span>
+            <span class="skel-bar"></span>
+            <span class="skel-bar"></span>
+            <span class="skel-bar"></span>
+          </div>
+        </div>
+        <div class="skel-grp">
+          <span class="skel-bar skel-cat"></span>
+          <div class="skel-docs">
+            <span class="skel-bar"></span>
+            <span class="skel-bar"></span>
+            <span class="skel-bar"></span>
+          </div>
+        </div>
+        <div class="skel-grp">
+          <span class="skel-bar skel-cat"></span>
+          <div class="skel-docs">
+            <span class="skel-bar"></span>
+            <span class="skel-bar"></span>
+            <span class="skel-bar"></span>
+            <span class="skel-bar"></span>
+          </div>
+        </div>
+        <div class="skel-grp">
+          <span class="skel-bar skel-cat"></span>
+          <div class="skel-docs">
+            <span class="skel-bar"></span>
+            <span class="skel-bar"></span>
+          </div>
+        </div>
+      </div>
+      <noscript>
+        <style>[data-skel] { display: none; }</style>
+        <ul class="grp-list">
+          <li><a href="{{ site.blog_prefix or '/' }}">All pages</a></li>
+        </ul>
+      </noscript>
     </div>
   </nav>
 

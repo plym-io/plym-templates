@@ -1,0 +1,243 @@
+.plym-prose {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--plym-text);
+  max-width: 42.9em;
+}
+
+.plym-prose > * + * {
+  margin-top: 1.35em;
+}
+
+.plym-prose h2,
+.plym-prose h3,
+.plym-prose h4 {
+  scroll-margin-top: 5.5rem;
+}
+
+.plym-prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2.75em;
+  margin-bottom: -0.35em;
+}
+
+.plym-prose h3 {
+  font-size: 1.1875rem;
+  margin-top: 2.25em;
+  margin-bottom: -0.4em;
+}
+
+.plym-prose h4 {
+  font-size: 1.0625rem;
+  margin-top: 2em;
+  margin-bottom: -0.5em;
+}
+
+.plym-prose .toclink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.plym-prose .toclink:hover::after {
+  content: "#";
+  color: var(--plym-accent);
+  margin-left: 0.35em;
+  font-weight: var(--plym-weight-body);
+}
+
+.plym-prose a {
+  color: var(--plym-accent-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--plym-accent-line);
+  transition: text-decoration-color 0.14s var(--plym-ease);
+}
+
+.plym-prose a:hover {
+  text-decoration-color: var(--plym-accent);
+}
+
+.plym-prose ul,
+.plym-prose ol {
+  padding-left: 1.35em;
+}
+
+.plym-prose li + li {
+  margin-top: 0.4em;
+}
+
+.plym-prose li::marker {
+  color: var(--plym-faint);
+}
+
+.plym-prose blockquote {
+  margin-inline: 0;
+  padding: 0.15em 0 0.15em 1.25em;
+  border-left: 2px solid var(--plym-accent-line);
+  color: var(--plym-muted);
+}
+
+.plym-prose hr {
+  border: 0;
+  border-top: 1px solid var(--plym-line);
+  margin-block: 2.5em;
+}
+
+.plym-prose img {
+  border-radius: var(--plym-radius);
+  border: 1px solid var(--plym-line);
+}
+
+.plym-prose figure {
+  margin: 2em 0;
+}
+
+.plym-prose figcaption {
+  margin-top: 0.7em;
+  font-size: 0.8125rem;
+  color: var(--plym-muted);
+  text-align: center;
+}
+
+.plym-prose code {
+  font-family: var(--plym-mono);
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+  background: var(--plym-raised);
+  color: var(--plym-accent-ink);
+  word-break: break-word;
+}
+
+.plym-prose pre,
+.plym-prose pre[class*="language-"] {
+  margin: 1.75em 0;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--plym-radius);
+  border: 1px solid var(--plym-code-line);
+  background: var(--plym-code-bg);
+  color: var(--plym-code-fg);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  tab-size: 2;
+}
+
+.plym-prose pre code,
+.plym-prose pre code[class*="language-"] {
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-family: var(--plym-mono);
+  font-size: 1em;
+  line-height: inherit;
+  white-space: pre;
+}
+
+.plym-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  display: block;
+  overflow-x: auto;
+}
+
+.plym-prose th,
+.plym-prose td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--plym-line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.plym-prose th {
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  color: var(--plym-muted);
+  border-bottom-color: var(--plym-line-strong);
+  white-space: nowrap;
+}
+
+.plym-prose .task-list-item {
+  list-style: none;
+  margin-left: -1.35em;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55em;
+}
+
+.plym-prose .task-list-item input {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  flex: none;
+  width: 1.05em;
+  height: 1.05em;
+  margin: 0.34em 0 0;
+  border: 1px solid color-mix(in srgb, var(--plym-text) 42%, var(--plym-bg));
+  border-radius: 4px;
+  background: var(--plym-bg);
+}
+
+.plym-prose .task-list-item input:checked {
+  border-color: var(--plym-accent-fill);
+  background: var(--plym-accent-fill);
+}
+
+.plym-prose .task-list-item input:checked::after {
+  content: "";
+  position: absolute;
+  left: 0.33em;
+  top: 0.14em;
+  width: 0.26em;
+  height: 0.5em;
+  border: solid var(--plym-on-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.plym-prose del {
+  color: var(--plym-muted);
+}
+
+.plym-prose sub,
+.plym-prose sup {
+  font-size: 0.72em;
+}
+
+.plym-prose .footnote {
+  margin-top: 3em;
+  padding-top: 1.25em;
+  border-top: 1px solid var(--plym-line);
+  font-size: 0.9375rem;
+  color: var(--plym-muted);
+}
+
+.plym-prose .footnote ol {
+  padding-left: 1.1em;
+}
+
+.plym-prose details {
+  border: 1px solid var(--plym-line);
+  border-radius: var(--plym-radius);
+  padding: 0.85rem 1.1rem;
+  background: var(--plym-surface);
+}
+
+.plym-prose summary {
+  cursor: pointer;
+}
+
+.plym-prose .plym-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: 0.75rem;
+}
+
+.plym-prose .plym-gallery img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  margin: 0;
+}

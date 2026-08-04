@@ -1,0 +1,352 @@
+.plym-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: color-mix(in srgb, var(--plym-bg) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--plym-line);
+}
+
+.plym-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.75rem;
+}
+
+.plym-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.0625rem;
+  letter-spacing: -0.02em;
+  flex: none;
+  max-width: 55%;
+}
+
+.plym-brand__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plym-brand__logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  object-fit: contain;
+}
+
+.plym-brand__mark {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 5px;
+  background: var(--plym-accent);
+  position: relative;
+}
+
+.plym-brand__mark::after {
+  content: "";
+  position: absolute;
+  inset: 6px 6px auto auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px 0 3px 0;
+  background: var(--plym-on-accent);
+}
+
+.plym-header__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.plym-search {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 17rem;
+}
+
+.plym-search__field {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0 0.6rem;
+  height: 2.25rem;
+  border: 1px solid var(--plym-line-strong);
+  border-radius: 8px;
+  background: var(--plym-surface);
+  transition: border-color 0.16s var(--plym-ease);
+}
+
+.plym-search__field:focus-within {
+  border-color: var(--plym-accent-line);
+}
+
+.plym-search__icon {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--plym-muted);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.plym-search__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  font-size: 0.875rem;
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.plym-search__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.plym-search__input::placeholder {
+  color: var(--plym-muted);
+}
+
+.plym-search__hint {
+  font-family: inherit;
+  font-size: 0.6875rem;
+  line-height: 1;
+  padding: 0.22rem 0.36rem;
+  border: 1px solid var(--plym-line-strong);
+  border-radius: 4px;
+  color: var(--plym-muted);
+  flex: none;
+}
+
+.plym-search__panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: min(28rem, calc(100vw - 2rem));
+  max-height: min(26rem, 60vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--plym-bg);
+  border: 1px solid var(--plym-line-strong);
+  border-radius: var(--plym-radius);
+  box-shadow: var(--plym-shadow-lift);
+  padding: 0.35rem;
+  z-index: 70;
+}
+
+.plym-search__hit {
+  display: block;
+  padding: 0.55rem 0.65rem;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.plym-search__hit[aria-selected="true"],
+.plym-search__hit:hover {
+  background: var(--plym-surface);
+}
+
+.plym-search__hit-title {
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  display: block;
+}
+
+.plym-search__hit-meta {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.8125rem;
+  color: var(--plym-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plym-search__hit mark {
+  background: var(--plym-accent-soft);
+  color: var(--plym-accent-ink);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.plym-search__empty {
+  padding: 0.9rem 0.65rem;
+  font-size: 0.875rem;
+  color: var(--plym-muted);
+}
+
+.plym-theme {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--plym-line-strong);
+  border-radius: 8px;
+  background: var(--plym-surface);
+  cursor: pointer;
+  color: var(--plym-muted);
+  transition: color 0.16s var(--plym-ease), border-color 0.16s var(--plym-ease);
+}
+
+.plym-theme:hover {
+  color: var(--plym-text);
+  border-color: var(--plym-accent-line);
+}
+
+.plym-theme .plym-icon {
+  width: 16px;
+  height: 16px;
+  grid-area: 1 / 1;
+}
+
+.plym-theme__moon {
+  display: none;
+}
+
+:root[data-plym-theme="dark"] .plym-theme__sun {
+  display: none;
+}
+
+:root[data-plym-theme="dark"] .plym-theme__moon {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-plym-theme="light"]) .plym-theme__sun {
+    display: none;
+  }
+
+  :root:not([data-plym-theme="light"]) .plym-theme__moon {
+    display: block;
+  }
+}
+
+.plym-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--plym-line);
+  background: var(--plym-surface);
+}
+
+.plym-footer__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 2fr);
+  gap: 2.5rem 3rem;
+  padding-block: 3.25rem 2.5rem;
+}
+
+.plym-footer__about {
+  max-width: 26rem;
+}
+
+.plym-footer__blurb {
+  margin-top: 0.85rem;
+  color: var(--plym-muted);
+  font-size: 0.9375rem;
+}
+
+.plym-footer__cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.plym-footer__title {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--plym-muted);
+  font-family: var(--plym-sans);
+  font-weight: var(--plym-weight-body);
+  margin-bottom: 0.9rem;
+}
+
+.plym-footer__list {
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+  font-size: 0.9375rem;
+}
+
+.plym-footer__list a {
+  color: var(--plym-muted);
+  transition: color 0.14s var(--plym-ease);
+}
+
+.plym-footer__list a:hover {
+  color: var(--plym-accent-ink);
+}
+
+.plym-footer__base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--plym-line);
+  font-size: 0.8125rem;
+  color: var(--plym-muted);
+}
+
+.plym-builtwith {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--plym-muted);
+  transition: color 0.14s var(--plym-ease);
+}
+
+.plym-builtwith:hover {
+  color: var(--plym-text);
+}
+
+.plym-builtwith__logo {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: block;
+}
+
+.plym-builtwith__name {
+  color: var(--plym-text);
+}
+
+@media (max-width: 60rem) {
+  .plym-footer__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.25rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  .plym-search__hint {
+    display: none;
+  }
+
+  .plym-search {
+    max-width: 11rem;
+  }
+
+  .plym-footer__cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 22rem) {
+  .plym-brand__name {
+    display: none;
+  }
+}

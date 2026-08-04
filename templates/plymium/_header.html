@@ -1,0 +1,49 @@
+<a class="plym-skip" href="#plym-main">Skip to content</a>
+
+<header class="plym-header">
+  <div class="plym-frame plym-header__inner">
+    <a class="plym-brand" href="{{ site.blog_prefix }}/">
+      {%- if site.logo %}
+      <img class="plym-brand__logo" src="{{ site.logo }}" alt="" width="24" height="24" decoding="async">
+      {%- else %}
+      <span class="plym-brand__mark" aria-hidden="true"></span>
+      {%- endif %}
+      <span class="plym-brand__name">{{ site.name }}</span>
+    </a>
+
+    <div class="plym-header__tools">
+      <div class="plym-search" data-plym-search>
+        <div class="plym-search__field">
+          <svg class="plym-search__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <circle cx="7" cy="7" r="4.5"></circle>
+            <path d="M10.5 10.5 14 14"></path>
+          </svg>
+          <input
+            class="plym-search__input"
+            id="plym-search-input"
+            type="search"
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="plym-search-results"
+            aria-autocomplete="list"
+            aria-label="Search articles"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="Search articles">
+          <kbd class="plym-search__hint" aria-hidden="true">/</kbd>
+        </div>
+        <div class="plym-search__panel" id="plym-search-results" role="listbox" aria-label="Search results" hidden></div>
+      </div>
+
+      <button class="plym-theme" type="button" data-plym-theme-toggle aria-label="Switch between light and dark theme">
+        <svg class="plym-icon plym-theme__sun" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <circle cx="10" cy="10" r="3.6"></circle>
+          <path d="M10 1.6v2M10 16.4v2M2.6 10h-2M19.4 10h-2M4.8 4.8 3.4 3.4M16.6 16.6l-1.4-1.4M15.2 4.8l1.4-1.4M3.4 16.6l1.4-1.4"></path>
+        </svg>
+        <svg class="plym-icon plym-theme__moon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <path d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

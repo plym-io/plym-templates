@@ -1,0 +1,21 @@
+<script>
+(function () {
+  try {
+    var stored = localStorage.getItem("plym-theme");
+    if (stored === "dark" || stored === "light") {
+      document.documentElement.setAttribute("data-plym-theme", stored);
+    }
+  } catch (err) { }
+})();
+</script>
+<noscript>
+  <style>
+    .plym-search,
+    .plym-theme,
+    .plym-filters,
+    .plym-pager,
+    .plym-postnav,
+    .plym-share,
+    .plym-subscribe { display: none !important; }
+  </style>
+</noscript>

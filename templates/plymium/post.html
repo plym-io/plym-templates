@@ -1,0 +1,172 @@
+{% include "_boot.html" %}
+
+{%- macro plym_toc(nodes, depth) -%}
+<ul class="plym-toc__list">
+  {%- for node in nodes %}
+  <li>
+    <a class="plym-toc__link" href="#{{ node.id }}">{{ node.name }}</a>
+    {%- if node.children and depth < 2 %}{{ plym_toc(node.children, depth + 1) }}{% endif %}
+  </li>
+  {%- endfor %}
+</ul>
+{%- endmacro -%}
+
+{% include "_header.html" %}
+
+<main class="plym-article plym-frame plym-frame--rails" id="plym-main">
+  <a class="plym-back" href="{{ site.blog_prefix }}/">
+    <span class="plym-back__arrow" aria-hidden="true">
+      <svg class="plym-icon" viewBox="0 0 16 16" focusable="false"><path d="M9.5 3.5 5 8l4.5 4.5"></path></svg>
+    </span>
+    All articles
+  </a>
+
+  <article>
+    <header class="plym-masthead">
+      <p class="plym-masthead__kicker">
+        {%- if post.category %}
+        <a class="plym-eyebrow plym-eyebrow--accent" href="{{ site.blog_prefix }}/?cat={{ post.category.slug }}">Published in {{ post.category.name }}</a>
+        <span class="plym-eyebrow plym-dot" aria-hidden="true">/</span>
+        {%- endif %}
+        {%- if post.published_at %}
+        <time class="plym-eyebrow" datetime="{{ post.published_at.isoformat() }}">{{ post.published_at.strftime('%B %-d, %Y') }}</time>
+        {%- endif %}
+      </p>
+
+      <h1 class="plym-masthead__title">{{ post.title }}</h1>
+
+      {%- if post.reading_time %}
+      <p class="plym-eyebrow">{{ post.reading_time }} minute{{ '' if post.reading_time == 1 else 's' }} read</p>
+      {%- endif %}
+    </header>
+
+    <div class="plym-layout">
+      <aside class="plym-rail plym-rail--left" aria-label="About the author">
+        <div class="plym-author">
+          <div class="plym-author__id">
+            {%- if post.author.avatar_url %}
+            <img class="plym-author__avatar" src="{{ post.author.avatar_url }}" alt="" width="40" height="40" decoding="async">
+            {%- else %}
+            <span class="plym-author__initial" aria-hidden="true">{{ post.author.display_name[:1] | upper }}</span>
+            {%- endif %}
+            <span>
+              <span class="plym-author__name">{{ post.author.display_name }}</span>
+              {%- if post.category %}
+              <span class="plym-byline__role">{{ post.category.name }}</span>
+              {%- endif %}
+            </span>
+          </div>
+
+          {%- if post.author.bio %}
+          <p class="plym-author__bio">{{ post.author.bio }}</p>
+          {%- endif %}
+
+          {%- if post.author.links %}
+          <ul class="plym-author__links">
+            {%- for link in post.author.links %}
+            <li><a class="plym-chip" href="{{ link.url }}" rel="noopener noreferrer">{{ link.type }}</a></li>
+            {%- endfor %}
+          </ul>
+          {%- endif %}
+        </div>
+
+        <div class="plym-share">
+          <p class="plym-eyebrow">Share this article</p>
+          <div class="plym-share__row">
+            <a class="plym-share__btn plym-share__btn--brand"
+               href="https://x.com/intent/post?url={{ post.canonical | urlencode }}&amp;text={{ post.title | urlencode }}"
+               rel="noopener noreferrer" aria-label="Share on X">
+              <svg class="plym-icon" viewBox="0 0 24 24" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+            </a>
+            <a class="plym-share__btn plym-share__btn--brand"
+               href="https://www.linkedin.com/sharing/share-offsite/?url={{ post.canonical | urlencode }}"
+               rel="noopener noreferrer" aria-label="Share on LinkedIn">
+              <svg class="plym-icon" viewBox="0 0 24 24" focusable="false"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5M2.9 21h4.2V9.4H2.9zm7.4 0h4.2v-6.3c0-1.7.6-2.7 2-2.7 1.3 0 1.8.9 1.8 2.7V21h4.2v-6.9c0-3.5-1.9-5.2-4.4-5.2a3.8 3.8 0 0 0-3.5 1.9V9.4h-4.3z"></path></svg>
+            </a>
+            <button class="plym-share__btn" type="button" data-plym-copy="{{ post.canonical }}" aria-label="Copy link to this article">
+              <svg class="plym-icon" viewBox="0 0 16 16" focusable="false">
+                <path d="M6.5 9.5a3 3 0 0 0 4.24 0l2-2a3 3 0 0 0-4.24-4.24l-.5.5"></path>
+                <path d="M9.5 6.5a3 3 0 0 0-4.24 0l-2 2a3 3 0 0 0 4.24 4.24l.5-.5"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="plym-main">
+        {%- if post.cover %}
+        <figure class="plym-cover">
+          <img src="{{ post.cover }}" alt="{{ post.title }}" fetchpriority="high" decoding="async">
+        </figure>
+        {%- endif %}
+
+        {%- if post.excerpt %}
+        <p class="plym-standfirst">{{ post.excerpt }}</p>
+        {%- endif %}
+
+        {%- set prose = post.content
+              | replace('<input type="checkbox" disabled="" checked="">',
+                        '<input type="checkbox" disabled="" checked="" aria-label="Done">')
+              | replace('<input type="checkbox" disabled="">',
+                        '<input type="checkbox" disabled="" aria-label="Not done">') -%}
+        <div class="plym-prose">
+          {{ prose | safe }}
+        </div>
+
+        {%- if post.tags %}
+        <ul class="plym-tags">
+          {%- for tag in post.tags %}
+          <li><a class="plym-chip" href="{{ site.blog_prefix }}/?q={{ tag.name | urlencode }}">{{ tag.name }}</a></li>
+          {%- endfor %}
+        </ul>
+        {%- endif %}
+
+        {%- if post.faqs %}
+        <section class="plym-faqs" aria-labelledby="plym-faqs-title">
+          <h2 class="plym-faqs__title" id="plym-faqs-title">Frequently asked questions</h2>
+          {%- for faq in post.faqs %}
+          <details class="plym-faq">
+            <summary class="plym-faq__q">
+              {{ faq.question }}
+              <span class="plym-faq__sign" aria-hidden="true"></span>
+            </summary>
+            <div class="plym-faq__a">{{ faq.answer }}</div>
+          </details>
+          {%- endfor %}
+        </section>
+        {%- endif %}
+
+        <nav class="plym-postnav plym-postnav--pending" aria-label="More articles">
+          <a class="plym-postnav__item plym-postnav__item--prev" href="{{ site.blog_prefix }}/" rel="prev">
+            <span class="plym-eyebrow">Previous</span>
+            <span class="plym-postnav__title"></span>
+          </a>
+          <a class="plym-postnav__item plym-postnav__item--next" href="{{ site.blog_prefix }}/" rel="next">
+            <span class="plym-eyebrow">Next</span>
+            <span class="plym-postnav__title"></span>
+          </a>
+        </nav>
+      </div>
+
+      <aside class="plym-rail plym-rail--right">
+        {%- if post.toc %}
+        <nav class="plym-toc" aria-label="On this page">
+          <p class="plym-eyebrow">On this page</p>
+          {{ plym_toc(post.toc, 1) }}
+        </nav>
+        {%- endif %}
+
+        <form class="plym-subscribe" data-plym-collect data-plym-source="article">
+          <label class="plym-subscribe__label" for="plym-post-email">Get new articles by email.</label>
+          <input class="plym-subscribe__input" id="plym-post-email" type="email" name="email"
+                 autocomplete="email" placeholder="you@work.com" required>
+          <button class="plym-btn" type="submit">Get started</button>
+          <p class="plym-subscribe__msg" role="status" aria-live="polite"></p>
+        </form>
+      </aside>
+    </div>
+  </article>
+</main>
+
+{% include "_footer.html" %}
+{% include "_scripts.html" %}

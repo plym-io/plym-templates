@@ -1,0 +1,390 @@
+<script>
+(function () {
+  "use strict";
+
+  var PREFIX = {{ site.blog_prefix | tojson }};
+  var PAGE_SIZE = {{ site.pagination.page_size | tojson }};
+  var CURRENT = {{ (post.slug if post is defined else "") | tojson }};
+  var $ = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) {
+    return Array.prototype.slice.call((root || document).querySelectorAll(sel));
+  };
+
+  var toggle = $("[data-plym-theme-toggle]");
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var root = document.documentElement;
+      var explicit = root.getAttribute("data-plym-theme");
+      var dark = explicit
+        ? explicit === "dark"
+        : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var next = dark ? "light" : "dark";
+      root.setAttribute("data-plym-theme", next);
+      try { localStorage.setItem("plym-theme", next); } catch (err) { }
+    });
+  }
+
+  var yearSlot = $("[data-plym-year]");
+  if (yearSlot) { yearSlot.textContent = String(new Date().getFullYear()); }
+
+  var indexPromise = null;
+
+  function postUrl(doc) {
+    return PREFIX + "/" + (doc.category ? doc.category + "/" : "") + doc.slug;
+  }
+
+  function loadIndex() {
+    if (!indexPromise) {
+      indexPromise = fetch(PREFIX + "/index.json", { credentials: "same-origin" })
+        .then(function (res) {
+          if (!res.ok) { throw new Error("no index"); }
+          return res.json();
+        })
+        .then(function (data) { return (data && data.documents) || []; })
+        .catch(function () { return null; });
+    }
+    return indexPromise;
+  }
+
+  var searchRoot = $("[data-plym-search]");
+  var input = $("#plym-search-input");
+  var panel = $("#plym-search-results");
+  var hero = $(".plym-hero");
+  var cards = (hero ? [hero] : []).concat($$(".plym-card"));
+  var filters = $(".plym-filters");
+  var activeCat = "all";
+  var pagerUsable = false;
+  var hits = [];
+  var cursor = -1;
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"]/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch];
+    });
+  }
+
+  function mark(text, terms) {
+    var out = escapeHtml(text);
+    terms.forEach(function (term) {
+      if (term.length < 2) { return; }
+      var safe = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      out = out.replace(new RegExp("(" + safe + ")", "ig"), "<mark>$1</mark>");
+    });
+    return out;
+  }
+
+  function score(doc, terms) {
+    var title = (doc.title || "").toLowerCase();
+    var excerpt = (doc.excerpt || "").toLowerCase();
+    var tags = (doc.tags || []).join(" ").toLowerCase();
+    var body = (doc.text || "").toLowerCase();
+    var category = (doc.category || "").toLowerCase();
+    var total = 0;
+    for (var i = 0; i < terms.length; i++) {
+      var term = terms[i];
+      var points = 0;
+      if (title.indexOf(term) > -1) { points += title.indexOf(term) === 0 ? 12 : 8; }
+      if (tags.indexOf(term) > -1) { points += 4; }
+      if (category.indexOf(term) > -1) { points += 3; }
+      if (excerpt.indexOf(term) > -1) { points += 2; }
+      if (body.indexOf(term) > -1) { points += 1; }
+      if (!points) { return 0; }
+      total += points;
+    }
+    return total;
+  }
+
+  function closePanel() {
+    if (!panel) { return; }
+    panel.hidden = true;
+    panel.innerHTML = "";
+    hits = [];
+    cursor = -1;
+    input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-activedescendant");
+  }
+
+  function highlight(next) {
+    var options = $$(".plym-search__hit", panel);
+    if (!options.length) { return; }
+    cursor = (next + options.length) % options.length;
+    options.forEach(function (node, i) {
+      node.setAttribute("aria-selected", i === cursor ? "true" : "false");
+    });
+    input.setAttribute("aria-activedescendant", options[cursor].id);
+    options[cursor].scrollIntoView({ block: "nearest" });
+  }
+
+  function renderPanel(query, docs) {
+    var terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+    hits = docs
+      .map(function (doc) { return { doc: doc, points: score(doc, terms) }; })
+      .filter(function (row) { return row.points > 0; })
+      .sort(function (a, b) { return b.points - a.points; })
+      .slice(0, 8)
+      .map(function (row) { return row.doc; });
+
+    if (!hits.length) {
+      panel.innerHTML = '<p class="plym-search__empty">No articles match &ldquo;'
+        + escapeHtml(query) + "&rdquo;.</p>";
+    } else {
+      panel.innerHTML = hits.map(function (doc, i) {
+        var meta = [];
+        if (doc.category) { meta.push(escapeHtml(doc.category.replace(/-/g, " "))); }
+        if (doc.reading_time) { meta.push(doc.reading_time + " min read"); }
+        return '<a class="plym-search__hit" role="option" aria-selected="false" id="plym-hit-'
+          + i + '" href="' + escapeHtml(postUrl(doc)) + '">'
+          + '<span class="plym-search__hit-title">' + mark(doc.title || "", terms) + "</span>"
+          + '<span class="plym-search__hit-meta">' + meta.join(" &middot; ") + "</span></a>";
+      }).join("");
+    }
+    panel.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+    cursor = -1;
+  }
+
+  function filterCards(query) {
+    var terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+    var shown = 0;
+    var inGrid = 0;
+    cards.forEach(function (card) {
+      var haystack = (card.getAttribute("data-plym-search-text") || "").toLowerCase();
+      var catOk = activeCat === "all" || card.getAttribute("data-plym-cat") === activeCat;
+      var textOk = terms.every(function (term) { return haystack.indexOf(term) > -1; });
+      var visible = catOk && textOk;
+      card.hidden = !visible;
+      if (visible) { shown += 1; if (card !== hero) { inGrid += 1; } }
+    });
+    var grid = $(".plym-grid");
+    if (grid) { grid.hidden = inGrid === 0; }
+    var blank = $(".plym-noresults");
+    if (blank) { blank.hidden = shown !== 0; }
+    var pager = $(".plym-pager");
+    if (pager) { pager.hidden = pagerUsable === false || activeCat !== "all" || terms.length > 0; }
+    return shown;
+  }
+
+  function runSearch(query) {
+    if (!query) {
+      closePanel();
+      if (cards.length) { filterCards(""); }
+      return;
+    }
+    loadIndex().then(function (docs) {
+      if (docs && docs.length) {
+        renderPanel(query, docs);
+      } else if (cards.length) {
+        closePanel();
+        filterCards(query);
+      } else {
+        closePanel();
+      }
+    });
+  }
+
+  if (input) {
+    var timer = null;
+    input.addEventListener("input", function () {
+      window.clearTimeout(timer);
+      var value = input.value.trim();
+      timer = window.setTimeout(function () { runSearch(value); }, 110);
+    });
+
+    input.addEventListener("focus", function () { loadIndex(); });
+
+    input.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        if (panel && !panel.hidden) { closePanel(); } else { input.value = ""; runSearch(""); input.blur(); }
+        return;
+      }
+      if (panel && !panel.hidden) {
+        if (event.key === "ArrowDown") { event.preventDefault(); highlight(cursor + 1); return; }
+        if (event.key === "ArrowUp") { event.preventDefault(); highlight(cursor - 1); return; }
+        if (event.key === "Enter" && cursor > -1) {
+          event.preventDefault();
+          $$(".plym-search__hit", panel)[cursor].click();
+          return;
+        }
+      }
+      if (event.key === "Enter" && !cards.length) {
+        event.preventDefault();
+        var q = input.value.trim();
+        if (q) { window.location.href = PREFIX + "/?q=" + encodeURIComponent(q); }
+      }
+    });
+
+    document.addEventListener("click", function (event) {
+      if (searchRoot && !searchRoot.contains(event.target)) { closePanel(); }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      var tag = (event.target.tagName || "").toLowerCase();
+      var typing = tag === "input" || tag === "textarea" || event.target.isContentEditable;
+      if (!typing && event.key === "/") { event.preventDefault(); input.focus(); return; }
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        input.focus();
+        input.select();
+      }
+    });
+  }
+
+  if (filters) {
+    var tabs = $$(".plym-filters__btn", filters);
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        activeCat = tab.getAttribute("data-plym-cat") || "all";
+        tabs.forEach(function (other) {
+          other.setAttribute("aria-selected", other === tab ? "true" : "false");
+        });
+        filterCards(input ? input.value.trim() : "");
+        var url = new URL(window.location.href);
+        if (activeCat === "all") { url.searchParams.delete("cat"); }
+        else { url.searchParams.set("cat", activeCat); }
+        window.history.replaceState(null, "", url);
+      });
+    });
+  }
+
+  if (document.body.classList.contains("plym-index")) {
+    var params = new URLSearchParams(window.location.search);
+
+    var pager = $(".plym-pager");
+    if (pager) {
+      var page = parseInt(params.get("page") || "1", 10);
+      if (!(page >= 1)) { page = 1; }
+      var prev = $(".plym-pager__prev", pager);
+      var next = $(".plym-pager__next", pager);
+      var label = $(".plym-pager__page", pager);
+      if (page > 1) {
+        prev.href = page === 2 ? PREFIX + "/" : PREFIX + "/?page=" + (page - 1);
+        prev.hidden = false;
+        pagerUsable = true;
+      }
+      if (cards.length >= PAGE_SIZE) {
+        next.href = PREFIX + "/?page=" + (page + 1);
+        next.hidden = false;
+        pagerUsable = true;
+      }
+      if (label) { label.textContent = "Page " + page; }
+      pager.hidden = !pagerUsable;
+    }
+
+    var initialCat = params.get("cat");
+    if (initialCat) {
+      var match = $('.plym-filters__btn[data-plym-cat="' + initialCat.replace(/"/g, "") + '"]');
+      if (match) { match.click(); }
+    }
+    var initialQuery = params.get("q");
+    if (initialQuery && input) {
+      input.value = initialQuery;
+      filterCards(initialQuery);
+    }
+  }
+
+  var tocLinks = $$(".plym-toc__link");
+  if (tocLinks.length) {
+    var headings = tocLinks
+      .map(function (link) { return document.getElementById(link.hash.slice(1)); })
+      .filter(Boolean);
+    var ticking = false;
+
+    var sync = function () {
+      ticking = false;
+      var current = 0;
+      for (var i = 0; i < headings.length; i++) {
+        if (headings[i].getBoundingClientRect().top <= 120) { current = i; }
+      }
+      tocLinks.forEach(function (link, i) {
+        if (i === current) { link.setAttribute("aria-current", "true"); }
+        else { link.removeAttribute("aria-current"); }
+      });
+    };
+
+    window.addEventListener("scroll", function () {
+      if (!ticking) { ticking = true; window.requestAnimationFrame(sync); }
+    }, { passive: true });
+    sync();
+  }
+
+  var postnav = $(".plym-postnav");
+  if (postnav && CURRENT) {
+    var settle = function (shown) {
+      postnav.classList.remove("plym-postnav--pending");
+      postnav.classList.toggle("plym-postnav--one", shown === 1);
+      postnav.hidden = shown === 0;
+    };
+
+    var fill = function (docs) {
+      if (!docs || docs.length < 2) { return 0; }
+      var ordered = docs.slice().sort(function (a, b) {
+        return String(b.published_at || "").localeCompare(String(a.published_at || ""));
+      });
+      var at = -1;
+      ordered.forEach(function (doc, i) { if (doc.slug === CURRENT) { at = i; } });
+      if (at < 0) { return 0; }
+      var pairs = [
+        { doc: ordered[at - 1], node: $(".plym-postnav__item--prev", postnav) },
+        { doc: ordered[at + 1], node: $(".plym-postnav__item--next", postnav) }
+      ];
+      var shown = 0;
+      pairs.forEach(function (pair) {
+        if (!pair.node) { return; }
+        if (!pair.doc) { pair.node.hidden = true; return; }
+        pair.node.href = postUrl(pair.doc);
+        $(".plym-postnav__title", pair.node).textContent = pair.doc.title;
+        shown += 1;
+      });
+      return shown;
+    };
+
+    loadIndex().then(
+      function (docs) { settle(fill(docs)); },
+      function () { settle(0); }
+    );
+  }
+
+  var copy = $("[data-plym-copy]");
+  if (copy) {
+    copy.addEventListener("click", function () {
+      var url = copy.getAttribute("data-plym-copy");
+      var done = function () {
+        var was = copy.getAttribute("aria-label");
+        copy.setAttribute("aria-label", "Link copied");
+        window.setTimeout(function () { copy.setAttribute("aria-label", was); }, 1600);
+      };
+      if (navigator.clipboard) { navigator.clipboard.writeText(url).then(done, function () {}); }
+    });
+  }
+
+  $$("form[data-plym-collect]").forEach(function (form) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var field = $('input[type="email"]', form);
+      var note = $(".plym-subscribe__msg", form);
+      var button = $("button", form);
+      if (!field.checkValidity()) { field.reportValidity(); return; }
+      button.disabled = true;
+      note.textContent = "";
+      fetch("/api/collect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          form: "subscribe",
+          email: field.value,
+          source: form.getAttribute("data-plym-source") || "",
+          page: window.location.pathname
+        })
+      }).then(function (res) {
+        if (!res.ok) { throw new Error("rejected"); }
+        note.textContent = "You are on the list.";
+        form.reset();
+      }).catch(function () {
+        note.textContent = "That did not go through. Please try again.";
+      }).then(function () {
+        button.disabled = false;
+      });
+    });
+  });
+})();
+</script>

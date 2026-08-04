@@ -1,0 +1,80 @@
+{%- set plym_home = site.website if site.website and '//' in site.website else ('https://' ~ site.website if site.website else '') -%}
+
+<footer class="plym-footer">
+  <div class="plym-frame plym-frame--rails plym-footer__inner">
+    <div class="plym-footer__about">
+      <a class="plym-brand" href="{{ site.blog_prefix }}/">
+        {%- if site.logo %}
+        <img class="plym-brand__logo" src="{{ site.logo }}" alt="" width="24" height="24" loading="lazy" decoding="async">
+        {%- else %}
+        <span class="plym-brand__mark" aria-hidden="true"></span>
+        {%- endif %}
+        <span class="plym-brand__name">{{ site.name }}</span>
+      </a>
+      <p class="plym-footer__blurb">{{ site.description or 'Writing on the work, the craft and the decisions behind it.' }}</p>
+
+      <form class="plym-subscribe" data-plym-collect data-plym-source="footer">
+        <label class="plym-subscribe__label" for="plym-footer-email">Get new articles by email.</label>
+        <div class="plym-subscribe__row">
+          <input class="plym-subscribe__input" id="plym-footer-email" type="email" name="email"
+                 autocomplete="email" placeholder="you@work.com" required>
+          <button class="plym-btn" type="submit">Get started</button>
+        </div>
+        <p class="plym-subscribe__msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <nav class="plym-footer__cols" aria-label="Footer">
+      <div>
+        <h2 class="plym-footer__title">Explore</h2>
+        <ul class="plym-footer__list">
+          <li><a href="{{ site.blog_prefix }}/">All articles</a></li>
+          {%- if plym_home %}
+          <li><a href="{{ plym_home }}">Main site</a></li>
+          {%- endif %}
+        </ul>
+      </div>
+
+      <div>
+        {%- if plym_cats is defined and plym_cats %}
+        <h2 class="plym-footer__title">Categories</h2>
+        <ul class="plym-footer__list">
+          {%- for cat in plym_cats[:5] %}
+          <li><a href="{{ site.blog_prefix }}/?cat={{ cat.slug }}">{{ cat.name }}</a></li>
+          {%- endfor %}
+        </ul>
+        {%- elif post is defined and post.tags %}
+        <h2 class="plym-footer__title">Tagged</h2>
+        <ul class="plym-footer__list">
+          {%- for tag in post.tags[:5] %}
+          <li><a href="{{ site.blog_prefix }}/?q={{ tag.name | urlencode }}">{{ tag.name }}</a></li>
+          {%- endfor %}
+        </ul>
+        {%- endif %}
+      </div>
+
+      <div>
+        <h2 class="plym-footer__title">For machines</h2>
+        <ul class="plym-footer__list">
+          <li><a href="{{ site.blog_prefix }}/llms.txt">llms.txt</a></li>
+          <li><a href="{{ site.blog_prefix }}/sitemap.xml">Sitemap</a></li>
+          {%- if post is defined %}
+          <li><a href="{{ site.blog_prefix }}/{{ post.path }}.md">This page as Markdown</a></li>
+          {%- endif %}
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <div class="plym-frame plym-frame--rails plym-footer__base">
+    <p>&copy; <span data-plym-year></span> {{ site.name }}</p>
+    <a class="plym-builtwith" href="https://plym.io" rel="noopener noreferrer">
+      <span>Built with</span>
+      <svg class="plym-builtwith__logo" viewBox="0 0 602 502" aria-hidden="true" focusable="false">
+        <path fill="#F43D02" d="M323,501 C215,501 108,501 1,501 C1,334 1,168 1,1 C201,1 401,1 601,1 C601,168 601,334 601,501 C508,501 416,501 323,501 M123,387 C181,352 239,317 297,282 C303,292 309,301 315,311 C260,345 205,378 149,412 C151,413 152,413 152,413 C225,413 298,413 371,413 C375,413 376,411 377,408 C411,322 445,235 479,148 C480,147 480,145 481,143 C478,143 476,143 474,143 C391,143 307,143 224,143 C219,143 217,145 215,149 C191,211 166,272 142,334 C135,351 129,369 121,387 C122,387 122,387 123,387 z"/>
+        <path fill="#FFFFFF" d="M122,387 C129,369 135,351 142,334 C166,272 191,211 215,149 C217,145 219,143 224,143 C307,143 391,143 474,143 C476,143 478,143 481,143 C480,145 480,147 479,148 C445,235 411,322 377,408 C376,411 375,413 371,413 C298,413 225,413 152,413 C152,413 151,413 149,412 C205,378 260,345 315,311 C309,301 303,292 297,282 C239,317 181,352 123,387 C122,387 122,387 122,387 z"/>
+      </svg>
+      <span class="plym-builtwith__name">plym</span>
+    </a>
+  </div>
+</footer>

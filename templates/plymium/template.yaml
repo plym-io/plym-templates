@@ -1,0 +1,12 @@
+fonts:
+  heading: Manrope
+  body: Inter
+
+colors:
+  primary: "#12100E"
+  secondary: "#6B6560"
+  accent: "#F43D02"
+  background: "#FFFFFF"
+
+prism:
+  theme: tomorrow

@@ -1,0 +1,136 @@
+:root {
+  color-scheme: light;
+
+  --plym-bg: var(--color-background);
+  --plym-surface: color-mix(in srgb, var(--color-primary) 3%, var(--color-background));
+  --plym-raised: color-mix(in srgb, var(--color-primary) 6%, var(--color-background));
+  --plym-inverse: color-mix(in srgb, var(--color-primary) 96%, #000);
+  --plym-on-inverse: color-mix(in srgb, var(--color-background) 96%, var(--color-primary));
+  --plym-on-inverse-dim: color-mix(in srgb, var(--color-background) 62%, var(--color-primary));
+
+  --plym-text: var(--color-primary);
+  --plym-muted: var(--color-secondary);
+  --plym-faint: color-mix(in srgb, var(--color-secondary) 78%, var(--color-background));
+
+  --plym-line: color-mix(in srgb, var(--color-primary) 11%, var(--color-background));
+  --plym-line-strong: color-mix(in srgb, var(--color-primary) 22%, var(--color-background));
+
+  --plym-accent: var(--color-accent);
+  --plym-accent-ink: color-mix(in srgb, var(--color-accent) 84%, #000);
+  --plym-accent-soft: color-mix(in srgb, var(--color-accent) 10%, var(--color-background));
+  --plym-accent-line: color-mix(in srgb, var(--color-accent) 34%, var(--color-background));
+  --plym-on-accent: var(--color-background);
+  --plym-accent-fill: var(--plym-accent-ink);
+  --plym-accent-fill-hover: color-mix(in srgb, var(--color-accent) 68%, #000);
+
+  --plym-code-bg: color-mix(in srgb, var(--color-primary) 94%, #000);
+  --plym-code-fg: color-mix(in srgb, var(--color-background) 88%, var(--color-primary));
+  --plym-code-line: color-mix(in srgb, var(--color-primary) 94%, #000);
+
+  --plym-shadow: 0 1px 2px color-mix(in srgb, var(--color-primary) 6%, transparent);
+  --plym-shadow-lift: 0 10px 30px color-mix(in srgb, var(--color-primary) 12%, transparent);
+
+  --plym-radius: 10px;
+  --plym-radius-lg: 14px;
+  --plym-radius-pill: 999px;
+
+  --plym-frame: 1200px;
+  --plym-gutter: clamp(1.25rem, calc(0.5rem + 2.4vw), 2.5rem);
+
+  --plym-sans: var(--font-body), "Plym Body Fallback", Arial, sans-serif;
+  --plym-display: var(--font-heading), "Plym Display Fallback", Arial, sans-serif;
+  --plym-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --plym-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+:root {
+  --plym-weight-body: 400;
+  --plym-weight-display: 600;
+}
+
+@font-face {
+  font-family: "Plym Body Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+  size-adjust: 107.4%;
+  ascent-override: 90%;
+  descent-override: 22.5%;
+  line-gap-override: 0%;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Plym Display Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+  size-adjust: 108%;
+  ascent-override: 101%;
+  descent-override: 28%;
+  line-gap-override: 0%;
+  font-weight: 600;
+}
+
+:root[data-plym-theme="dark"] {
+  color-scheme: dark;
+
+  --plym-bg: color-mix(in srgb, var(--color-primary) 82%, #000);
+  --plym-surface: color-mix(in srgb, var(--color-background) 5%, var(--plym-bg));
+  --plym-raised: color-mix(in srgb, var(--color-background) 9%, var(--plym-bg));
+  --plym-inverse: color-mix(in srgb, var(--color-background) 7%, var(--plym-bg));
+  --plym-on-inverse: color-mix(in srgb, var(--color-background) 93%, var(--color-primary));
+  --plym-on-inverse-dim: color-mix(in srgb, var(--color-background) 66%, var(--plym-bg));
+
+  --plym-text: color-mix(in srgb, var(--color-background) 93%, var(--color-primary));
+  --plym-muted: color-mix(in srgb, var(--color-secondary) 52%, var(--color-background));
+  --plym-faint: color-mix(in srgb, var(--color-secondary) 74%, var(--plym-bg));
+
+  --plym-line: color-mix(in srgb, var(--color-background) 13%, var(--plym-bg));
+  --plym-line-strong: color-mix(in srgb, var(--color-background) 26%, var(--plym-bg));
+
+  --plym-accent-ink: var(--color-accent);
+  --plym-accent-soft: color-mix(in srgb, var(--color-accent) 18%, var(--plym-bg));
+  --plym-accent-line: color-mix(in srgb, var(--color-accent) 42%, var(--plym-bg));
+  --plym-on-accent: color-mix(in srgb, var(--color-primary) 92%, #000);
+  --plym-accent-fill: var(--color-accent);
+  --plym-accent-fill-hover: color-mix(in srgb, var(--color-accent) 82%, #fff);
+
+  --plym-code-bg: color-mix(in srgb, var(--color-background) 6%, var(--plym-bg));
+  --plym-code-fg: color-mix(in srgb, var(--color-background) 88%, var(--color-primary));
+  --plym-code-line: color-mix(in srgb, var(--color-background) 12%, var(--plym-bg));
+
+  --plym-shadow: 0 1px 2px rgb(0 0 0 / 40%);
+  --plym-shadow-lift: 0 12px 34px rgb(0 0 0 / 55%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-plym-theme="light"]) {
+    color-scheme: dark;
+
+    --plym-bg: color-mix(in srgb, var(--color-primary) 82%, #000);
+    --plym-surface: color-mix(in srgb, var(--color-background) 5%, var(--plym-bg));
+    --plym-raised: color-mix(in srgb, var(--color-background) 9%, var(--plym-bg));
+    --plym-inverse: color-mix(in srgb, var(--color-background) 7%, var(--plym-bg));
+    --plym-on-inverse: color-mix(in srgb, var(--color-background) 93%, var(--color-primary));
+    --plym-on-inverse-dim: color-mix(in srgb, var(--color-background) 66%, var(--plym-bg));
+
+    --plym-text: color-mix(in srgb, var(--color-background) 93%, var(--color-primary));
+    --plym-muted: color-mix(in srgb, var(--color-secondary) 52%, var(--color-background));
+    --plym-faint: color-mix(in srgb, var(--color-secondary) 74%, var(--plym-bg));
+
+    --plym-line: color-mix(in srgb, var(--color-background) 13%, var(--plym-bg));
+    --plym-line-strong: color-mix(in srgb, var(--color-background) 26%, var(--plym-bg));
+
+    --plym-accent-ink: var(--color-accent);
+    --plym-accent-soft: color-mix(in srgb, var(--color-accent) 18%, var(--plym-bg));
+    --plym-accent-line: color-mix(in srgb, var(--color-accent) 42%, var(--plym-bg));
+    --plym-on-accent: color-mix(in srgb, var(--color-primary) 92%, #000);
+    --plym-accent-fill: var(--color-accent);
+    --plym-accent-fill-hover: color-mix(in srgb, var(--color-accent) 82%, #fff);
+
+    --plym-code-bg: color-mix(in srgb, var(--color-background) 6%, var(--plym-bg));
+    --plym-code-fg: color-mix(in srgb, var(--color-background) 88%, var(--color-primary));
+    --plym-code-line: color-mix(in srgb, var(--color-background) 12%, var(--plym-bg));
+
+    --plym-shadow: 0 1px 2px rgb(0 0 0 / 40%);
+    --plym-shadow-lift: 0 12px 34px rgb(0 0 0 / 55%);
+  }
+}

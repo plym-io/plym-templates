@@ -1,0 +1,144 @@
+{% include "_boot.html" %}
+
+{%- set plym_cats = [] -%}
+{%- set plym_seen = [] -%}
+{%- for item in posts -%}
+  {%- if item.category and item.category.slug not in plym_seen -%}
+    {%- set _ = plym_seen.append(item.category.slug) -%}
+    {%- set _ = plym_cats.append(item.category) -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{% include "_header.html" %}
+
+<main class="plym-shell plym-frame plym-frame--rails" id="plym-main">
+  <div class="plym-lede">
+    <h1 class="plym-lede__title">{{ site.name }}</h1>
+    {%- if site.description %}
+    <p class="plym-lede__text">{{ site.description }}</p>
+    {%- endif %}
+  </div>
+
+  {%- if posts %}
+  {%- set lead = posts[0] %}
+  <article class="plym-hero{% if lead.cover %} plym-hero--cover{% endif %}"
+           data-plym-cat="{{ lead.category.slug if lead.category else '' }}"
+           data-plym-search-text="{{ lead.title }} {{ lead.excerpt or '' }} {{ lead.category.name if lead.category else '' }} {{ lead.tags | map(attribute='name') | join(' ') }} {{ lead.author.display_name }}">
+    <div class="plym-hero__body">
+      <p class="plym-eyebrow plym-hero__meta">
+        {%- if lead.published_at %}<time datetime="{{ lead.published_at.isoformat() }}">{{ lead.published_at.strftime('%B %-d, %Y') }}</time>{% endif %}
+        {%- if lead.published_at and lead.reading_time %} &middot; {% endif %}
+        {%- if lead.reading_time %}{{ lead.reading_time }} min read{% endif %}
+      </p>
+
+      <h2 class="plym-hero__title">
+        <a href="{{ site.blog_prefix }}/{{ lead.path }}">{{ lead.title }}</a>
+      </h2>
+
+      {%- if lead.excerpt %}
+      <p class="plym-hero__excerpt">{{ lead.excerpt }}</p>
+      {%- endif %}
+
+      <div class="plym-hero__foot">
+        <div class="plym-byline">
+          {%- if lead.author.avatar_url %}
+          <img class="plym-byline__avatar" src="{{ lead.author.avatar_url }}" alt="" width="34" height="34" fetchpriority="low" decoding="async">
+          {%- else %}
+          <span class="plym-byline__initial" aria-hidden="true">{{ lead.author.display_name[:1] | upper }}</span>
+          {%- endif %}
+          <span>
+            <span class="plym-byline__name">{{ lead.author.display_name }}</span>
+            {%- if lead.category %}
+            <span class="plym-byline__role">{{ lead.category.name }}</span>
+            {%- endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {%- if lead.cover %}
+    <div class="plym-hero__media">
+      <img src="{{ lead.cover }}" alt="{{ lead.title }}" fetchpriority="high" decoding="async">
+    </div>
+    {%- endif %}
+  </article>
+
+  <div class="plym-filters" role="tablist" aria-label="Filter articles by category">
+    <div class="plym-filters__list">
+      <button class="plym-filters__btn" type="button" role="tab" aria-selected="true" data-plym-cat="all">All articles</button>
+      {%- for cat in plym_cats %}
+      <button class="plym-filters__btn" type="button" role="tab" aria-selected="false" data-plym-cat="{{ cat.slug }}">{{ cat.name }}</button>
+      {%- endfor %}
+    </div>
+  </div>
+
+  {%- if posts | length > 1 %}
+  <ul class="plym-grid">
+    {%- for item in posts[1:] %}
+    <li class="plym-card"
+        data-plym-cat="{{ item.category.slug if item.category else '' }}"
+        data-plym-search-text="{{ item.title }} {{ item.excerpt or '' }} {{ item.category.name if item.category else '' }} {{ item.tags | map(attribute='name') | join(' ') }} {{ item.author.display_name }}">
+      <div class="plym-card__media">
+        {%- if item.cover %}
+        <img src="{{ item.cover }}" alt="{{ item.title }}" loading="lazy" decoding="async">
+        {%- else %}
+        <span class="plym-card__placeholder" aria-hidden="true">{{ item.category.name if item.category else site.name }}</span>
+        {%- endif %}
+      </div>
+
+      <div class="plym-card__meta">
+        {%- if item.category %}
+        <span class="plym-chip">{{ item.category.name }}</span>
+        {%- endif %}
+        {%- if item.published_at %}
+        <time datetime="{{ item.published_at.isoformat() }}">{{ item.published_at.strftime('%B %-d, %Y') }}</time>
+        {%- endif %}
+      </div>
+
+      <h3 class="plym-card__title">
+        <a href="{{ site.blog_prefix }}/{{ item.path }}">{{ item.title }}</a>
+      </h3>
+
+      {%- if item.excerpt %}
+      <p class="plym-card__excerpt">{{ item.excerpt }}</p>
+      {%- endif %}
+
+      <p class="plym-card__author">
+        {%- if item.author.avatar_url %}
+        <img src="{{ item.author.avatar_url }}" alt="" width="20" height="20" loading="lazy" decoding="async">
+        {%- endif %}
+        <span>{{ item.author.display_name }}</span>
+        {%- if item.reading_time %}<span class="plym-dot">&middot;</span><span>{{ item.reading_time }} min read</span>{% endif %}
+      </p>
+    </li>
+    {%- endfor %}
+  </ul>
+  {%- endif %}
+
+  <div class="plym-empty plym-noresults" hidden>
+    <p class="plym-empty__title">No matching articles</p>
+    <p>Try a different search term, or pick another category.</p>
+  </div>
+
+  <nav class="plym-pager" aria-label="Pagination" hidden>
+    <a class="plym-btn plym-btn--ghost plym-pager__prev" href="{{ site.blog_prefix }}/" hidden rel="prev">
+      <svg class="plym-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 3.5 5 8l4.5 4.5"></path></svg>
+      Newer
+    </a>
+    <span class="plym-pager__page"></span>
+    <a class="plym-btn plym-btn--ghost plym-pager__next" href="{{ site.blog_prefix }}/" hidden rel="next">
+      Older
+      <svg class="plym-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6.5 3.5 11 8l-4.5 4.5"></path></svg>
+    </a>
+  </nav>
+
+  {%- else %}
+  <div class="plym-empty">
+    <p class="plym-empty__title">Nothing published yet</p>
+    <p>The first article will show up here the moment it goes live.</p>
+  </div>
+  {%- endif %}
+</main>
+
+{% include "_footer.html" %}
+{% include "_scripts.html" %}

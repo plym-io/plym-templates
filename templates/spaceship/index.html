@@ -1,0 +1,61 @@
+{% import "_cards.html" as c with context %}
+{% import "_icons.html" as ic %}
+{% set fallback_year = posts[0].published_at.year if posts and posts[0].published_at else '' %}
+{% include "_header.html" %}
+
+<main class="sp-main" id="sp-main">
+  <h1 class="sp-sr">{{ site.name }}</h1>
+
+  <section class="sp-feed">
+    <div class="sp-wrap">
+      {% if posts %}
+        <div class="sp-feed__grid">
+          <div class="sp-feed__lead">
+            {{ c.featured(posts[0], 'dark', pagination.page == 1 if pagination else true) }}
+          </div>
+          {% if posts | length > 1 %}
+            <div class="sp-stack">
+              {% for post in posts[1:4] %}{{ c.compact(post, 'dark') }}{% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% else %}
+        <p class="sp-empty">Nothing published yet.</p>
+      {% endif %}
+      {% include "_lead.html" %}
+    </div>
+  </section>
+
+  {% if posts | length > 4 %}
+    <section class="sp-section">
+      <div class="sp-wrap">
+        <div class="sp-section__head">
+          <h2 class="sp-section__title">More posts</h2>
+        </div>
+        <div class="sp-columns">
+          {% for post in posts[4:] %}{{ c.compact(post, 'light') }}{% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  {% if pagination and pagination.pages > 1 %}
+    <nav class="sp-pager" aria-label="Pagination">
+      <div class="sp-wrap sp-pager__inner">
+        <span class="sp-pager__slot">
+          {% if pagination.prev_url %}
+            <a class="sp-pager__link" rel="prev" href="{{ pagination.prev_url }}">{{ ic.chevron_left(16) }}<span>Newer</span></a>
+          {% endif %}
+        </span>
+        <span class="sp-pager__count">Page {{ pagination.page }} of {{ pagination.pages }}</span>
+        <span class="sp-pager__slot sp-pager__slot--end">
+          {% if pagination.next_url %}
+            <a class="sp-pager__link" rel="next" href="{{ pagination.next_url }}"><span>Older</span>{{ ic.chevron_right(16) }}</a>
+          {% endif %}
+        </span>
+      </div>
+    </nav>
+  {% endif %}
+</main>
+
+{% include "_footer.html" %}

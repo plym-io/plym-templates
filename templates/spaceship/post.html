@@ -1,0 +1,133 @@
+{% import "_cards.html" as c with context %}
+{% import "_icons.html" as ic %}
+{% set fallback_year = post.published_at.year if post.published_at else '' %}
+{% include "_header.html" %}
+
+<main class="sp-main" id="sp-main">
+  <header class="sp-hero{% if post.cover %} sp-hero--cover{% endif %}">
+    <div class="sp-wrap">
+      <div class="sp-hero__body">
+        <nav class="sp-crumbs" aria-label="Breadcrumb">
+          <a href="{{ site.blog_prefix or '/' }}">{{ site.name }}</a>
+          {% if post.category %}
+            <span class="sp-crumbs__sep" aria-hidden="true">/</span>
+            <span>{{ post.category.name }}</span>
+          {% endif %}
+        </nav>
+        <h1 class="sp-hero__title">{{ post.title }}</h1>
+        {% if post.excerpt %}<p class="sp-hero__deck">{{ post.excerpt }}</p>{% endif %}
+      </div>
+      {% if post.cover %}
+        <div class="sp-hero__cover">
+          <img src="{{ post.cover }}" alt="" fetchpriority="high" decoding="async">
+        </div>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="sp-wrap">
+    <div class="sp-meta">
+      <div class="sp-meta__who">
+        <p class="sp-meta__author">
+          {% if post.author.avatar_url %}
+            <img class="sp-meta__avatar" src="{{ post.author.avatar_url }}" alt="" width="24" height="24" loading="lazy" decoding="async">
+          {% endif %}
+          <span>{{ post.author.display_name }}</span>
+        </p>
+        <p class="sp-meta__stamp">
+          {% if post.published_at %}
+            <time datetime="{{ post.published_at.isoformat() }}">{{ c.long_date(post.published_at) }}</time>
+            <span class="sp-meta__bar" aria-hidden="true">|</span>
+          {% endif %}
+          <span class="sp-meta__read">{{ ic.clock(14) }}{{ post.reading_time }} minutes</span>
+        </p>
+      </div>
+      <ul class="sp-share">
+        <li class="sp-share__label">Share:</li>
+        <li>
+          <a class="sp-share__link" rel="nofollow noopener noreferrer" target="_blank"
+             href="https://x.com/intent/post?url={{ post.canonical | urlencode }}&amp;text={{ post.title | urlencode }}"
+             aria-label="Share on X">{{ ic.x_mark(15) }}</a>
+        </li>
+        <li>
+          <a class="sp-share__link" rel="nofollow noopener noreferrer" target="_blank"
+             href="https://www.facebook.com/sharer/sharer.php?u={{ post.canonical | urlencode }}"
+             aria-label="Share on Facebook">{{ ic.facebook(15) }}</a>
+        </li>
+        <li>
+          <a class="sp-share__link" rel="nofollow noopener noreferrer" target="_blank"
+             href="https://www.linkedin.com/sharing/share-offsite/?url={{ post.canonical | urlencode }}"
+             aria-label="Share on LinkedIn">{{ ic.linkedin(15) }}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sp-rule"></div>
+  </div>
+
+  <div class="sp-wrap">
+    <div class="sp-post">
+      <div class="sp-post__main">
+        <div class="plym-content sp-prose">{{ post.content | safe }}</div>
+
+        {% if post.faqs %}
+          <section class="sp-faq" aria-labelledby="sp-faq-heading">
+            <h2 class="sp-aside__heading" id="sp-faq-heading">Frequently asked questions</h2>
+            {% for faq in post.faqs %}
+              <details class="sp-faq__item">
+                <summary>{{ faq.question }}</summary>
+                <p>{{ faq.answer }}</p>
+              </details>
+            {% endfor %}
+          </section>
+        {% endif %}
+
+        <section class="sp-bio" aria-labelledby="sp-bio-heading">
+          <h2 class="sp-bio__heading" id="sp-bio-heading">Written by</h2>
+          <div class="sp-bio__rule"></div>
+          <div class="sp-bio__card">
+            {% if post.author.avatar_url %}
+              <img class="sp-bio__avatar" src="{{ post.author.avatar_url }}" alt="" width="120" height="120" loading="lazy" decoding="async">
+            {% endif %}
+            <div class="sp-bio__text">
+              <h3 class="sp-bio__name">{{ post.author.display_name }}</h3>
+              {% if post.author.links %}
+                <ul class="sp-bio__links">
+                  {% for link in post.author.links %}
+                    <li><a rel="nofollow noopener noreferrer" href="{{ link.url }}">{{ link.type }}</a></li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="sp-post__aside">
+        {% if post.tags %}
+          <h2 class="sp-sr">Tags</h2>
+          <ul class="sp-tags">
+            {% for tag in post.tags %}<li>{{ tag.name }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+        {% if post.toc %}
+          <nav class="sp-toc" aria-labelledby="sp-toc-heading">
+            <h2 class="sp-aside__heading" id="sp-toc-heading">Table of Contents</h2>
+            <ul class="sp-toc__list">
+              {% for node in post.toc %}
+                <li><a href="#{{ node.id }}">{{ node.name | safe }}</a></li>
+              {% endfor %}
+            </ul>
+          </nav>
+        {% endif %}
+      </aside>
+    </div>
+  </div>
+
+  <div class="sp-lead-band">
+    <div class="sp-wrap">
+      {% include "_lead.html" %}
+    </div>
+  </div>
+</main>
+
+{% include "_footer.html" %}

@@ -1,0 +1,15 @@
+{% import "_icons.html" as ic %}
+<a class="sp-skip" href="#sp-main">Skip to content</a>
+<header class="sp-topbar">
+  <div class="sp-wrap sp-topbar__inner">
+    <a class="sp-brand" href="{{ site.blog_prefix or '/' }}">
+      {% if site.logo %}<img class="sp-brand__mark" src="{{ site.logo }}" alt="" width="32" height="32" decoding="async">{% endif %}
+      <span class="sp-brand__slash" aria-hidden="true">/</span>
+      <span class="sp-brand__name">{{ site.name }}</span>
+    </a>
+    {% set site_host = site.website | replace('https://', '') | replace('http://', '') | trim('/') %}
+    {% if site_host %}
+      <a class="sp-btn sp-btn--outline" href="{{ site.website if '://' in site.website else 'https://' ~ site.website }}">{{ site_host }}</a>
+    {% endif %}
+  </div>
+</header>

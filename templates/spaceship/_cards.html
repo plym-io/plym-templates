@@ -1,0 +1,61 @@
+{% macro post_url(post) %}{{ site.blog_prefix }}/{{ post.path }}{% endmacro %}
+
+{% macro cover_url(post) %}{% if post.cover.startswith('http') or post.cover.startswith('/') %}{{ post.cover }}{% else %}{{ site.blog_prefix }}/{{ post.cover }}{% endif %}{% endmacro %}
+
+{% macro long_date(value) %}{{ value.strftime('%B') }} {{ value.day }}, {{ value.year }}{% endmacro %}
+
+{% macro byline(post, tone='light', avatar=false) %}
+  <div class="sp-byline sp-byline--{{ tone }}">
+    {% if avatar and post.author.avatar_url %}
+      <img class="sp-byline__avatar" src="{{ post.author.avatar_url }}" alt="" width="32" height="32" loading="lazy" decoding="async">
+    {% endif %}
+    <span class="sp-byline__name">{{ post.author.display_name }}</span>
+    {% if post.published_at %}
+      <span class="sp-byline__dot" aria-hidden="true">·</span>
+      <time class="sp-byline__date" datetime="{{ post.published_at.isoformat() }}">{{ long_date(post.published_at) }}</time>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro eyebrow(post, tone='light') %}
+  {% if post.category %}<span class="sp-eyebrow sp-eyebrow--{{ tone }}">{{ post.category.name }}</span>{% endif %}
+{% endmacro %}
+
+{% macro featured(post, tone='dark', priority=false) %}
+  <article class="sp-card sp-card--featured sp-card--{{ tone }}">
+    <div class="sp-thumb sp-thumb--wide">
+      {% if post.cover %}
+        <img class="sp-thumb__img" src="{{ cover_url(post) | trim }}" alt=""
+             {% if priority %}fetchpriority="high" decoding="async"{% else %}loading="lazy" decoding="async"{% endif %}>
+      {% else %}
+        <span class="sp-thumb__ph" aria-hidden="true"></span>
+      {% endif %}
+    </div>
+    {{ eyebrow(post, tone) }}
+    <h2 class="sp-card__title sp-card__title--xl">
+      <a class="sp-card__link" href="{{ post_url(post) | trim }}">{{ post.title }}</a>
+    </h2>
+    {% if post.excerpt %}<p class="sp-card__deck">{{ post.excerpt }}</p>{% endif %}
+    {{ byline(post, tone, true) }}
+  </article>
+{% endmacro %}
+
+{% macro compact(post, tone='light') %}
+  <article class="sp-card sp-card--compact sp-card--{{ tone }}">
+    <div class="sp-thumb sp-thumb--square">
+      {% if post.cover %}
+        <img class="sp-thumb__img" src="{{ cover_url(post) | trim }}" alt="" loading="lazy" decoding="async">
+      {% else %}
+        <span class="sp-thumb__ph" aria-hidden="true"></span>
+      {% endif %}
+    </div>
+    <div class="sp-card__body">
+      {{ eyebrow(post, tone) }}
+      <h3 class="sp-card__title">
+        <a class="sp-card__link" href="{{ post_url(post) | trim }}">{{ post.title }}</a>
+      </h3>
+      {% if post.excerpt %}<p class="sp-card__deck">{{ post.excerpt }}</p>{% endif %}
+      {{ byline(post, tone) }}
+    </div>
+  </article>
+{% endmacro %}

@@ -1,0 +1,337 @@
+.sp-prose {
+  color: var(--sp-fg);
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  line-height: 30px;
+}
+
+.sp-prose > *:first-child {
+  margin-top: 0;
+}
+
+.sp-prose p {
+  margin: 0 0 1.25em;
+}
+
+.sp-prose h2,
+.sp-prose h3,
+.sp-prose h4,
+.sp-prose h5,
+.sp-prose h6 {
+  font-family: var(--sp-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.sp-prose h2 {
+  font-size: 32px;
+  line-height: 40px;
+  margin: 40px 0 20px;
+}
+
+.sp-prose h3 {
+  font-size: 28px;
+  line-height: 1.25;
+  margin: 32px 0 12px;
+}
+
+.sp-prose h4 {
+  font-size: 24px;
+  line-height: 1.25;
+  margin: 28px 0 12px;
+}
+
+.sp-prose h5,
+.sp-prose h6 {
+  font-size: 20px;
+  line-height: 1.3;
+  margin: 24px 0 12px;
+}
+
+.sp-prose .toclink {
+  color: inherit;
+}
+
+.sp-prose .toclink:hover,
+.sp-prose .toclink:focus-visible {
+  text-decoration: none;
+}
+
+.sp-prose a {
+  color: var(--sp-accent);
+}
+
+.sp-prose a:hover,
+.sp-prose a:focus-visible {
+  text-decoration: underline;
+}
+
+.sp-prose ul,
+.sp-prose ol {
+  margin: 0 0 1.25em;
+  padding-left: 24px;
+}
+
+.sp-prose li {
+  margin-bottom: 8px;
+}
+
+.sp-prose li > ul,
+.sp-prose li > ol {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.sp-prose img {
+  aspect-ratio: auto 16 / 9;
+  border-radius: var(--sp-radius);
+  height: auto;
+  margin: 24px 0;
+  width: 100%;
+}
+
+.sp-prose figure {
+  margin: 24px 0;
+}
+
+.sp-prose figure img {
+  margin: 0;
+}
+
+.sp-prose figcaption {
+  color: var(--sp-fg-muted);
+  font-size: 14px;
+  line-height: 22px;
+  margin-top: 10px;
+}
+
+.sp-prose blockquote {
+  margin: 40px 0 48px;
+  padding-left: 40px;
+  position: relative;
+}
+
+.sp-prose blockquote::after {
+  background-image: linear-gradient(180deg, #096bde 0.87%, var(--sp-brand-dark-a) 75.12%);
+  content: "";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 3px;
+}
+
+.sp-prose blockquote p {
+  margin-bottom: 0;
+  padding-bottom: 8px;
+}
+
+.sp-prose hr {
+  background: var(--sp-border-muted);
+  border: 0;
+  height: 1px;
+  margin: 40px 0;
+}
+
+.sp-prose code {
+  background: var(--sp-code-bg);
+  border-radius: 4px;
+  color: var(--sp-code-fg);
+  font-family: var(--sp-mono);
+  font-size: 14px;
+  line-height: 20px;
+  padding: 2px 6px;
+}
+
+.sp-prose pre {
+  background: var(--sp-code-bg);
+  border-radius: 4px;
+  margin: 28px 0;
+  overflow-x: auto;
+  padding: 16px 24px;
+}
+
+.sp-prose pre code {
+  background: none;
+  display: block;
+  padding: 0;
+  white-space: pre;
+}
+
+.sp-prose table {
+  border-collapse: collapse;
+  display: table;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 32px 0;
+  table-layout: auto;
+  text-align: left;
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .sp-prose {
+    font-size: 17px;
+    line-height: 28px;
+  }
+
+  .sp-prose h2 {
+    font-size: 26px;
+    line-height: 32px;
+    margin: 32px 0 16px;
+  }
+
+  .sp-prose h3 {
+    font-size: 22px;
+  }
+
+  .sp-prose h4 {
+    font-size: 19px;
+  }
+
+  .sp-prose table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+  }
+}
+
+.sp-prose thead {
+  border-bottom: 1px solid var(--sp-code-border);
+}
+
+.sp-prose th,
+.sp-prose td {
+  border: 1px solid var(--sp-code-border);
+  padding: 12px 20px;
+  vertical-align: top;
+}
+
+.sp-prose th {
+  font-weight: 600;
+}
+
+.sp-prose tbody tr:nth-child(2n) {
+  background: var(--sp-code-bg);
+}
+
+.sp-prose strong,
+.sp-prose b {
+  font-weight: 600;
+}
+
+.sp-prose sup a,
+.sp-prose .footnote {
+  font-size: 14px;
+}
+
+.sp-prose .footnote {
+  border-top: 1px solid var(--sp-border-muted);
+  color: var(--sp-fg-muted);
+  margin-top: 40px;
+  padding-top: 16px;
+}
+
+.sp-prose .footnote hr {
+  display: none;
+}
+
+.sp-prose .footnote ol {
+  margin-bottom: 0;
+}
+
+.sp-prose .task-list-item {
+  list-style: none;
+}
+
+.sp-prose .task-list-item input {
+  margin-right: 8px;
+}
+
+.sp-prose .admonition {
+  border-radius: var(--sp-radius);
+}
+
+.sp-prose .admonition-title {
+  font-family: var(--sp-display);
+  font-weight: 600;
+}
+
+.sp-prose .tabbed-labels > label {
+  font-weight: 600;
+}
+
+.sp-prose pre[class*="language-"],
+.sp-prose code[class*="language-"] {
+  background: var(--sp-code-bg);
+  color: var(--sp-code-fg);
+  font-family: var(--sp-mono);
+  font-size: 14px;
+  line-height: 20px;
+  text-shadow: none;
+}
+
+.sp-prose .token {
+  background: none;
+  color: var(--sp-code-fg);
+}
+
+.sp-prose .token.comment,
+.sp-prose .token.block-comment,
+.sp-prose .token.prolog,
+.sp-prose .token.doctype,
+.sp-prose .token.cdata {
+  color: #57606a;
+}
+
+.sp-prose .token.punctuation,
+.sp-prose .token.operator,
+.sp-prose .token.entity,
+.sp-prose .token.namespace {
+  color: #24292f;
+}
+
+.sp-prose .token.keyword,
+.sp-prose .token.atrule,
+.sp-prose .token.important,
+.sp-prose .token.deleted {
+  color: #cf222e;
+}
+
+.sp-prose .token.string,
+.sp-prose .token.char,
+.sp-prose .token.attr-value,
+.sp-prose .token.regex,
+.sp-prose .token.url,
+.sp-prose .token.inserted {
+  color: #0a3069;
+}
+
+.sp-prose .token.number,
+.sp-prose .token.boolean,
+.sp-prose .token.constant,
+.sp-prose .token.symbol {
+  color: #0550ae;
+}
+
+.sp-prose .token.function,
+.sp-prose .token.class-name,
+.sp-prose .token.builtin {
+  color: #6639ba;
+}
+
+.sp-prose .token.tag,
+.sp-prose .token.selector,
+.sp-prose .token.attr-name,
+.sp-prose .token.variable,
+.sp-prose .token.property {
+  color: #953800;
+}
+
+.sp-prose .token.bold {
+  font-weight: 600;
+}
+
+.sp-prose .token.italic {
+  font-style: italic;
+}

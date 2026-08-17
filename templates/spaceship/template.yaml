@@ -1,0 +1,12 @@
+fonts:
+  heading: Mona Sans
+  body: Mona Sans
+
+colors:
+  primary: "#1f2328"
+  secondary: "#59636e"
+  accent: "#0969da"
+  background: "#ffffff"
+
+prism:
+  theme: tomorrow

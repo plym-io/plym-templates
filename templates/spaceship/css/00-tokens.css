@@ -1,0 +1,42 @@
+:root {
+  --sp-canvas: var(--color-background);
+  --sp-fg: var(--color-primary);
+  --sp-fg-muted: var(--color-secondary);
+  --sp-accent: var(--color-accent);
+
+  --sp-canvas-subtle: #f6f8fa;
+  --sp-border: #d1d9e0;
+  --sp-border-muted: #d8dee4;
+  --sp-border-strong: #b7bfc7;
+
+  --sp-dark: #0d1117;
+  --sp-dark-raised: #151b23;
+  --sp-dark-band: #212830;
+  --sp-dark-fg: #ffffff;
+  --sp-dark-fg-muted: #8b949e;
+  --sp-dark-border: rgba(61, 68, 77, 0.7);
+  --sp-dark-hairline: rgba(205, 217, 229, 0.1);
+  --sp-dark-accent: #79c0ff;
+
+  --sp-brand-a: #d2a8ff;
+  --sp-brand-b: #f778ba;
+  --sp-brand-c: #ff7b72;
+  --sp-brand-dark-a: #8250df;
+  --sp-brand-dark-b: #d42a32;
+  --sp-indigo: #545df0;
+
+  --sp-code-bg: #eff2ff;
+  --sp-code-border: #b9c2ff;
+  --sp-code-fg: #24292f;
+
+  --sp-shell: 1280px;
+  --sp-gutter: 24px;
+  --sp-gap: 48px;
+  --sp-radius: 6px;
+
+  --sp-sans: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --sp-display: var(--font-heading), -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --sp-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --sp-ease: cubic-bezier(0.33, 1, 0.68, 1);
+}

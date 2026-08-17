@@ -1,0 +1,78 @@
+{% import "_icons.html" as ic %}
+<section class="sp-lead" aria-labelledby="sp-lead-heading">
+  <div class="sp-lead__card">
+    <div class="sp-lead__inner">
+      <div class="sp-lead__copy">
+        <h2 class="sp-lead__title" id="sp-lead-heading">{{ site.name }}</h2>
+        {% if site.description %}<p class="sp-lead__deck">{{ site.description }}</p>{% endif %}
+      </div>
+      <div class="sp-lead__side">
+        <label class="sp-lead__label" for="sp-lead-email">Your email address</label>
+        <form class="sp-lead__form" id="sp-lead-form" novalidate>
+          <div class="sp-lead__row">
+            <input class="sp-lead__field" id="sp-lead-email" name="email" type="email"
+                   autocomplete="email" required placeholder="Your email address">
+            <button class="sp-lead__submit" id="sp-lead-submit" type="submit">
+              <span class="sp-lead__submit-text">Subscribe</span>{{ ic.chevron_right(20) }}
+            </button>
+          </div>
+          <div class="sp-lead__trap">
+            <label for="sp-lead-website">Leave this field empty</label>
+            <input id="sp-lead-website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <p class="sp-lead__status" id="sp-lead-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+(function () {
+  var form = document.getElementById('sp-lead-form');
+  if (!form || !window.fetch) { return; }
+  var field = document.getElementById('sp-lead-email');
+  var trap = document.getElementById('sp-lead-website');
+  var button = document.getElementById('sp-lead-submit');
+  var status = document.getElementById('sp-lead-status');
+  var endpoint = {{ (site.blog_prefix ~ '/api/collect') | tojson }};
+
+  function say(text, state) {
+    status.textContent = text;
+    status.className = 'sp-lead__status' + (state ? ' is-' + state : '');
+  }
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    if (trap.value) { return; }
+    if (!field.checkValidity()) {
+      say('Enter a valid email address.', 'error');
+      field.focus();
+      return;
+    }
+    button.disabled = true;
+    say('Sending', null);
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        form: 'lead',
+        email: field.value,
+        page: window.location.pathname
+      })
+    }).then(function (response) {
+      if (response.status === 201) {
+        form.reset();
+        say('Saved. Thanks.', 'ok');
+      } else if (response.status === 429) {
+        say('Too many attempts. Try again shortly.', 'error');
+      } else {
+        say('That did not save. Try again.', 'error');
+      }
+    }).catch(function () {
+      say('That did not save. Try again.', 'error');
+    }).then(function () {
+      button.disabled = false;
+    });
+  });
+})();
+</script>

@@ -1,0 +1,138 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--sp-canvas);
+  color: var(--sp-fg);
+  font-family: var(--sp-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--sp-display);
+  font-weight: 600;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration: underline;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--sp-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.sp-dark :focus-visible,
+.sp-topbar :focus-visible,
+.sp-feed :focus-visible,
+.sp-hero :focus-visible,
+.sp-lead :focus-visible,
+.sp-footer :focus-visible {
+  outline-color: var(--sp-dark-accent);
+}
+
+.sp-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sp-skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 20;
+  padding: 12px 20px;
+  background: var(--sp-canvas);
+  color: var(--sp-fg);
+  font-weight: 600;
+}
+
+.sp-skip:focus {
+  left: 12px;
+  top: 12px;
+}
+
+.sp-wrap {
+  max-width: var(--sp-shell);
+  margin: 0 auto;
+  padding: 0 var(--sp-gutter);
+}
+
+.sp-main {
+  display: block;
+}
+
+.sp-icon {
+  display: inline-block;
+  flex: none;
+  vertical-align: middle;
+}
+
+.sp-empty {
+  color: var(--sp-dark-fg-muted);
+  font-size: 18px;
+  padding: 40px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

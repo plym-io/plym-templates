@@ -1,0 +1,40 @@
+{% set site_host = site.website | replace('https://', '') | replace('http://', '') | trim('/') %}
+<footer class="sp-footer">
+  <div class="sp-wrap">
+    <div class="sp-footer__top">
+      <div class="sp-footer__brand">
+        <a class="sp-brand" href="{{ site.blog_prefix or '/' }}">
+          {% if site.logo %}<img class="sp-brand__mark" src="{{ site.logo }}" alt="" width="32" height="32" loading="lazy" decoding="async">{% endif %}
+          <span class="sp-brand__name">{{ site.name }}</span>
+        </a>
+        {% if site.description %}<p class="sp-footer__deck">{{ site.description }}</p>{% endif %}
+      </div>
+      <nav class="sp-footer__nav" aria-label="{{ site.name }}">
+        <h2 class="sp-footer__heading">Links</h2>
+        <ul class="sp-footer__list">
+          <li><a href="{{ site.blog_prefix or '/' }}">All posts</a></li>
+          <li><a href="{{ site.blog_prefix }}/llms.txt">llms.txt</a></li>
+          <li><a href="{{ site.blog_prefix }}/sitemap.xml">sitemap.xml</a></li>
+          {% if site_host %}<li><a href="{{ site.website if '://' in site.website else 'https://' ~ site.website }}">{{ site_host }}</a></li>{% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div class="sp-footer__bar">
+    <div class="sp-wrap sp-footer__bar-inner">
+      <p class="sp-footer__legal">&copy; <span id="sp-year">{{ fallback_year }}</span> {{ site.name }}</p>
+    </div>
+  </div>
+</footer>
+<script>
+(function () {
+  var slot = document.getElementById('sp-year');
+  if (slot) { slot.textContent = String(new Date().getFullYear()); }
+
+  var boxes = document.querySelectorAll('.plym-content .task-list-item > input[type="checkbox"]');
+  for (var i = 0; i < boxes.length; i++) {
+    var label = (boxes[i].parentNode.textContent || '').trim();
+    if (label) { boxes[i].setAttribute('aria-label', label); }
+  }
+})();
+</script>

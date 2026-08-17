@@ -84,26 +84,6 @@
 
 .prose blockquote p { margin: 0.5rem 0; }
 
-.prose .note, .prose .warn, .prose .tip {
-  margin: 1.75rem 0;
-  padding: 1rem 1.25rem;
-  border: 1px solid var(--rule);
-  border-left-width: 2px;
-  border-left-color: var(--color-accent);
-  border-radius: 0 var(--r-tight) var(--r-tight) 0;
-  background: var(--surface);
-  color: var(--ink-2);
-  font-size: 1rem;
-}
-
-.prose .note > :first-child,
-.prose .warn > :first-child,
-.prose .tip > :first-child { margin-top: 0; }
-
-.prose .note > :last-child,
-.prose .warn > :last-child,
-.prose .tip > :last-child { margin-bottom: 0; }
-
 .prose code {
   font-family: var(--mono);
   font-size: 0.875em;

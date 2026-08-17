@@ -248,19 +248,6 @@
   margin-right: 8px;
 }
 
-.sp-prose .admonition {
-  border-radius: var(--sp-radius);
-}
-
-.sp-prose .admonition-title {
-  font-family: var(--sp-display);
-  font-weight: 600;
-}
-
-.sp-prose .tabbed-labels > label {
-  font-weight: 600;
-}
-
 .sp-prose pre[class*="language-"],
 .sp-prose code[class*="language-"] {
   background: var(--sp-code-bg);

@@ -1,0 +1,115 @@
+:root {
+  --tone-note: var(--ink);
+  --tone-info: var(--accent-ink);
+  --tone-good: #0F6B4A;
+  --tone-warn: #8A5000;
+  --tone-stop: #B02318;
+}
+
+.nb-content .admonition {
+  --tone: var(--tone-note);
+  margin: 2.1rem 0;
+  padding: 1.15rem 1.4rem;
+  background: color-mix(in srgb, var(--tone) 7%, var(--color-background));
+  border: var(--border);
+  border-left: 5px solid var(--tone);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.nb-content .admonition > :first-child { margin-top: 0; }
+.nb-content .admonition > :last-child { margin-bottom: 0; }
+
+.nb-content .admonition-title {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--tone);
+}
+
+.nb-content .admonition.tip,
+.nb-content .admonition.hint { --tone: var(--tone-good); }
+
+.nb-content .admonition.warning,
+.nb-content .admonition.attention,
+.nb-content .admonition.caution { --tone: var(--tone-warn); }
+
+.nb-content .admonition.danger,
+.nb-content .admonition.error { --tone: var(--tone-stop); }
+
+.nb-content .admonition.important { --tone: var(--tone-info); }
+
+.nb-content .admonition .admonition {
+  margin: 1.15rem 0;
+  box-shadow: none;
+}
+
+.nb-content .tabbed-set {
+  margin: 2.25rem 0;
+  background: var(--color-background);
+  border: var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+}
+
+.nb-content .tabbed-labels {
+  gap: 0;
+  border-bottom: var(--border);
+}
+
+.nb-content .tabbed-labels > label {
+  margin-bottom: 0;
+  padding: 0.7rem 1rem;
+  border-bottom: 0;
+  border-right: 1px solid var(--line-soft);
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  transition: color 0.12s ease, background-color 0.12s ease;
+}
+
+.nb-content .tabbed-labels > label:hover {
+  color: var(--ink);
+  background: var(--accent-tint);
+}
+
+.nb-content .tabbed-set > input:nth-of-type(1):checked ~ .tabbed-labels > :nth-child(1),
+.nb-content .tabbed-set > input:nth-of-type(2):checked ~ .tabbed-labels > :nth-child(2),
+.nb-content .tabbed-set > input:nth-of-type(3):checked ~ .tabbed-labels > :nth-child(3),
+.nb-content .tabbed-set > input:nth-of-type(4):checked ~ .tabbed-labels > :nth-child(4),
+.nb-content .tabbed-set > input:nth-of-type(5):checked ~ .tabbed-labels > :nth-child(5),
+.nb-content .tabbed-set > input:nth-of-type(6):checked ~ .tabbed-labels > :nth-child(6) {
+  color: var(--ink);
+  background: var(--accent-tint);
+  box-shadow: inset 0 3px 0 var(--accent);
+}
+
+.nb-content .tabbed-set > input:focus-visible ~ .tabbed-labels {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.nb-content .tabbed-content { padding: 1.25rem 1.4rem; }
+
+.nb-content .tabbed-block > :first-child { margin-top: 0; }
+.nb-content .tabbed-block > :last-child { margin-bottom: 0; }
+
+.nb-content .tabbed-block > pre,
+.nb-content .admonition > pre {
+  margin: 1.25rem 0;
+  box-shadow: none;
+}
+
+.nb-content .tabbed-block > img,
+.nb-content .admonition > img { box-shadow: var(--shadow-xs); }
+
+.nb-content .plym-gallery img { height: auto; }

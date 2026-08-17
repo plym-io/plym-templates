@@ -57,15 +57,15 @@
 
 .plym-content .admonition.important { --plym-admon: var(--color-accent); }
 
-.plym-content .admonition.tip .admonition-title::before { content: "+"; }
-.plym-content .admonition.hint .admonition-title::before { content: "?"; }
-.plym-content .admonition.error .admonition-title::before { content: "x"; }
+.plym-content .admonition.tip > .admonition-title::before { content: "+"; }
+.plym-content .admonition.hint > .admonition-title::before { content: "?"; }
+.plym-content .admonition.error > .admonition-title::before { content: "x"; }
 
-.plym-content .admonition.warning .admonition-title::before,
-.plym-content .admonition.attention .admonition-title::before,
-.plym-content .admonition.caution .admonition-title::before,
-.plym-content .admonition.danger .admonition-title::before,
-.plym-content .admonition.important .admonition-title::before { content: "!"; }
+.plym-content .admonition.warning > .admonition-title::before,
+.plym-content .admonition.attention > .admonition-title::before,
+.plym-content .admonition.caution > .admonition-title::before,
+.plym-content .admonition.danger > .admonition-title::before,
+.plym-content .admonition.important > .admonition-title::before { content: "!"; }
 
 .plym-content .tabbed-set {
   margin: clamp(1.8rem, 4vw, 2.4rem) 0;

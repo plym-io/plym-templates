@@ -1,0 +1,12 @@
+fonts:
+  heading: Manrope
+  body: Literata
+
+colors:
+  primary: "#16181D"
+  secondary: "#63666E"
+  accent: "#0E6B57"
+  background: "#FFFFFF"
+
+prism:
+  theme: coy

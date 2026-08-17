@@ -1,0 +1,21 @@
+{% import "_icons.html" as ic %}
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="shell masthead-in">
+    <a class="wordmark" href="{{ site.blog_prefix or '/' }}">
+      {%- if site.logo -%}
+        <img class="wordmark-logo" src="{{ site.logo }}" alt="{{ site.name }}">
+      {%- else -%}
+        {{ site.name }}
+      {%- endif -%}
+    </a>
+    {% if site.website %}
+
+      <a class="masthead-link" href="{{ site.website if '//' in site.website else 'https://' ~ site.website }}">
+        <span>{{ (site.website | replace('https://', '') | replace('http://', '') | replace('www.', '')).rstrip('/') }}</span>
+        {{ ic.chevron(13) }}
+      </a>
+    {% endif %}
+  </div>
+</header>

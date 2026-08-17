@@ -1,0 +1,10 @@
+{% macro tree(nodes, depth) -%}
+  <ol class="rail-list rail-list-{{ depth }}">
+    {%- for node in nodes %}
+      <li class="rail-item">
+        <a class="rail-link" href="#{{ node.id }}" data-rail-link>{{ node.name | safe }}</a>
+        {%- if node.children and depth < 2 %}{{ tree(node.children, depth + 1) }}{% endif -%}
+      </li>
+    {%- endfor %}
+  </ol>
+{%- endmacro %}

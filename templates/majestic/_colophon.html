@@ -1,0 +1,13 @@
+{% import "_icons.html" as ic %}
+<footer class="colophon">
+  <div class="shell colophon-in">
+    <a class="colophon-name" href="{{ site.blog_prefix or '/' }}">{{ site.name }}</a>
+    {% if site.description %}<p class="colophon-note">{{ site.description }}</p>{% endif %}
+    {% if site.website %}
+      <a class="colophon-link" href="{{ site.website if '//' in site.website else 'https://' ~ site.website }}">
+        <span>{{ (site.website | replace('https://', '') | replace('http://', '') | replace('www.', '')).rstrip('/') }}</span>
+        {{ ic.chevron(12) }}
+      </a>
+    {% endif %}
+  </div>
+</footer>

@@ -1,0 +1,58 @@
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .masthead,
+  .colophon,
+  .progress,
+  .rail,
+  .share,
+  .pager,
+  .back-link,
+  .skip-link { display: none !important; }
+
+  body {
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
+
+  .post-shell {
+    display: block;
+    max-width: none;
+    padding: 0;
+  }
+
+  .plym-content a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  .plym-content pre,
+  .plym-content .admonition,
+  .plym-content .tabbed-set {
+    border: 1px solid #999;
+    background: none;
+    break-inside: avoid;
+  }
+
+  .plym-content .tabbed-block { display: block !important; }
+
+  .plym-content h2,
+  .plym-content h3 { break-after: avoid; }
+
+  .post-cover img { max-height: 9cm; }
+
+  .faq-a { display: block !important; }
+}

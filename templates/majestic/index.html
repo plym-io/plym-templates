@@ -1,0 +1,69 @@
+{% import "_icons.html" as ic %}
+{% include "_masthead.html" %}
+
+<main id="main" class="feed">
+  <div class="shell">
+
+    <div class="feed-head">
+      <h1 class="feed-title">{{ site.name }}</h1>
+      {% if site.description %}<p class="feed-note">{{ site.description }}</p>{% endif %}
+    </div>
+
+    {% if posts %}
+      <ol class="cards">
+        {% for post in posts %}
+          <li class="card">
+            <div class="card-text">
+              {% if post.category %}<p class="eyebrow">{{ post.category.name }}</p>{% endif %}
+              <h2 class="card-title">
+                <a href="{{ site.blog_prefix }}/{{ post.path }}">{{ post.title }}</a>
+              </h2>
+              {% if post.excerpt %}<p class="card-excerpt">{{ post.excerpt }}</p>{% endif %}
+              <p class="meta card-meta">
+                {% if post.author.avatar_url %}
+                  <img class="avatar avatar-xs" src="{{ site.absolute_url(post.author.avatar_url) }}"
+                       alt="" width="22" height="22" loading="lazy" decoding="async">
+                {% endif %}
+                <span class="meta-item">{{ post.author.display_name }}</span>
+                {% if post.published_at %}
+                  <time class="meta-item" datetime="{{ post.published_at.isoformat() }}">{{ post.published_at.strftime('%b %d, %Y') }}</time>
+                {% endif %}
+                <span class="meta-item">{{ post.reading_time }} min read</span>
+              </p>
+            </div>
+
+            {% if post.cover %}
+              <a class="card-thumb" href="{{ site.blog_prefix }}/{{ post.path }}" tabindex="-1" aria-hidden="true">
+                <img src="{{ site.absolute_url(post.cover) }}" alt=""
+                     width="320" height="214" loading="lazy" decoding="async">
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+
+      {% if pagination and pagination.pages > 1 %}
+        <nav class="pager" aria-label="Pagination">
+          {% if pagination.prev_url %}
+            <a class="pager-btn pager-prev" href="{{ pagination.prev_url }}" rel="prev">
+              <span class="pager-arrow pager-arrow-back">{{ ic.chevron(15) }}</span>
+              <span>Newer</span>
+            </a>
+          {% endif %}
+          <p class="pager-count">Page {{ pagination.page }} of {{ pagination.pages }}</p>
+          {% if pagination.next_url %}
+            <a class="pager-btn pager-next" href="{{ pagination.next_url }}" rel="next">
+              <span>Older</span>
+              <span class="pager-arrow">{{ ic.chevron(15) }}</span>
+            </a>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% else %}
+      <p class="empty">Nothing published here yet.</p>
+    {% endif %}
+
+  </div>
+</main>
+
+{% include "_colophon.html" %}

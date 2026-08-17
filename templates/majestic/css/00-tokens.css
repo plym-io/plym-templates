@@ -1,0 +1,34 @@
+:root {
+
+  --sans: var(--font-heading), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: var(--font-body), Charter, Georgia, "Times New Roman", serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --ink: var(--color-primary);
+  --muted: var(--color-secondary);
+  --paper: var(--color-background);
+  --accent: var(--color-accent);
+
+  --ink-soft: color-mix(in srgb, var(--color-primary) 78%, var(--color-background));
+  --rule: color-mix(in srgb, var(--color-primary) 13%, transparent);
+  --rule-soft: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  --tint: color-mix(in srgb, var(--color-primary) 3.5%, var(--color-background));
+  --tint-strong: color-mix(in srgb, var(--color-primary) 6.5%, var(--color-background));
+
+  --note: #2B5C9B;
+  --good: #186A4B;
+  --warn: #8A5A00;
+  --stop: #B0322A;
+
+  --measure: 41rem;
+  --wide: 76rem;
+  --rail: 14rem;
+  --gutter: clamp(1.25rem, 5vw, 2rem);
+
+  --text: clamp(1.0625rem, 0.99rem + 0.34vw, 1.25rem);
+  --lead: 1.72;
+
+  --radius: 6px;
+  --radius-lg: 10px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 12px 28px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,278 @@
+.plym-content .admonition {
+  --plym-admon: var(--note);
+  margin: clamp(1.8rem, 4vw, 2.4rem) 0;
+  padding: 1rem 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--plym-admon) 22%, transparent);
+  border-left: 3px solid var(--plym-admon);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--plym-admon) 5%, var(--color-background));
+  font-size: 0.96em;
+  line-height: 1.62;
+}
+
+.plym-content .admonition > :first-child { margin-top: 0; }
+.plym-content .admonition > :last-child { margin-bottom: 0; }
+
+.plym-content .admonition-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  margin: 0 0 0.6em;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--plym-admon);
+}
+
+.plym-content .admonition-title::before {
+  content: "i";
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: var(--plym-admon);
+  color: var(--color-background);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: none;
+}
+
+.plym-content .admonition.tip,
+.plym-content .admonition.hint { --plym-admon: var(--good); }
+
+.plym-content .admonition.warning,
+.plym-content .admonition.attention,
+.plym-content .admonition.caution { --plym-admon: var(--warn); }
+
+.plym-content .admonition.danger,
+.plym-content .admonition.error { --plym-admon: var(--stop); }
+
+.plym-content .admonition.important { --plym-admon: var(--color-accent); }
+
+.plym-content .admonition.tip .admonition-title::before { content: "+"; }
+.plym-content .admonition.hint .admonition-title::before { content: "?"; }
+.plym-content .admonition.error .admonition-title::before { content: "x"; }
+
+.plym-content .admonition.warning .admonition-title::before,
+.plym-content .admonition.attention .admonition-title::before,
+.plym-content .admonition.caution .admonition-title::before,
+.plym-content .admonition.danger .admonition-title::before,
+.plym-content .admonition.important .admonition-title::before { content: "!"; }
+
+.plym-content .tabbed-set {
+  margin: clamp(1.8rem, 4vw, 2.4rem) 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+}
+
+.plym-content .tabbed-labels {
+  gap: 0;
+  padding: 0 0.45rem;
+  border-bottom: 1px solid var(--rule);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--tint);
+}
+
+.plym-content .tabbed-labels > label {
+  padding: 0.7rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  color: var(--muted);
+}
+
+.plym-content .tabbed-labels > label:hover { color: var(--ink); }
+
+.plym-content .tabbed-content {
+  padding: 1.15rem 1.25rem;
+  font-size: 0.96em;
+}
+
+.plym-content .tabbed-block > :first-child { margin-top: 0; }
+.plym-content .tabbed-block > :last-child { margin-bottom: 0; }
+
+.plym-content .tabbed-block > pre,
+.plym-content .admonition > pre {
+  margin: 1rem 0;
+  padding: 0.85rem 1rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--tint-strong);
+}
+
+.plym-content .tabbed-set > input:focus-visible ~ .tabbed-labels {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.plym-content .plym-gallery {
+  gap: 0.6rem;
+  margin: clamp(1.8rem, 4vw, 2.4rem) 0;
+  scrollbar-color: color-mix(in srgb, var(--color-primary) 25%, transparent) transparent;
+}
+
+.plym-content .plym-gallery img {
+  width: min(78%, 460px);
+  height: clamp(200px, 38vh, 340px);
+  aspect-ratio: auto;
+  border-radius: var(--radius);
+  background: var(--tint-strong);
+}
+
+.plym-content pre {
+  position: static;
+  margin: clamp(1.8rem, 4vw, 2.4rem) 0;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-lg);
+  background: var(--tint);
+  box-shadow: none;
+  text-shadow: none;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.65;
+  tab-size: 2;
+}
+
+.plym-content pre > code {
+  position: static;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  text-shadow: none;
+  font-family: var(--mono);
+  font-size: 1em;
+  min-width: 0;
+  word-break: normal;
+}
+
+.plym-content pre::before,
+.plym-content pre::after,
+.plym-content pre > code::before,
+.plym-content pre > code::after { display: none; }
+
+.plym-content :not(pre) > code[class*="language-"] {
+  padding: 0.14em 0.4em;
+  border-radius: 4px;
+  background: var(--tint-strong);
+  font-size: 0.86em;
+}
+
+.plym-content .token.comment,
+.plym-content .token.prolog,
+.plym-content .token.doctype,
+.plym-content .token.cdata { color: #6A6A72; }
+
+.plym-content .token.punctuation { color: #4A4A52; }
+.plym-content .token.operator,
+.plym-content .token.entity,
+.plym-content .token.url { color: #5A5A63; }
+
+.plym-content .token.keyword,
+.plym-content .token.atrule,
+.plym-content .token.rule,
+.plym-content .token.selector { color: #1F5AA8; }
+
+.plym-content .token.string,
+.plym-content .token.char,
+.plym-content .token.attr-value,
+.plym-content .token.inserted { color: #1A6B3D; }
+
+.plym-content .token.function,
+.plym-content .token.class-name { color: #7A3E9D; }
+
+.plym-content .token.number,
+.plym-content .token.boolean,
+.plym-content .token.constant,
+.plym-content .token.symbol { color: #A33A12; }
+
+.plym-content .token.builtin,
+.plym-content .token.tag,
+.plym-content .token.property,
+.plym-content .token.attr-name { color: #0E6B57; }
+
+.plym-content .token.regex,
+.plym-content .token.variable,
+.plym-content .token.important { color: #8A5A00; }
+
+.plym-content .token.deleted { color: #B0322A; }
+.plym-content .token.namespace { opacity: 0.75; }
+
+.plym-content .footnote-ref {
+  padding-left: 0.1em;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.plym-content .footnote {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.plym-content .footnote::before {
+  content: "Notes";
+  display: block;
+  margin-bottom: 0.85rem;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.plym-content .footnote hr { display: none; }
+.plym-content .footnote ol { margin: 0; padding-left: 1.3em; }
+.plym-content .footnote li { margin: 0.5em 0; }
+.plym-content .footnote p { display: inline; margin: 0; }
+
+.plym-content .footnote-backref {
+  position: relative;
+  display: inline-block;
+  width: 1.05em;
+  height: 1.05em;
+  margin-left: 0.4em;
+  overflow: hidden;
+  vertical-align: -0.16em;
+  text-indent: 150%;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.plym-content .footnote-backref::before {
+  content: "";
+  position: absolute;
+  left: 0.16em;
+  top: 0.3em;
+  width: 0.38em;
+  height: 0.38em;
+  border-left: 1.5px solid var(--accent);
+  border-bottom: 1.5px solid var(--accent);
+  transform: rotate(45deg);
+}
+
+.plym-content .footnote-backref::after {
+  content: "";
+  position: absolute;
+  left: 0.2em;
+  top: 0.485em;
+  width: 0.62em;
+  height: 1.5px;
+  background: var(--accent);
+}

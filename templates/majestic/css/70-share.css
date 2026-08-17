@@ -1,0 +1,113 @@
+.share {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+
+.share-btn::-webkit-details-marker { display: none; }
+
+.share-btn:hover {
+  background: var(--tint-strong);
+  color: var(--ink);
+}
+
+.share[open] .share-btn {
+  background: var(--tint-strong);
+  color: var(--accent);
+}
+
+.share-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.55rem);
+  z-index: 40;
+  min-width: 15rem;
+  padding: 0.4rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.share-heading {
+  margin: 0;
+  padding: 0.5rem 0.6rem 0.4rem;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.share-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.55rem 0.6rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.share-item:hover {
+  background: var(--tint-strong);
+  color: var(--accent);
+}
+
+.share-item .ic {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.share-item:hover .ic { color: var(--accent); }
+
+.share-swap {
+  position: relative;
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+}
+
+.share-swap .ic {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.share-swap .ic + .ic { opacity: 0; }
+
+.share-copy.is-done { color: var(--good); }
+.share-copy.is-done .share-swap .ic { opacity: 0; }
+.share-copy.is-done .share-swap .ic + .ic { opacity: 1; color: var(--good); }
+
+.copy-field {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  opacity: 0;
+}
+
+@media (max-width: 26rem) {
+  .share-menu { min-width: 13.5rem; }
+}

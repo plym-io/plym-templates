@@ -1,0 +1,134 @@
+.feed { padding-top: clamp(2.5rem, 6vw, 4.5rem); }
+
+.feed-head { margin-bottom: clamp(2rem, 4vw, 3rem); }
+
+.feed-title {
+  font-size: clamp(2rem, 1.45rem + 2.2vw, 2.9rem);
+  letter-spacing: -0.032em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.feed-note {
+  max-width: 34rem;
+  margin: 0.9rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.cards {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding: clamp(1.6rem, 3vw, 2.25rem) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.card-text { min-width: 0; }
+
+.card .eyebrow { margin-bottom: 0.5rem; }
+
+.card-title {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.25rem, 1.05rem + 0.7vw, 1.5rem);
+  letter-spacing: -0.022em;
+  line-height: 1.25;
+}
+
+.card-title a {
+  text-decoration: none;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.card-title a:hover { text-decoration: underline; }
+
+.card-excerpt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  margin: 0 0 0.9rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.card-thumb {
+  display: block;
+  width: clamp(92px, 22vw, 170px);
+}
+
+.card-thumb img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background: var(--tint-strong);
+}
+
+.empty {
+  padding: 3rem 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.pager {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.pager-count {
+  grid-column: 2;
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.pager-btn,
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1.05rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.pager-btn:hover,
+.back-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pager-prev { grid-column: 1; justify-self: start; }
+.pager-next { grid-column: 3; justify-self: end; }
+
+.pager-arrow { display: inline-flex; }
+.pager-arrow-back { transform: rotate(180deg); }
+
+@media (max-width: 33rem) {
+  .card { gap: 1rem; }
+  .card-excerpt { font-size: 0.95rem; }
+}

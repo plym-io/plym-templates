@@ -1,0 +1,148 @@
+name: demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: Template name
+        required: true
+        type: string
+
+concurrency:
+  group: demo
+  cancel-in-progress: false
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      API: https://api.cloud.plym.io
+      TEMPLATE: ${{ inputs.name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the template exists
+        run: |
+          if [ ! -f "templates/$TEMPLATE/template.yaml" ]; then
+            echo "templates/$TEMPLATE/template.yaml not found"
+            exit 1
+          fi
+
+      - name: Create the blog with the template installed
+        env:
+          EMAIL: ${{ secrets.PLYM_CLOUD_EMAIL }}
+          PASSWORD: ${{ secrets.PLYM_CLOUD_PASSWORD }}
+        run: |
+          TOKEN=$(curl -sS --fail-with-body -X POST "$API/api/auth/login" -H 'Content-Type: application/json' --data "$(jq -n --arg e "$EMAIL" --arg p "$PASSWORD" '{email:$e,password:$p}')" | jq -r .access)
+          echo "::add-mask::$TOKEN"
+          wait_op() {
+            local after=0 page state
+            for _ in $(seq 1 200); do
+              page=$(curl -sS --fail-with-body -H "Authorization: Bearer $TOKEN" "$API/api/ops/$1/events?after=$after")
+              echo "$page" | jq -r '.events[] | [.event, (.title // .message // .line // .outcome // "")] | join("  ")'
+              after=$(echo "$page" | jq -r .next_after)
+              state=$(echo "$page" | jq -r .state)
+              case "$state" in
+                succeeded|finished) return 0 ;;
+                failed) echo "$page" | jq -c .error; return 1 ;;
+              esac
+              sleep 3
+            done
+            echo "op $1 did not finish in time"
+            return 1
+          }
+          SLUG="$TEMPLATE"
+          available=$(curl -sS --fail-with-body -H "Authorization: Bearer $TOKEN" "$API/api/slug-check?slug=$SLUG" | jq -r .available)
+          if [ "$available" != "true" ]; then
+            SLUG="$TEMPLATE-$(openssl rand -hex 3)"
+          fi
+          created=$(curl -sS --fail-with-body -X POST "$API/api/blogs" -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' --data "$(jq -n --arg s "$SLUG" --arg t "$TEMPLATE" '{slug:$s,name:$t,template:$t}')")
+          op_id=$(echo "$created" | jq -r .op_id)
+          template_op_id=$(echo "$created" | jq -r .template_op_id)
+          wait_op "$op_id"
+          if [ "$template_op_id" = "null" ]; then
+            echo "the template install was not chained; blog $SLUG is left in place"
+            exit 1
+          fi
+          wait_op "$template_op_id"
+          echo "SLUG=$SLUG" >> "$GITHUB_ENV"
+          echo "https://$SLUG.plym.space is live with template $TEMPLATE"
+
+      - name: Publish content
+        if: ${{ hashFiles('content/index.json') != '' }}
+        env:
+          EMAIL: ${{ secrets.PLYM_CLOUD_EMAIL }}
+          PASSWORD: ${{ secrets.PLYM_CLOUD_PASSWORD }}
+        run: |
+          TOKEN=$(curl -sS --fail-with-body -X POST "$API/api/auth/login" -H 'Content-Type: application/json' --data "$(jq -n --arg e "$EMAIL" --arg p "$PASSWORD" '{email:$e,password:$p}')" | jq -r .access)
+          echo "::add-mask::$TOKEN"
+          handoff_url=$(curl -sS --fail-with-body -X POST "$API/api/blogs/$SLUG/admin-session" -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' --data '{}' | jq -r .url)
+          BASE="${handoff_url%%/plym-admin/handoff*}"
+          CODE="${handoff_url#*code=}"
+          TTOKEN=$(curl -sS --fail-with-body -X POST "$BASE/cloud/handoff" -H 'Content-Type: application/json' --data "$(jq -n --arg c "$CODE" '{code:$c}')" | jq -r .access_token)
+          echo "::add-mask::$TTOKEN"
+          jq -c '.[]' content/index.json | while read -r entry; do
+            title=$(echo "$entry" | jq -r .title)
+            md=$(echo "$entry" | jq -r .content)
+            excerpt=$(echo "$entry" | jq -r '.excerpt // empty')
+            post_slug=$(echo "$entry" | jq -r .slug)
+            dir="content/$(dirname "$md")"
+            body=$(cat "content/$md")
+            cover=""
+            for f in "$dir"/*; do
+              [ -f "$f" ] || continue
+              fname=$(basename "$f")
+              if [ "$fname" = "$(basename "$md")" ]; then
+                continue
+              fi
+              url=$(curl -sS --fail-with-body -X POST "$BASE/api/media" -H "Authorization: Bearer $TTOKEN" -F "file=@$f" | jq -r .url)
+              if [ "$fname" = "cover.webp" ]; then
+                cover="$url"
+              fi
+              body=${body//"./$fname"/"$url"}
+              body=${body//"$fname"/"$url"}
+            done
+            payload=$(jq -n --arg t "$title" --arg s "$post_slug" --arg c "$body" --arg e "$excerpt" --arg cv "$cover" '{title:$t, slug:$s, content:$c} + (if $e != "" then {excerpt:$e} else {} end) + (if $cv != "" then {cover:$cv} else {} end)')
+            post_id=$(curl -sS --fail-with-body -X POST "$BASE/api/posts" -H "Authorization: Bearer $TTOKEN" -H 'Content-Type: application/json' --data-binary "$payload" | jq -r .id)
+            curl -sS --fail-with-body -o /dev/null -X PATCH "$BASE/api/posts/$post_id" -H "Authorization: Bearer $TTOKEN" -H 'Content-Type: application/json' --data '{"status":"published"}'
+            echo "published $post_slug as post $post_id"
+          done
+
+      - name: Delete the blog
+        env:
+          EMAIL: ${{ secrets.PLYM_CLOUD_EMAIL }}
+          PASSWORD: ${{ secrets.PLYM_CLOUD_PASSWORD }}
+        run: |
+          for _ in 1 2 3 4 5; do
+            if curl -sSf -o /dev/null "https://$SLUG.plym.space/"; then
+              served=yes
+              break
+            fi
+            sleep 5
+          done
+          if [ "${served:-no}" != "yes" ]; then
+            echo "https://$SLUG.plym.space/ is not serving; blog left in place"
+            exit 1
+          fi
+          TOKEN=$(curl -sS --fail-with-body -X POST "$API/api/auth/login" -H 'Content-Type: application/json' --data "$(jq -n --arg e "$EMAIL" --arg p "$PASSWORD" '{email:$e,password:$p}')" | jq -r .access)
+          echo "::add-mask::$TOKEN"
+          wait_op() {
+            local after=0 page state
+            for _ in $(seq 1 200); do
+              page=$(curl -sS --fail-with-body -H "Authorization: Bearer $TOKEN" "$API/api/ops/$1/events?after=$after")
+              echo "$page" | jq -r '.events[] | [.event, (.title // .message // .line // .outcome // "")] | join("  ")'
+              after=$(echo "$page" | jq -r .next_after)
+              state=$(echo "$page" | jq -r .state)
+              case "$state" in
+                succeeded|finished) return 0 ;;
+                failed) echo "$page" | jq -c .error; return 1 ;;
+              esac
+              sleep 3
+            done
+            echo "op $1 did not finish in time"
+            return 1
+          }
+          op_id=$(curl -sS --fail-with-body -X DELETE "$API/api/blogs/$SLUG" -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' --data '{"confirm":true}' | jq -r .op_id)
+          wait_op "$op_id"
+          echo "blog $SLUG deleted; https://$SLUG.plym.space keeps serving from the edge"

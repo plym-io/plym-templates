@@ -1,0 +1,120 @@
+[
+  {
+    "title": "The right way to write Markdown",
+    "slug": "the-right-way-to-write-markdown",
+    "excerpt": "A small portable core, a very long tail, and a house style for both. One sentence per line, why `console` and `bash` are different tags, the nine callout names and the four jobs they do, and the five things that silently break when a document moves to another renderer.",
+    "cover": "1/cover.webp",
+    "tags": [
+      "documentation",
+      "formatting",
+      "markdown",
+      "style guide",
+      "writing"
+    ],
+    "faqs": [
+      {
+        "question": "Should I write one sentence per line in Markdown?",
+        "answer": "Yes. Renderers join consecutive lines into a single paragraph, so the published page is identical either way — what changes is the diff. Fix a typo inside a hard-wrapped paragraph and version control shows the whole paragraph rewrapped, so a reviewer has to read all of it to find your two characters. Fix the same typo in a one-sentence line and the diff is one line. It also stacks your sentence lengths into a visible column while you write, which is a better editing tool than it sounds."
+      },
+      {
+        "question": "Why does my nested Markdown list render as a code block?",
+        "answer": "The indentation does not match the parent marker. A nested item must be indented by the width of the marker above it: two spaces under `- `, three under `1. `. Four spaces of indent means \"indented code block\" in Markdown, so a list nested one space too deep silently becomes a `<pre>` instead. Nothing errors, which is why it is the most common Markdown bug there is."
+      },
+      {
+        "question": "Is Markdown the same in every tool?",
+        "answer": "Only the core is. Headings, paragraphs, emphasis, lists, links, images, blockquotes and code fences are CommonMark and work in every renderer. Tables, task lists and strikethrough are GitHub Flavored Markdown and work almost everywhere. Callouts, tab sets, galleries, collapsible blocks and footnotes are extensions — no two implementations spell them the same way, so moving a document that uses them means rewriting those blocks by hand."
+      }
+    ]
+  },
+  {
+    "title": "Is There a Santa Claus? The Sun's 1897 editorial, reprinted in full, and the three things it does that opinion writing mostly does not",
+    "slug": "is-there-a-santa-claus-the-sun-1897-editorial",
+    "excerpt": "Five hundred words, unsigned, printed in September. It concedes the objection completely, it never once says \"I\", and it ends on a cadence rather than a conclusion — and it has now been in print for longer than the newspaper that printed it existed.",
+    "cover": "2/cover.webp",
+    "tags": [
+      "editorial"
+    ],
+    "faqs": [
+      {
+        "question": "Who wrote \"Yes, Virginia, there is a Santa Claus\"?",
+        "answer": "Francis Pharcellus Church, a veteran editorial writer at The Sun of New York, born in Rochester on 22 February 1839. The editorial ran unsigned, as editorials did at the time, and Church never publicly claimed it. His authorship was disclosed only after his death on 11 April 1906, nine years after it was printed."
+      },
+      {
+        "question": "When was the \"Is There a Santa Claus?\" editorial published?",
+        "answer": "On 21 September 1897, in The Sun of New York. It is not a Christmas piece — it ran in September, three months out of season, because that is when the letter arrived. It runs to roughly five hundred words and is the most reprinted editorial ever to appear in an English-language newspaper."
+      },
+      {
+        "question": "Who was Virginia O'Hanlon?",
+        "answer": "Laura Virginia O'Hanlon was the eight-year-old who wrote the letter, from 115 West Ninety-fifth Street in Manhattan. Her father, an assistant to the coroner, told her that if she saw it in The Sun it was so. She went on to take a bachelor's degree from Hunter College in 1910, a master's from Columbia in 1912 and a doctorate from Fordham, taught in the New York City schools for forty-seven years, and died on 13 May 1971."
+      }
+    ]
+  },
+  {
+    "title": "How to actually center a div",
+    "slug": "how-to-actually-center-a-div",
+    "excerpt": "The answer is two lines. The rest is the four situations where those two lines do not work, which are all really the same situation: a parent with no height cannot centre anything vertically, and nothing in CSS will tell you that.",
+    "cover": "3/cover.webp",
+    "tags": [],
+    "faqs": [
+      {
+        "question": "What is the simplest way to center a div?",
+        "answer": "Two lines on the parent: `display: grid` and `place-items: center`. That centres a single child on both axes in every current browser, with no wrapper element, no transform, and no knowledge of how big the child is. The flexbox equivalent needs two separate properties — `align-items` and `justify-content` — because flex honours `align-items` but ignores `justify-items` entirely."
+      },
+      {
+        "question": "Why doesn't vertical centering work?",
+        "answer": "Almost always because the parent has no height. A box sized by its contents has no middle to centre in; the browser is centring correctly inside a 40-pixel box. `height: 100%` does not fix it on its own, because a percentage height resolves against the parent's height and is ignored silently when that parent is `auto`. Give the container `min-height: 100dvh`, or set `height: 100%` on `html` and `body` so the chain actually resolves."
+      },
+      {
+        "question": "Why did my position: fixed modal stop being centered?",
+        "answer": "Something above it in the tree has a `transform`, `filter`, `backdrop-filter`, `perspective`, `contain: paint` or `will-change`. Any of those makes that ancestor the containing block for its positioned descendants, so `fixed` is now measured against that element rather than the viewport. Nothing errors and nothing warns. Move the overlay out of that subtree, or use the `<dialog>` element with `showModal()`, which puts it in the top layer where no ancestor can reach it."
+      }
+    ]
+  },
+  {
+    "title": "Six evenings with a composing stick",
+    "slug": "six-evenings-with-a-composing-stick",
+    "excerpt": null,
+    "cover": "4/cover.webp",
+    "tags": [
+      "letterpress",
+      "typography"
+    ],
+    "faqs": [
+      {
+        "question": "What is a composing stick?",
+        "answer": "A small adjustable metal tray, held in the left hand, that a typesetter builds a line of metal type into with the right. You set it once to the measure of the line — thirty picas, say, which is five inches — and it does not change for the rest of the job. A full stick is surprisingly heavy, which is the first thing anyone notices."
+      },
+      {
+        "question": "Why is metal type set backwards?",
+        "answer": "Because the inked face presses straight onto the paper, so the letter has to be a mirror of what prints. The compositor builds each line right to left with the characters inverted. Every piece of type carries a groove cast across one face, called the nick, so you can feel whether a letter is the right way up without looking at it — most people stop reading the letters within about twenty minutes and start reading the nicks."
+      },
+      {
+        "question": "Where do the terms \"upper case\" and \"lower case\" come from?",
+        "answer": "From furniture. Type was stored in shallow partitioned drawers called cases, and the capitals were kept in a case on the rack above the one holding the small letters. Upper case, lower case. The compartments inside a case are sized by how often each letter is needed rather than arranged alphabetically, which makes the drawer a physical frequency table of the language."
+      }
+    ]
+  },
+  {
+    "title": "Apple introduces the Macintosh",
+    "slug": "apple-introduces-the-macintosh",
+    "excerpt": "Cupertino, 24 January 1984. A $2,495 machine, a canvas bag, and a computer that spoke for itself.",
+    "cover": null,
+    "tags": [
+      "archive"
+    ],
+    "faqs": [
+      {
+        "question": "When was the first Macintosh introduced?",
+        "answer": "On 24 January 1984, at Apple's annual shareholders' meeting at the Flint Center in Cupertino, California. Steve Jobs pointed to a canvas bag on a table at the centre of the stage, lifted the machine out of it, took a floppy disk from his jacket pocket, and said he would like to let the Macintosh speak for itself. It then did."
+      },
+      {
+        "question": "How much did the original Macintosh cost?",
+        "answer": "$2,495 at launch in January 1984. Roughly 70,000 units had sold by the first week of May that same year."
+      },
+      {
+        "question": "What were the original Macintosh's specifications?",
+        "answer": "128 kilobytes of memory, a Motorola 68000 processor, a nine-inch black-and-white screen running at 512 by 342 pixels, and a single 3.5-inch floppy drive. It shipped with a word processor, a drawing program and a mouse — and no command line, which was the actual news."
+      }
+    ]
+  }
+]

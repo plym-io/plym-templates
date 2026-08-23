@@ -120,6 +120,52 @@
   white-space: pre;
 }
 
+.prose pre .token.comment,
+.prose pre .token.block-comment,
+.prose pre .token.prolog,
+.prose pre .token.doctype,
+.prose pre .token.cdata { color: #9BA1A8; }
+
+.prose pre .token.punctuation { color: #C7CBD1; }
+
+.prose pre .token.operator,
+.prose pre .token.entity,
+.prose pre .token.url { color: #7FD4CE; }
+
+.prose pre .token.keyword,
+.prose pre .token.atrule,
+.prose pre .token.rule,
+.prose pre .token.selector { color: #C9A6EA; }
+
+.prose pre .token.string,
+.prose pre .token.char,
+.prose pre .token.attr-value,
+.prose pre .token.inserted { color: #9DD48C; }
+
+.prose pre .token.function,
+.prose pre .token.class-name { color: #F1AC6E; }
+
+.prose pre .token.number,
+.prose pre .token.boolean,
+.prose pre .token.constant,
+.prose pre .token.symbol { color: #F2A0AE; }
+
+.prose pre .token.builtin,
+.prose pre .token.tag,
+.prose pre .token.property,
+.prose pre .token.attr-name { color: #84C9EA; }
+
+.prose pre .token.regex,
+.prose pre .token.variable,
+.prose pre .token.important { color: #E9C982; }
+
+.prose pre .token.deleted { color: #F29191; }
+
+.prose pre .token.namespace { opacity: 0.75; }
+
+.prose pre .token.bold { font-weight: 600; }
+.prose pre .token.italic { font-style: italic; }
+
 .copy {
   position: absolute;
   top: 0.5rem;
@@ -228,3 +274,39 @@
 .prose .footnote hr { display: none; }
 .prose .footnote ol { padding-left: 1.25rem; }
 .prose .footnote-backref { text-decoration: none; }
+
+.prose .footnote-ref {
+  padding-left: 0.1em;
+  color: var(--link);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.prose .footnote-ref:hover { text-decoration: underline; }
+
+.prose .footnote li:target {
+  background: var(--accent-tint);
+  border-radius: var(--r-tight);
+}
+
+.prose mark {
+  padding: 0.1em 0.3em;
+  border-radius: var(--r-tight);
+  background: var(--accent-tint);
+  box-shadow: inset 0 -1px 0 var(--accent-line);
+  color: var(--ink);
+}
+
+.prose figure {
+  margin: 1.75rem 0;
+}
+
+.prose figure > img { margin: 0; }
+
+.prose figcaption {
+  margin-top: 0.625rem;
+  font-family: var(--display);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--ink-3);
+}

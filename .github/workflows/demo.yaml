@@ -29,7 +29,7 @@ jobs:
             exit 1
           fi
           echo "SLUG=templates-$TEMPLATE" >> "$GITHUB_ENV"
-          echo "DEMO_HOST=$TEMPLATE.templates.plym.space" >> "$GITHUB_ENV"
+          echo "DEMO_HOST=templates-$TEMPLATE.plym.space" >> "$GITHUB_ENV"
 
       - name: Create or resume the blog
         env:
@@ -88,6 +88,7 @@ jobs:
           esac
 
       - name: Open an admin session
+        if: ${{ env.INSTALLED != 'yes' || hashFiles('content/index.json') != '' }}
         env:
           EMAIL: ${{ secrets.PLYM_CLOUD_EMAIL }}
           PASSWORD: ${{ secrets.PLYM_CLOUD_PASSWORD }}
@@ -135,29 +136,6 @@ jobs:
             return 1
           }
           op_id=$(curl -sS --fail-with-body -X POST "$BASE/cloud/templates" -H "Authorization: Bearer $TTOKEN" -H 'Content-Type: application/json' --data "$(jq -n --arg n "$TEMPLATE" '{name:$n,source:"public"}')" | jq -r .op_id)
-          wait_op "$op_id"
-
-      - name: Point the blog at its demo address
-        run: |
-          OPS_BASE="$BASE/cloud/ops"
-          OPS_TOKEN="$TTOKEN"
-          wait_op() {
-            local after=0 page state
-            for _ in $(seq 1 200); do
-              page=$(curl -sS --fail-with-body -H "Authorization: Bearer $OPS_TOKEN" "$OPS_BASE/$1/events?after=$after")
-              echo "$page" | jq -r '.events[] | [.event, (.title // .message // .line // .outcome // "")] | join("  ")'
-              after=$(echo "$page" | jq -r .next_after)
-              state=$(echo "$page" | jq -r .state)
-              case "$state" in
-                succeeded|finished) return 0 ;;
-                failed) echo "$page" | jq -c .error; return 1 ;;
-              esac
-              sleep 3
-            done
-            echo "op $1 did not finish in time"
-            return 1
-          }
-          op_id=$(curl -sS --fail-with-body -X PUT "$BASE/cloud/home" -H "Authorization: Bearer $TTOKEN" -H 'Content-Type: application/json' --data "$(jq -n --arg u "https://$DEMO_HOST/" '{url:$u,register_hostname:true}')" | jq -r .op_id)
           wait_op "$op_id"
 
       - name: Publish content

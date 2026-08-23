@@ -141,33 +141,48 @@ jobs:
       - name: Publish content
         if: ${{ hashFiles('content/index.json') != '' }}
         run: |
-          existing=$(curl -sS --fail-with-body -H "Authorization: Bearer $TTOKEN" "$BASE/api/posts?include_drafts=true&page_size=200" | jq -r '.items[].slug')
-          jq -c '.[]' content/index.json | while read -r entry; do
-            title=$(echo "$entry" | jq -r .title)
-            md=$(echo "$entry" | jq -r .content)
-            excerpt=$(echo "$entry" | jq -r '.excerpt // empty')
+          existing=$(curl -sS --fail-with-body -H "Authorization: Bearer $TTOKEN" "$BASE/api/posts?include_drafts=true&page_size=200" | jq -c '[.items[] | {slug, id, status}]')
+          jq -c 'to_entries[]' content/index.json | while read -r item; do
+            entry=$(echo "$item" | jq -c .value)
+            dir="content/$(echo "$item" | jq -r '.key + 1')"
             post_slug=$(echo "$entry" | jq -r .slug)
-            if printf '%s\n' "$existing" | grep -qx "$post_slug"; then
-              echo "$post_slug already exists, skipping"
+            match=$(echo "$existing" | jq -c --arg s "$post_slug" '.[] | select(.slug == $s)')
+            if [ -n "$match" ]; then
+              if [ "$(echo "$match" | jq -r .status)" = "published" ]; then
+                echo "$post_slug already published, skipping"
+              else
+                post_id=$(echo "$match" | jq -r .id)
+                curl -sS --fail-with-body -o /dev/null -X PATCH "$BASE/api/posts/$post_id" -H "Authorization: Bearer $TTOKEN" -H 'Content-Type: application/json' --data '{"status":"published"}'
+                echo "$post_slug existed as a draft; published it as post $post_id"
+              fi
               continue
             fi
-            dir="content/$(dirname "$md")"
-            body=$(cat "content/$md")
-            cover=""
-            for f in "$dir"/*; do
-              [ -f "$f" ] || continue
-              fname=$(basename "$f")
-              if [ "$fname" = "$(basename "$md")" ]; then
-                continue
-              fi
-              url=$(curl -sS --fail-with-body -X POST "$BASE/api/media" -H "Authorization: Bearer $TTOKEN" -F "file=@$f" | jq -r .url)
-              if [ "$fname" = "cover.webp" ]; then
-                cover="$url"
-              fi
-              body=${body//"./$fname"/"$url"}
-              body=${body//"$fname"/"$url"}
-            done
-            payload=$(jq -n --arg t "$title" --arg s "$post_slug" --arg c "$body" --arg e "$excerpt" --arg cv "$cover" '{title:$t, slug:$s, content:$c} + (if $e != "" then {excerpt:$e} else {} end) + (if $cv != "" then {cover:$cv} else {} end)')
+            if [ ! -f "$dir/content.md" ]; then
+              echo "$dir/content.md not found for $post_slug"
+              exit 1
+            fi
+            body=$(cat "$dir/content.md")
+            if [ -d "$dir/media" ]; then
+              for f in "$dir/media"/*; do
+                [ -f "$f" ] || continue
+                fname=$(basename "$f")
+                url=$(curl -sS --fail-with-body -X POST "$BASE/api/media" -H "Authorization: Bearer $TTOKEN" -F "file=@$f" | jq -r .url)
+                body=${body//"./media/$fname"/"$url"}
+                body=${body//"media/$fname"/"$url"}
+              done
+            fi
+            cover_url=""
+            cover_path=$(echo "$entry" | jq -r '.cover // empty')
+            if [ -n "$cover_path" ]; then
+              cover_url=$(curl -sS --fail-with-body -X POST "$BASE/api/media" -H "Authorization: Bearer $TTOKEN" -F "file=@content/$cover_path" | jq -r .url)
+            fi
+            faq_ids='[]'
+            while read -r faq; do
+              [ -n "$faq" ] || continue
+              fid=$(curl -sS --fail-with-body -X POST "$BASE/api/faqs" -H "Authorization: Bearer $TTOKEN" -H 'Content-Type: application/json' --data-binary "$faq" | jq -r .id)
+              faq_ids=$(echo "$faq_ids" | jq -c --argjson id "$fid" '. + [$id]')
+            done < <(echo "$entry" | jq -c '.faqs // [] | .[] | {question, answer}')
+            payload=$(echo "$entry" | jq -c --arg c "$body" --arg cv "$cover_url" --argjson f "$faq_ids" '{title, slug, content: $c, tags: (.tags // []), faqs: $f} + (if .excerpt then {excerpt} else {} end) + (if $cv != "" then {cover: $cv} else {} end)')
             post_id=$(curl -sS --fail-with-body -X POST "$BASE/api/posts" -H "Authorization: Bearer $TTOKEN" -H 'Content-Type: application/json' --data-binary "$payload" | jq -r .id)
             curl -sS --fail-with-body -o /dev/null -X PATCH "$BASE/api/posts/$post_id" -H "Authorization: Bearer $TTOKEN" -H 'Content-Type: application/json' --data '{"status":"published"}'
             echo "published $post_slug as post $post_id"
@@ -189,6 +204,23 @@ jobs:
           if [ "$served" != "yes" ]; then
             echo "https://$DEMO_HOST/ is not serving; the blog stays running at https://$SLUG.plym.space"
             exit 1
+          fi
+          if [ -f content/index.json ]; then
+            for post_slug in $(jq -r '.[].slug' content/index.json); do
+              served=no
+              for _ in 1 2 3 4 5 6 7 8; do
+                if curl -sSf -o /dev/null "https://$DEMO_HOST/$post_slug"; then
+                  served=yes
+                  break
+                fi
+                sleep 5
+              done
+              if [ "$served" != "yes" ]; then
+                echo "https://$DEMO_HOST/$post_slug is not serving; not suspending, the blog stays running"
+                exit 1
+              fi
+              echo "https://$DEMO_HOST/$post_slug serves"
+            done
           fi
           TOKEN=$(curl -sS --fail-with-body -X POST "$API/api/auth/login" -H 'Content-Type: application/json' --data "$(jq -n --arg e "$EMAIL" --arg p "$PASSWORD" '{email:$e,password:$p}')" | jq -r .access)
           echo "::add-mask::$TOKEN"

@@ -141,13 +141,20 @@ jobs:
       - name: Publish content
         if: ${{ hashFiles('content/index.json') != '' }}
         run: |
-          existing=$(curl -sS --fail-with-body -H "Authorization: Bearer $TTOKEN" "$BASE/api/posts?include_drafts=true&page_size=200" | jq -r '.items[].slug')
+          existing=$(curl -sS --fail-with-body -H "Authorization: Bearer $TTOKEN" "$BASE/api/posts?include_drafts=true&page_size=200" | jq -c '[.items[] | {slug, id, status}]')
           jq -c 'to_entries[]' content/index.json | while read -r item; do
             entry=$(echo "$item" | jq -c .value)
             dir="content/$(echo "$item" | jq -r '.key + 1')"
             post_slug=$(echo "$entry" | jq -r .slug)
-            if printf '%s\n' "$existing" | grep -qx "$post_slug"; then
-              echo "$post_slug already exists, skipping"
+            match=$(echo "$existing" | jq -c --arg s "$post_slug" '.[] | select(.slug == $s)')
+            if [ -n "$match" ]; then
+              if [ "$(echo "$match" | jq -r .status)" = "published" ]; then
+                echo "$post_slug already published, skipping"
+              else
+                post_id=$(echo "$match" | jq -r .id)
+                curl -sS --fail-with-body -o /dev/null -X PATCH "$BASE/api/posts/$post_id" -H "Authorization: Bearer $TTOKEN" -H 'Content-Type: application/json' --data '{"status":"published"}'
+                echo "$post_slug existed as a draft; published it as post $post_id"
+              fi
               continue
             fi
             if [ ! -f "$dir/content.md" ]; then
@@ -197,6 +204,23 @@ jobs:
           if [ "$served" != "yes" ]; then
             echo "https://$DEMO_HOST/ is not serving; the blog stays running at https://$SLUG.plym.space"
             exit 1
+          fi
+          if [ -f content/index.json ]; then
+            for post_slug in $(jq -r '.[].slug' content/index.json); do
+              served=no
+              for _ in 1 2 3 4 5 6 7 8; do
+                if curl -sSf -o /dev/null "https://$DEMO_HOST/$post_slug"; then
+                  served=yes
+                  break
+                fi
+                sleep 5
+              done
+              if [ "$served" != "yes" ]; then
+                echo "https://$DEMO_HOST/$post_slug is not serving; not suspending, the blog stays running"
+                exit 1
+              fi
+              echo "https://$DEMO_HOST/$post_slug serves"
+            done
           fi
           TOKEN=$(curl -sS --fail-with-body -X POST "$API/api/auth/login" -H 'Content-Type: application/json' --data "$(jq -n --arg e "$EMAIL" --arg p "$PASSWORD" '{email:$e,password:$p}')" | jq -r .access)
           echo "::add-mask::$TOKEN"

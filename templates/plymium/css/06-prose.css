@@ -135,6 +135,52 @@
   white-space: pre;
 }
 
+.plym-prose pre .token.comment,
+.plym-prose pre .token.block-comment,
+.plym-prose pre .token.prolog,
+.plym-prose pre .token.doctype,
+.plym-prose pre .token.cdata { color: #9BA1A8; }
+
+.plym-prose pre .token.punctuation { color: #C7CBD1; }
+
+.plym-prose pre .token.operator,
+.plym-prose pre .token.entity,
+.plym-prose pre .token.url { color: #7FD4CE; }
+
+.plym-prose pre .token.keyword,
+.plym-prose pre .token.atrule,
+.plym-prose pre .token.rule,
+.plym-prose pre .token.selector { color: #C9A6EA; }
+
+.plym-prose pre .token.string,
+.plym-prose pre .token.char,
+.plym-prose pre .token.attr-value,
+.plym-prose pre .token.inserted { color: #9DD48C; }
+
+.plym-prose pre .token.function,
+.plym-prose pre .token.class-name { color: #F1AC6E; }
+
+.plym-prose pre .token.number,
+.plym-prose pre .token.boolean,
+.plym-prose pre .token.constant,
+.plym-prose pre .token.symbol { color: #F2A0AE; }
+
+.plym-prose pre .token.builtin,
+.plym-prose pre .token.tag,
+.plym-prose pre .token.property,
+.plym-prose pre .token.attr-name { color: #84C9EA; }
+
+.plym-prose pre .token.regex,
+.plym-prose pre .token.variable,
+.plym-prose pre .token.important { color: #E9C982; }
+
+.plym-prose pre .token.deleted { color: #F29191; }
+
+.plym-prose pre .token.namespace { opacity: 0.75; }
+
+.plym-prose pre .token.bold { font-weight: 600; }
+.plym-prose pre .token.italic { font-style: italic; }
+
 .plym-prose table {
   width: 100%;
   border-collapse: collapse;
@@ -216,6 +262,77 @@
 
 .plym-prose .footnote ol {
   padding-left: 1.1em;
+}
+
+.plym-prose .footnote hr {
+  display: none;
+}
+
+.plym-prose .footnote-ref {
+  padding-left: 0.1em;
+  color: var(--plym-accent-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.plym-prose .footnote-ref:hover {
+  text-decoration: underline;
+}
+
+.plym-prose .footnote-backref {
+  margin-left: 0.35em;
+}
+
+.plym-prose .footnote li:target {
+  background: var(--plym-accent-soft);
+  border-radius: var(--plym-radius);
+}
+
+.plym-prose abbr[title] {
+  text-decoration-color: var(--plym-accent-line);
+  cursor: help;
+}
+
+.plym-prose mark {
+  padding: 0.1em 0.32em;
+  border-radius: 4px;
+  background: var(--plym-accent-soft);
+  box-shadow: inset 0 -1px 0 var(--plym-accent-line);
+  color: var(--plym-text);
+}
+
+.plym-prose kbd {
+  display: inline-block;
+  padding: 0.12em 0.42em;
+  font-family: var(--plym-mono);
+  font-size: 0.82em;
+  line-height: 1.5;
+  color: var(--plym-text);
+  background: var(--plym-surface);
+  border: 1px solid var(--plym-line-strong);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+}
+
+.plym-prose dl {
+  margin: 1.75em 0;
+}
+
+.plym-prose dt {
+  font-family: var(--plym-display);
+  font-weight: var(--plym-weight-display);
+  color: var(--plym-text);
+}
+
+.plym-prose dt:not(:first-child) {
+  margin-top: 1em;
+}
+
+.plym-prose dd {
+  margin: 0.3em 0 0;
+  padding-left: 1em;
+  border-left: 2px solid var(--plym-line);
+  color: var(--plym-muted);
 }
 
 .plym-prose details {

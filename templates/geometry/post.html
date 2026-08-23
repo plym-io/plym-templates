@@ -158,4 +158,12 @@
   for (var k = 0; k < heads.length; k++)
     if (links[heads[k].id]) io.observe(heads[k]);
 })();
+
+(function () {
+  var boxes = document.querySelectorAll('.nb-content .task-list-item > input[type="checkbox"]');
+  for (var i = 0; i < boxes.length; i++) {
+    var label = (boxes[i].parentNode.textContent || '').trim();
+    if (label) boxes[i].setAttribute('aria-label', label);
+  }
+})();
 </script>

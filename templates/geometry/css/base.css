@@ -249,15 +249,19 @@ a { color: inherit; text-decoration: none; }
 }
 .nb-footer a { color: var(--ink); transition: color 0.15s ease; }
 .nb-footer a:hover { color: var(--accent-ink); }
-.nb-credit a { display: inline-flex; align-items: center; gap: 0.45rem; }
-.nb-credit-mark {
+.nb-footer .plym-builtwith {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 1.05rem;
-  height: 1.05rem;
-  flex: none;
-  background: var(--accent);
-  border: 1.5px solid var(--ink);
+  gap: 0.45rem;
+  color: var(--dim);
 }
-.nb-credit-mark svg { width: 0.62rem; height: 0.52rem; color: var(--color-background); }
+.nb-footer .plym-builtwith .plym-builtwith__name { color: var(--ink); }
+.nb-footer .plym-builtwith:hover,
+.nb-footer .plym-builtwith:hover .plym-builtwith__name { color: var(--accent-ink); }
+.plym-builtwith__logo {
+  display: block;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border-radius: 3px;
+}

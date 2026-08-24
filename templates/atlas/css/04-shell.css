@@ -372,16 +372,29 @@
   color: var(--ink-3);
 }
 
-.ftr-built { margin-left: auto; }
+.plym-builtwith {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  color: var(--ink-3);
+  transition: color 0.18s ease;
+}
 
-.ftr-built a {
+.plym-builtwith:hover { color: var(--ink-2); }
+
+.plym-builtwith__logo {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.plym-builtwith__name {
   color: var(--ink-2);
   font-family: var(--display);
   font-weight: 600;
-  border-bottom: 1px solid var(--accent-line);
 }
-
-.ftr-built a:hover { color: var(--link); }
 
 @media (max-width: 64rem) {
   .ftr { padding: 0 1.5rem; }
@@ -391,5 +404,5 @@
 @media (max-width: 40rem) {
   .ftr { padding: 0 1.125rem; }
   .ftr-cols { gap: 1.75rem 2.5rem; }
-  .ftr-built { margin-left: 0; }
+  .plym-builtwith { margin-left: 0; }
 }

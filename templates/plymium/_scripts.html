@@ -366,7 +366,7 @@
       if (!field.checkValidity()) { field.reportValidity(); return; }
       button.disabled = true;
       note.textContent = "";
-      fetch("/api/collect", {
+      fetch(PREFIX + "/api/collect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

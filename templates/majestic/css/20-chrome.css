@@ -102,3 +102,29 @@
 }
 
 .colophon-link { margin-left: auto; }
+
+.plym-builtwith {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.plym-builtwith:hover { color: var(--ink); }
+
+.plym-builtwith__logo {
+  display: block;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border-radius: 3px;
+}
+
+.plym-builtwith__name {
+  font-weight: 600;
+  color: var(--ink);
+}

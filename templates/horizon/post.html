@@ -1,0 +1,122 @@
+{% import "_icons.html" as ico %}
+
+{% macro toclist(items, depth) %}
+<ul class="h-toc__list h-toc__list--{{ depth }}">
+  {% for item in items %}
+    <li class="h-toc__item">
+      <a class="h-toc__link" href="#{{ item.id }}">{{ item.name | safe }}</a>
+      {% if item.children %}{{ toclist(item.children, depth + 1) }}{% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+
+{% include "_header.html" %}
+
+<main id="h-main" class="h-main">
+  <article class="h-article">
+    <header class="h-post-head">
+      <div class="h-wrap h-wrap--wide">
+        {% if post.category %}
+          <p class="h-eyebrow"><span class="h-eyebrow__chip">{{ post.category.name }}</span></p>
+        {% endif %}
+
+        <h1 class="h-post-head__title">{{ post.title }}</h1>
+
+        {% if post.excerpt %}<p class="h-post-head__deck h-post-head__deck--sm">{{ post.excerpt }}</p>{% endif %}
+
+        <ul class="h-byline">
+          <li class="h-byline__item">
+            {% if post.author.avatar_url %}
+              <img class="h-byline__avatar" src="{{ post.author.avatar_url }}" alt="" width="32" height="32" decoding="async">
+            {% endif %}
+            <span class="h-byline__name">{{ post.author.display_name }}</span>
+          </li>
+        </ul>
+
+        <div class="h-post-head__strip">
+          {% if post.excerpt %}<p class="h-post-head__deck h-post-head__deck--lg">{{ post.excerpt }}</p>{% endif %}
+          <div class="h-post-head__facts">
+            {% if post.published_at %}
+              <span class="h-fact">{{ ico.calendar() }}<time datetime="{{ post.published_at.isoformat() }}">{{ post.published_at.strftime('%b %d, %Y') }}</time></span>
+            {% endif %}
+            {% if post.reading_time %}
+              <span class="h-fact">{{ ico.clock() }}<span>{{ post.reading_time }} min read</span></span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if post.cover %}
+          <figure class="h-cover">
+            <img class="h-cover__img" src="{{ post.cover }}" alt="" fetchpriority="high" decoding="async">
+          </figure>
+        {% endif %}
+      </div>
+    </header>
+
+    <div class="h-wrap h-wrap--wide h-post-body">
+      {% if post.toc %}
+        <aside class="h-aside">
+          <details class="h-toc" open>
+            <summary class="h-toc__head">
+              <span>Table of Contents</span>
+              <span class="h-toc__mark" aria-hidden="true"></span>
+            </summary>
+            <nav class="h-toc__body" aria-label="Table of contents">
+              {{ toclist(post.toc, 1) }}
+            </nav>
+          </details>
+        </aside>
+      {% endif %}
+
+      <div class="h-prose plym-content{% if not post.toc %} h-prose--solo{% endif %}">
+        {{ post.content | safe }}
+
+        {% if post.faqs %}
+          <section class="h-faq">
+            <h2 class="h-faq__title">Frequently asked questions</h2>
+            {% for faq in post.faqs %}
+              <details class="h-faq__item">
+                <summary class="h-faq__q">{{ faq.question }}</summary>
+                <div class="h-faq__a">{{ faq.answer }}</div>
+              </details>
+            {% endfor %}
+          </section>
+        {% endif %}
+
+        {% if post.tags %}
+          <ul class="h-tags" aria-label="Tags">
+            {% for tag in post.tags %}<li class="h-tags__item">{{ tag.name }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+
+  <section class="h-wrap h-wrap--wide">
+    <div class="h-share">
+      <span class="h-share__title">Share the article</span>
+      <div class="h-share__row">
+        <a class="h-share__btn" href="https://www.facebook.com/sharer/sharer.php?u={{ post.canonical | urlencode }}" target="_blank" rel="noopener noreferrer">{{ ico.facebook() }}<span>Facebook</span></a>
+        <a class="h-share__btn" href="https://www.linkedin.com/sharing/share-offsite/?url={{ post.canonical | urlencode }}" target="_blank" rel="noopener noreferrer">{{ ico.linkedin() }}<span>LinkedIn</span></a>
+        <a class="h-share__btn" href="https://x.com/intent/tweet?url={{ post.canonical | urlencode }}&amp;text={{ post.title | urlencode }}" target="_blank" rel="noopener noreferrer">{{ ico.twitter() }}<span>Post</span></a>
+        <a class="h-share__btn" href="mailto:?subject={{ post.title | urlencode }}&amp;body={{ post.canonical | urlencode }}">{{ ico.mail() }}<span>Email</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="h-wrap h-wrap--wide">
+    <div class="h-cta">
+      <div class="h-cta__text">
+        <h2 class="h-cta__title">More from {{ site.name }}</h2>
+        {% if site.description %}<p class="h-cta__sub">{{ site.description }}</p>{% endif %}
+      </div>
+      <div class="h-cta__actions">
+        <a class="h-btn h-btn--light" href="{{ site.blog_prefix or '/' }}">{{ ico.arrow_left() }}<span>All posts</span></a>
+        {% if site.website %}<a class="h-btn h-btn--ghost" href="{{ site.website }}">Visit website</a>{% endif %}
+      </div>
+    </div>
+  </section>
+</main>
+
+{% include "_footer.html" %}

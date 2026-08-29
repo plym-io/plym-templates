@@ -1,0 +1,22 @@
+<a class="h-skip" href="#h-main">Skip to content</a>
+
+<header class="h-head">
+  <div class="h-head__in">
+    <a class="h-brand" href="{{ site.blog_prefix or '/' }}">
+      {% if site.logo %}
+        <img class="h-brand__mark" src="{{ site.logo }}" alt="{{ site.name }}">
+      {% else %}
+        <span class="h-brand__name">{{ site.name }}</span>
+      {% endif %}
+    </a>
+
+    <nav class="h-head__nav" aria-label="Primary">
+      <a class="h-head__link" href="{{ site.blog_prefix or '/' }}">Blog</a>
+      {% if site.website %}<a class="h-head__link" href="{{ site.website }}">Website</a>{% endif %}
+    </nav>
+
+    {% if site.website %}
+      <a class="h-btn h-btn--solid h-head__cta" href="{{ site.website }}">Get started</a>
+    {% endif %}
+  </div>
+</header>

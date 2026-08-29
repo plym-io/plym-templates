@@ -1,0 +1,12 @@
+fonts:
+  heading: DM Sans
+  body: DM Sans
+
+colors:
+  primary: "#111113"
+  secondary: "#6D727E"
+  accent: "#2563EB"
+  background: "#FCFCFD"
+
+prism:
+  theme: tomorrow

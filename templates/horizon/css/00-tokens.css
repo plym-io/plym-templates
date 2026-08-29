@@ -1,0 +1,39 @@
+:root {
+  --h-container: 1200px;
+  --h-wide: 1024px;
+  --h-content: 680px;
+  --h-aside: 288px;
+
+  --h-r-xxs: 12px;
+  --h-r-xs: 16px;
+  --h-r-sm: 18px;
+  --h-r-lg: 24px;
+  --h-r-pill: 100px;
+
+  --h-gutter: clamp(1rem, 3.5vw, 1.5rem);
+  --h-head-h: 68px;
+
+  --h-ink: var(--color-primary);
+  --h-tone: var(--color-secondary);
+  --h-body: color-mix(in srgb, var(--color-primary) 70%, var(--color-background));
+  --h-link: var(--color-accent);
+  --h-link-ink: color-mix(in srgb, var(--color-accent) 80%, var(--color-primary));
+
+  --h-line: color-mix(in srgb, var(--color-primary) 10%, var(--color-background));
+  --h-line-soft: color-mix(in srgb, var(--color-primary) 6%, var(--color-background));
+  --h-surface: color-mix(in srgb, var(--color-primary) 4%, var(--color-background));
+  --h-tint: color-mix(in srgb, var(--color-accent) 9%, var(--color-background));
+
+  --h-dark: linear-gradient(135deg,
+      color-mix(in srgb, var(--color-primary) 94%, var(--color-accent)) 0%,
+      color-mix(in srgb, var(--color-primary) 62%, var(--color-accent)) 100%);
+
+  --h-shadow: 0 5px 25px -5px color-mix(in srgb, var(--color-primary) 12%, transparent);
+  --h-ring: 0 0 0 3px color-mix(in srgb, var(--color-accent) 40%, transparent);
+
+  --h-fast: 160ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --h-fast: 1ms; }
+}

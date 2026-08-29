@@ -1,0 +1,47 @@
+{% import "_card.html" as cards %}
+{% import "_icons.html" as ico %}
+
+{% include "_header.html" %}
+
+<main id="h-main" class="h-main">
+  <section class="h-hero">
+    <div class="h-wrap">
+      <h1 class="h-hero__title">{{ site.name }}</h1>
+      {% if site.description %}<p class="h-hero__sub">{{ site.description }}</p>{% endif %}
+    </div>
+  </section>
+
+  <section class="h-feed">
+    <div class="h-wrap">
+      <h2 class="h-feed__label">Latest</h2>
+
+      {% if posts %}
+        <div class="h-grid">
+          {% for post in posts %}{{ cards.card(site, post, loop.index <= 3) }}{% endfor %}
+        </div>
+      {% else %}
+        <p class="h-empty">No posts published yet.</p>
+      {% endif %}
+
+      {% if pagination and pagination.pages and pagination.pages > 1 %}
+        <nav class="h-pager" aria-label="Pagination">
+          {% if pagination.prev_url %}
+            <a class="h-pager__btn" href="{{ pagination.prev_url }}" rel="prev" aria-label="Previous page">{{ ico.chevron_left() }}</a>
+          {% else %}
+            <span class="h-pager__btn h-pager__btn--off" aria-hidden="true">{{ ico.chevron_left() }}</span>
+          {% endif %}
+
+          <span class="h-pager__label">Page {{ pagination.page }} of {{ pagination.pages }}</span>
+
+          {% if pagination.next_url %}
+            <a class="h-pager__btn" href="{{ pagination.next_url }}" rel="next" aria-label="Next page">{{ ico.chevron_right() }}</a>
+          {% else %}
+            <span class="h-pager__btn h-pager__btn--off" aria-hidden="true">{{ ico.chevron_right() }}</span>
+          {% endif %}
+        </nav>
+      {% endif %}
+    </div>
+  </section>
+</main>
+
+{% include "_footer.html" %}

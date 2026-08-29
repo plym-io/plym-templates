@@ -1,0 +1,27 @@
+{% macro card(site, post, eager) %}
+<article class="h-card">
+  <a class="h-card__media" href="{{ site.blog_prefix }}/{{ post.path }}" tabindex="-1" aria-hidden="true">
+    <figure class="h-thumb">
+      {% if post.cover %}
+        <img class="h-thumb__img" src="{{ post.cover }}" alt=""
+             {% if eager %}fetchpriority="high" decoding="async"{% else %}loading="lazy" decoding="async"{% endif %}>
+      {% else %}
+        <span class="h-thumb__img h-thumb__ph"></span>
+      {% endif %}
+      {% if post.category %}<span class="h-thumb__tag">{{ post.category.name }}</span>{% endif %}
+    </figure>
+  </a>
+
+  <div class="h-card__body">
+    <h3 class="h-card__title">
+      <a class="h-card__link" href="{{ site.blog_prefix }}/{{ post.path }}">{{ post.title }}</a>
+    </h3>
+    <div class="h-card__meta">
+      <span class="h-card__by">by {{ post.author.display_name }}</span>
+      {% if post.published_at %}
+        <time datetime="{{ post.published_at.isoformat() }}">{{ post.published_at.strftime('%b %d, %Y') }}</time>
+      {% endif %}
+    </div>
+  </div>
+</article>
+{% endmacro %}

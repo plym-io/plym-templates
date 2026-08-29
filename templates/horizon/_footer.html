@@ -1,0 +1,23 @@
+<footer class="h-foot">
+  <div class="h-foot__in">
+    <div class="h-foot__brand">
+      <a class="h-brand" href="{{ site.blog_prefix or '/' }}">
+        {% if site.logo %}
+          <img class="h-brand__mark" src="{{ site.logo }}" alt="{{ site.name }}">
+        {% else %}
+          <span class="h-brand__name">{{ site.name }}</span>
+        {% endif %}
+      </a>
+      {% if site.description %}<p class="h-foot__blurb">{{ site.description }}</p>{% endif %}
+    </div>
+
+    <nav class="h-foot__nav" aria-label="Footer">
+      <a class="h-foot__link" href="{{ site.blog_prefix or '/' }}">All posts</a>
+      {% if site.website %}<a class="h-foot__link" href="{{ site.website }}">Website</a>{% endif %}
+    </nav>
+  </div>
+
+  <div class="h-foot__base">
+    <span>{{ site.name }}</span>
+  </div>
+</footer>

@@ -1,0 +1,132 @@
+<script>
+(function () {
+  var doc = document;
+
+  var yearSlot = doc.querySelector("[data-cp-year]");
+  if (yearSlot) yearSlot.textContent = String(new Date().getFullYear());
+
+  var menuBtn = doc.querySelector("[data-cp-menu]");
+  var drawer = doc.getElementById("cp-drawer");
+  if (menuBtn && drawer) {
+    menuBtn.addEventListener("click", function () {
+      var open = drawer.hasAttribute("hidden");
+      if (open) drawer.removeAttribute("hidden"); else drawer.setAttribute("hidden", "");
+      menuBtn.setAttribute("aria-expanded", String(open));
+      menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    });
+  }
+
+  var shareBtn = doc.querySelector("[data-cp-share]");
+  if (shareBtn) {
+    shareBtn.addEventListener("click", function () {
+      var payload = { title: doc.title, url: location.href };
+      if (navigator.share) { navigator.share(payload).catch(function () {}); return; }
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(location.href).then(function () {
+          shareBtn.classList.add("is-done");
+          setTimeout(function () { shareBtn.classList.remove("is-done"); }, 1600);
+        }).catch(function () {});
+      }
+    });
+  }
+
+  var grid = doc.querySelector("[data-cp-grid]");
+  if (grid) {
+    var cards = Array.prototype.slice.call(grid.querySelectorAll(".cp-card"));
+    var tabs = Array.prototype.slice.call(doc.querySelectorAll(".cp-tab"));
+    var empty = doc.querySelector("[data-cp-empty]");
+    var query = doc.getElementById("cp-q");
+    var bar = doc.getElementById("cp-searchbar");
+    var searchBtn = doc.querySelector("[data-cp-search-toggle]");
+    var active = "";
+
+    var apply = function () {
+      var needle = query && query.value ? query.value.trim().toLowerCase() : "";
+      var shown = 0;
+      cards.forEach(function (card) {
+        var byCat = !active || card.getAttribute("data-cp-cat") === active;
+        var byText = !needle || (card.getAttribute("data-cp-text") || "").toLowerCase().indexOf(needle) > -1;
+        var show = byCat && byText;
+        card.hidden = !show;
+        if (show) shown++;
+      });
+      if (empty) empty.hidden = shown !== 0;
+    };
+
+    var select = function (slug) {
+      active = slug;
+      tabs.forEach(function (tab) {
+        var on = tab.getAttribute("data-cp-filter") === slug;
+        tab.classList.toggle("is-active", on);
+        tab.setAttribute("aria-pressed", String(on));
+      });
+      apply();
+    };
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        var slug = tab.getAttribute("data-cp-filter");
+        select(slug);
+        history.replaceState(null, "", slug ? "#c=" + slug : location.pathname);
+      });
+    });
+
+    var openSearch = function () {
+      if (!bar || !searchBtn) return;
+      bar.removeAttribute("hidden");
+      searchBtn.setAttribute("aria-expanded", "true");
+      if (query) query.focus();
+    };
+
+    if (searchBtn && bar) {
+      searchBtn.addEventListener("click", function () {
+        if (bar.hasAttribute("hidden")) { openSearch(); return; }
+        bar.setAttribute("hidden", "");
+        searchBtn.setAttribute("aria-expanded", "false");
+        if (query) { query.value = ""; apply(); }
+      });
+    }
+    if (query) query.addEventListener("input", apply);
+
+    var hash = location.hash || "";
+    if (hash.indexOf("#c=") === 0) {
+      var wanted = decodeURIComponent(hash.slice(3));
+      if (tabs.some(function (t) { return t.getAttribute("data-cp-filter") === wanted; })) select(wanted);
+    } else if (hash === "#search") {
+      openSearch();
+    }
+  }
+
+  Array.prototype.forEach.call(doc.querySelectorAll("[data-cp-form]"), function (form) {
+    var note = form.querySelector("[data-cp-note]");
+    var button = form.querySelector("button[type=submit]");
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      var payload = { form: form.getAttribute("data-cp-form"), page: location.pathname };
+      Array.prototype.forEach.call(form.elements, function (field) {
+        if (field.name) payload[field.name] = field.value;
+      });
+      if (button) button.disabled = true;
+      fetch("/api/collect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(function (response) {
+        if (!response.ok) throw new Error(String(response.status));
+        form.reset();
+        if (note) { note.textContent = "Thank you. We will be in touch."; note.classList.remove("is-bad"); }
+      }).catch(function () {
+        if (note) { note.textContent = "That did not go through. Please try again."; note.classList.add("is-bad"); }
+      }).then(function () {
+        if (button) button.disabled = false;
+      });
+    });
+  });
+
+  Array.prototype.forEach.call(doc.querySelectorAll(".task-list-item > input[type=checkbox]"), function (box) {
+    var label = (box.parentElement.textContent || "").trim();
+    if (label) box.setAttribute("aria-label", label);
+  });
+})();
+</script>

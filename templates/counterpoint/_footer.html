@@ -1,0 +1,60 @@
+{% import "_icons.html" as ic %}
+{% set home = site.blog_prefix ~ '/' %}
+{% set offsite = site.website if site.website and '://' in site.website else none %}
+
+<footer class="cp-foot" id="cp-contact">
+  <div class="cp-shell cp-foot__top">
+    <div class="cp-foot__group">
+      <p class="cp-foot__head">Insights</p>
+      <ul class="cp-foot__list">
+        <li><a href="{{ home }}">All insights</a></li>
+        {% for category in footer_categories or [] %}
+          <li><a href="{{ home }}#c={{ category.slug }}">{{ category.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="cp-foot__group">
+      <p class="cp-foot__head">{{ site.name }}</p>
+      <ul class="cp-foot__list">
+        {% if offsite %}<li><a href="{{ offsite }}">Main site</a></li>{% endif %}
+        <li><a href="{{ site.public_blog_url() }}/llms.txt">llms.txt</a></li>
+        <li><a href="{{ home }}#cp-contact">Contact us</a></li>
+      </ul>
+    </div>
+
+    <div class="cp-foot__contact">
+      <p class="cp-foot__head">Contact Us</p>
+      <form class="cp-form" data-cp-form="contact" novalidate>
+        <div class="cp-form__row">
+          <label class="cp-sr" for="cp-c-name">Your name</label>
+          <input class="cp-field" id="cp-c-name" name="name" type="text" placeholder="Name *" autocomplete="name" required>
+          <label class="cp-sr" for="cp-c-email">Corporate email</label>
+          <input class="cp-field" id="cp-c-email" name="email" type="email" placeholder="Corporate Email *" autocomplete="email" required>
+        </div>
+        <label class="cp-sr" for="cp-c-msg">Your inquiry</label>
+        <textarea class="cp-field cp-field--area" id="cp-c-msg" name="message" rows="4" placeholder="Enter Your Inquiry"></textarea>
+        <button class="cp-btn cp-btn--ghost" type="submit">Send</button>
+        <p class="cp-form__note" data-cp-note role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="cp-shell cp-foot__base">
+    <a class="cp-foot__brand" href="{{ home }}">
+      {% if site.logo %}
+        <img class="cp-foot__logo" src="{{ site.logo }}" alt="{{ site.name }}">
+      {% else %}
+        <svg class="cp-foot__mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path d="M27.4 9.6A14 14 0 1 0 30 16" fill="none" stroke="currentColor" stroke-width="4.4" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="5.1" fill="currentColor"/>
+        </svg>
+        <span>{{ site.name }}</span>
+      {% endif %}
+    </a>
+    <p class="cp-foot__copy">&#169; <span data-cp-year>{{ year }}</span> {{ site.name }}</p>
+    <a class="cp-plym" href="https://plym.io" rel="noopener">
+      <span>Built with</span>{{ ic.plym_mark() }}<span class="cp-plym__word">plym</span>
+    </a>
+  </div>
+</footer>

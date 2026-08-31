@@ -1,0 +1,118 @@
+{% import "_icons.html" as ic %}
+{% set home = site.blog_prefix ~ '/' %}
+{% set offsite = site.website if site.website and '://' in site.website else none %}
+
+{% set cat = namespace(list=[], slugs=[]) %}
+{% for entry in posts %}
+  {% if entry.category and entry.category.slug not in cat.slugs %}
+    {% set cat.slugs = cat.slugs + [entry.category.slug] %}
+    {% set cat.list = cat.list + [entry.category] %}
+  {% endif %}
+{% endfor %}
+
+{% set year = posts[0].published_at.year if posts and posts[0].published_at else 2026 %}
+{% set footer_categories = cat.list %}
+{% set nav_current = 'insights' %}
+{% include "_header.html" %}
+
+<main class="cp-main" id="cp-main">
+  <section class="cp-hero">
+    <div class="cp-shell">
+      <nav class="cp-crumbs" aria-label="Breadcrumb">
+        <a class="cp-crumbs__home" href="{{ offsite or home }}" aria-label="Home">{{ ic.home() }}</a>
+        {{ ic.chevron() }}
+        <span class="cp-crumbs__here" aria-current="page">{{ site.name }}</span>
+      </nav>
+      <h1 class="cp-hero__title">{% if pagination.page > 1 %}{{ site.name }}<span class="cp-hero__page"> &#8212; page {{ pagination.page }}</span>{% else %}{{ site.name }}{% endif %}</h1>
+      {% if site.description %}<p class="cp-hero__deck">{{ site.description }}</p>{% endif %}
+    </div>
+  </section>
+
+  <div class="cp-shell">
+    <div class="cp-filter">
+      <div class="cp-tabs" role="group" aria-label="Filter by category">
+        <button class="cp-tab is-active" type="button" data-cp-filter="" aria-pressed="true">All</button>
+        {% for category in cat.list %}
+          <button class="cp-tab" type="button" data-cp-filter="{{ category.slug }}" aria-pressed="false">{{ category.name }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="cp-searchbar" id="cp-searchbar" hidden>
+      <label class="cp-sr" for="cp-q">Search insights on this page</label>
+      <input class="cp-searchbar__input" id="cp-q" type="search" placeholder="Search insights on this page" autocomplete="off">
+    </div>
+
+    {% if posts %}
+      <ul class="cp-grid" data-cp-grid>
+        {% for entry in posts %}
+          <li class="cp-card" data-cp-cat="{{ entry.category.slug if entry.category else '' }}" data-cp-text="{{ entry.title }} {{ entry.excerpt or '' }} {{ entry.category.name if entry.category else '' }}">
+            <a class="cp-card__media" href="{{ site.blog_prefix }}/{{ entry.path }}" tabindex="-1" aria-hidden="true">
+              {% if entry.cover %}
+                <img src="{{ entry.cover }}" alt=""{% if loop.first %} fetchpriority="high"{% else %} loading="lazy"{% endif %} decoding="async">
+              {% else %}
+                <span class="cp-card__blank">
+                  <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                    <path d="M27.4 9.6A14 14 0 1 0 30 16" fill="none" stroke="currentColor" stroke-width="4.4" stroke-linecap="round"/>
+                    <circle cx="16" cy="16" r="5.1" fill="currentColor"/>
+                  </svg>
+                </span>
+              {% endif %}
+            </a>
+            <div class="cp-card__meta">
+              {% if entry.category %}<span class="cp-pill">{{ entry.category.name }}</span>{% endif %}
+              <span class="cp-card__read">{{ entry.reading_time }} min read</span>
+            </div>
+            <h2 class="cp-card__title"><a href="{{ site.blog_prefix }}/{{ entry.path }}">{{ entry.title }}</a></h2>
+            {% if entry.published_at %}
+              <time class="cp-card__date" datetime="{{ entry.published_at.isoformat() }}">{{ entry.published_at.strftime('%B') }} {{ entry.published_at.day }}, {{ entry.published_at.year }}</time>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+      <p class="cp-empty" data-cp-empty hidden>No insights match that filter.</p>
+    {% else %}
+      <p class="cp-empty">No insights published yet.</p>
+    {% endif %}
+
+    {% if pagination.pages > 1 %}
+      {% set win = namespace(nums=[]) %}
+      {% for n in range(1, pagination.pages + 1) %}
+        {% if n == 1 or n == pagination.pages or (n >= pagination.page - 2 and n <= pagination.page + 2) %}
+          {% set win.nums = win.nums + [n] %}
+        {% endif %}
+      {% endfor %}
+      <nav class="cp-pager" aria-label="Pagination">
+        {% if pagination.page > 1 %}
+          <a class="cp-pager__step" href="{{ site.blog_prefix }}/" aria-label="First page">{{ ic.chevrons('left') }}</a>
+          <a class="cp-pager__step" href="{{ pagination.prev_url }}" rel="prev" aria-label="Previous page">{{ ic.chevron('left') }}</a>
+        {% else %}
+          <span class="cp-pager__step is-off" aria-hidden="true">{{ ic.chevrons('left') }}</span>
+          <span class="cp-pager__step is-off" aria-hidden="true">{{ ic.chevron('left') }}</span>
+        {% endif %}
+
+        {% set gap = namespace(last=0) %}
+        {% for n in win.nums %}
+          {% if n - gap.last > 1 %}<span class="cp-pager__gap" aria-hidden="true">&#8230;</span>{% endif %}
+          {% if n == pagination.page %}
+            <span class="cp-pager__num is-current" aria-current="page">{{ n }}</span>
+          {% else %}
+            <a class="cp-pager__num" href="{% if n == 1 %}{{ site.blog_prefix }}/{% else %}{{ site.blog_prefix }}/page/{{ n }}{% endif %}" aria-label="Page {{ n }}">{{ n }}</a>
+          {% endif %}
+          {% set gap.last = n %}
+        {% endfor %}
+
+        {% if pagination.next_url %}
+          <a class="cp-pager__step" href="{{ pagination.next_url }}" rel="next" aria-label="Next page">{{ ic.chevron() }}</a>
+          <a class="cp-pager__step" href="{{ site.blog_prefix }}/page/{{ pagination.pages }}" aria-label="Last page">{{ ic.chevrons() }}</a>
+        {% else %}
+          <span class="cp-pager__step is-off" aria-hidden="true">{{ ic.chevron() }}</span>
+          <span class="cp-pager__step is-off" aria-hidden="true">{{ ic.chevrons() }}</span>
+        {% endif %}
+      </nav>
+    {% endif %}
+  </div>
+</main>
+
+{% include "_footer.html" %}
+{% include "_scripts.html" %}

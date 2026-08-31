@@ -1,0 +1,17 @@
+fonts:
+  # Two voices. Inter is the display/UI voice (nav, titles, headings, buttons,
+  # pills) and stands in for Pretendard, whose Latin is Inter-derived. Lato is
+  # the text voice (article prose, dates, breadcrumbs, footer links).
+  # plym serves heading at 600/900 and body at 400, so every weight this
+  # template uses is one of those three; prose bold is a synthesized Lato 700.
+  heading: Inter
+  body: Lato
+
+colors:
+  primary: "#121A42"
+  secondary: "#6A7092"
+  accent: "#BF111F"
+  background: "#FFFFFF"
+
+prism:
+  theme: tomorrow

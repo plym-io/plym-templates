@@ -1,0 +1,103 @@
+{% import "_icons.html" as ic %}
+{% set home = site.blog_prefix ~ '/' %}
+{% set offsite = site.website if site.website and '://' in site.website else none %}
+
+{% set year = post.published_at.year if post.published_at else 2026 %}
+{% set footer_categories = [post.category] if post.category else [] %}
+{% set nav_current = 'post' %}
+{% include "_header.html" %}
+
+<main class="cp-main" id="cp-main">
+  <article class="cp-article">
+    <header class="cp-phero">
+      <div class="cp-shell cp-phero__inner">
+        <span class="cp-pill">{{ post.category.name if post.category else 'Insight' }}</span>
+        <h1 class="cp-phero__title">{{ post.title }}</h1>
+        <div class="cp-chips">
+          <span class="cp-chip"><span class="cp-chip__ico">{{ ic.clock() }}</span>{{ post.reading_time }} min read</span>
+          {% if post.published_at %}
+            <span class="cp-chip"><span class="cp-chip__ico">{{ ic.calendar() }}</span><time datetime="{{ post.published_at.isoformat() }}">{{ post.published_at.strftime('%B') }} {{ post.published_at.day }}, {{ post.published_at.year }}</time></span>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <div class="cp-shell cp-body">
+      <div class="cp-body__main">
+        <div class="plym-content">
+          {{ post.content | safe }}
+        </div>
+
+        {% if post.tags %}
+          <ul class="cp-tags" aria-label="Topics">
+            {% for tag in post.tags %}<li><span class="cp-pill">{{ tag.name }}</span></li>{% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if post.faqs %}
+          <section class="cp-faq" aria-labelledby="cp-faq-h">
+            <h2 class="cp-h2" id="cp-faq-h">Frequently asked questions</h2>
+            {% for faq in post.faqs %}
+              <details class="cp-faq__item">
+                <summary>{{ faq.question }}{{ ic.chevron() }}</summary>
+                <p>{{ faq.answer }}</p>
+              </details>
+            {% endfor %}
+          </section>
+        {% endif %}
+      </div>
+
+      <aside class="cp-side" aria-label="About this insight">
+        <div class="cp-panel">
+          <p class="cp-panel__head">Summary</p>
+          <dl class="cp-facts">
+            <div><dt>Type</dt><dd>{{ post.category.name if post.category else 'Insight' }}</dd></div>
+            {% if post.published_at %}<div><dt>Published</dt><dd>{{ post.published_at.strftime('%B') }} {{ post.published_at.day }}, {{ post.published_at.year }}</dd></div>{% endif %}
+            <div><dt>Read</dt><dd>{{ post.reading_time }} min</dd></div>
+            <div><dt>Author</dt><dd>{{ post.author.display_name }}</dd></div>
+          </dl>
+        </div>
+
+        <div class="cp-panel cp-panel--tight">
+          <h2 class="cp-panel__pitch">Receive our insightful weekly newsletter and stay ahead of the competition.</h2>
+          <form class="cp-form cp-form--slim" data-cp-form="newsletter" novalidate>
+            <label class="cp-sr" for="cp-n-email">Email address</label>
+            <input class="cp-field cp-field--light" id="cp-n-email" name="email" type="email" placeholder="Enter your email address" autocomplete="email" required>
+            <button class="cp-btn cp-btn--solid" type="submit">Subscribe</button>
+            <p class="cp-form__note" data-cp-note role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </aside>
+    </div>
+
+    <div class="cp-shell">
+      <section class="cp-author" aria-labelledby="cp-author-h">
+        <h2 class="cp-h2" id="cp-author-h">Author</h2>
+        <div class="cp-author__card">
+          {% if post.author.avatar_url %}
+            <img class="cp-author__face" src="{{ post.author.avatar_url }}" alt="" width="106" height="106" loading="lazy" decoding="async">
+          {% else %}
+            <span class="cp-author__face cp-author__face--blank" aria-hidden="true">{{ post.author.display_name[0] }}</span>
+          {% endif %}
+          <div class="cp-author__body">
+            <p class="cp-author__name">{{ post.author.display_name }}</p>
+            {% if post.author.links %}
+              <ul class="cp-author__links">
+                {% for link in post.author.links %}
+                  <li><a href="{{ link.url }}" rel="noopener" aria-label="{{ post.author.display_name }} on {{ link.type }}">{{ ic.link_glyph(link.type) }}</a></li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+
+      <div class="cp-backrow">
+        <a class="cp-btn cp-btn--pill" href="{{ home }}">{{ ic.arrow('left') }}Back to list</a>
+      </div>
+    </div>
+  </article>
+</main>
+
+{% include "_footer.html" %}
+{% include "_scripts.html" %}

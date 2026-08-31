@@ -1,0 +1,30 @@
+:root {
+  --cp-ink: var(--color-primary);
+  --cp-red: var(--color-accent);
+  --cp-bg: var(--color-background);
+
+  --cp-prose: color-mix(in srgb, var(--cp-ink) 88%, #2b3a86);
+  --cp-muted: color-mix(in srgb, var(--color-secondary) 82%, var(--color-primary));
+  --cp-faint: var(--color-secondary);
+
+  --cp-panel: color-mix(in srgb, var(--cp-ink) 4%, #ffffff);
+  --cp-pill-bg: color-mix(in srgb, var(--cp-ink) 9%, #ffffff);
+  --cp-pill-ink: color-mix(in srgb, var(--cp-ink) 40%, #8790c4);
+  --cp-line: color-mix(in srgb, var(--cp-ink) 12%, #ffffff);
+  --cp-rule: color-mix(in srgb, var(--cp-ink) 22%, #ffffff);
+  --cp-red-deep: color-mix(in srgb, var(--cp-red) 88%, var(--cp-ink));
+
+  --cp-dark: var(--cp-ink);
+  --cp-dark-field: color-mix(in srgb, var(--cp-ink) 86%, #ffffff);
+  --cp-dark-ink: color-mix(in srgb, var(--cp-ink) 24%, #dfe2ec);
+  --cp-dark-line: color-mix(in srgb, var(--cp-ink) 74%, #ffffff);
+
+  --cp-ui: var(--font-heading), "Helvetica Neue", Arial, sans-serif;
+  --cp-text: var(--font-body), "Helvetica Neue", Arial, sans-serif;
+
+  --cp-shell: 1240px;
+  --cp-gut: 24px;
+  --cp-head: 120px;
+  --cp-r: 6px;
+  --cp-r-lg: 12px;
+}

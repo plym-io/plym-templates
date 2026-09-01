@@ -87,9 +87,10 @@ button { cursor: pointer; }
 }
 
 .cp-h2 {
+  font-family: var(--cp-display);
   font-size: 36px;
   line-height: 40px;
-  font-weight: var(--cp-w-semi);
+  font-weight: var(--cp-w-display);
   color: var(--cp-ink);
 }
 

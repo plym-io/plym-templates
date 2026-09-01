@@ -4,22 +4,22 @@
 
 <footer class="cp-foot" id="cp-contact">
   <div class="cp-shell cp-foot__top">
-    <div class="cp-foot__group">
-      <p class="cp-foot__head">Insights</p>
-      <ul class="cp-foot__list">
-        <li><a href="{{ home }}">All insights</a></li>
-        {% for category in footer_categories or [] %}
-          <li><a href="{{ home }}#c={{ category.slug }}">{{ category.name }}</a></li>
+    <div class="cp-foot__group"{% if not footer_tags %} hidden{% endif %}>
+      <p class="cp-foot__head">Coverage</p>
+      <ul class="cp-foot__list" data-cp-foot-topics>
+        {% for tag in footer_tags or [] %}
+          <li><a data-cp-taxo href="{{ home }}#t={{ tag.slug }}">{{ tag.name }}</a></li>
         {% endfor %}
       </ul>
     </div>
 
     <div class="cp-foot__group">
-      <p class="cp-foot__head">{{ site.name }}</p>
-      <ul class="cp-foot__list">
-        {% if offsite %}<li><a href="{{ offsite }}">Main site</a></li>{% endif %}
-        <li><a href="{{ site.public_blog_url() }}/llms.txt">llms.txt</a></li>
-        <li><a href="{{ home }}#cp-contact">Contact us</a></li>
+      <p class="cp-foot__head">Insights</p>
+      <ul class="cp-foot__list" data-cp-foot-cats>
+        <li><a href="{{ home }}">All insights</a></li>
+        {% for category in footer_categories or [] %}
+          <li><a data-cp-taxo href="{{ home }}#c={{ category.slug }}">{{ category.name }}</a></li>
+        {% endfor %}
       </ul>
     </div>
 
@@ -27,11 +27,15 @@
       <p class="cp-foot__head">Contact Us</p>
       <form class="cp-form" data-cp-form="contact" novalidate>
         <div class="cp-form__row">
-          <label class="cp-sr" for="cp-c-name">Your name</label>
-          <input class="cp-field" id="cp-c-name" name="name" type="text" placeholder="Name *" autocomplete="name" required>
-          <label class="cp-sr" for="cp-c-email">Corporate email</label>
-          <input class="cp-field" id="cp-c-email" name="email" type="email" placeholder="Corporate Email *" autocomplete="email" required>
+          <label class="cp-sr" for="cp-c-first">First name</label>
+          <input class="cp-field" id="cp-c-first" name="first_name" type="text" placeholder="First Name *" autocomplete="given-name" required>
+          <label class="cp-sr" for="cp-c-last">Last name</label>
+          <input class="cp-field" id="cp-c-last" name="last_name" type="text" placeholder="Last Name *" autocomplete="family-name" required>
         </div>
+        <label class="cp-sr" for="cp-c-company">Company</label>
+        <input class="cp-field" id="cp-c-company" name="company" type="text" placeholder="Company" autocomplete="organization">
+        <label class="cp-sr" for="cp-c-email">Corporate email</label>
+        <input class="cp-field" id="cp-c-email" name="email" type="email" placeholder="Corporate Email *" autocomplete="email" required>
         <label class="cp-sr" for="cp-c-msg">Your inquiry</label>
         <textarea class="cp-field cp-field--area" id="cp-c-msg" name="message" rows="4" placeholder="Enter Your Inquiry"></textarea>
         <button class="cp-btn cp-btn--ghost" type="submit">Send</button>
@@ -39,6 +43,8 @@
       </form>
     </div>
   </div>
+
+  <div class="cp-foot__rule"></div>
 
   <div class="cp-shell cp-foot__base">
     <a class="cp-foot__brand" href="{{ home }}">
@@ -49,10 +55,13 @@
           <path d="M27.4 9.6A14 14 0 1 0 30 16" fill="none" stroke="currentColor" stroke-width="4.4" stroke-linecap="round"/>
           <circle cx="16" cy="16" r="5.1" fill="currentColor"/>
         </svg>
-        <span>{{ site.name }}</span>
+        <span class="cp-foot__word">{{ site.name }}</span>
       {% endif %}
     </a>
-    <p class="cp-foot__copy">&#169; <span data-cp-year>{{ year }}</span> {{ site.name }}</p>
+    <div class="cp-foot__legal">
+      <a class="cp-foot__legal-link" href="{{ site.public_blog_url() }}/llms.txt">llms.txt</a>
+      <p class="cp-foot__copy">&#169; <span data-cp-year>{{ year }}</span> {{ site.name }}</p>
+    </div>
     <a class="cp-plym" href="https://plym.io" rel="noopener">
       <span>Built with</span>{{ ic.plym_mark() }}<span class="cp-plym__word">plym</span>
     </a>

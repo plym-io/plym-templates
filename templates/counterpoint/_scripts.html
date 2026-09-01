@@ -30,6 +30,73 @@
     });
   }
 
+  var home = doc.querySelector(".cp-brand") ? doc.querySelector(".cp-brand").getAttribute("href") : "/";
+
+  var link = function (cls, slug, name, prefix) {
+    var a = doc.createElement("a");
+    a.className = cls;
+    a.setAttribute("data-cp-taxo", "");
+    a.href = home + "#" + prefix + "=" + slug;
+    a.textContent = name;
+    return a;
+  };
+
+  var listInto = function (host, items, prefix) {
+    if (!host) return;
+    Array.prototype.forEach.call(host.querySelectorAll("[data-cp-taxo]"), function (n) {
+      if (n.parentNode.tagName === "LI") n.parentNode.remove(); else n.remove();
+    });
+    items.forEach(function (item) {
+      var li = doc.createElement("li");
+      li.appendChild(link("", item.slug, item.name, prefix));
+      host.appendChild(li);
+    });
+  };
+
+  var taxonomy = function (path) {
+    return fetch(home.replace(/\/$/, "") + path, { headers: { Accept: "application/json" } })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) { return Array.isArray(rows) ? rows : []; })
+      .catch(function () { return []; });
+  };
+
+  Promise.all([taxonomy("/api/categories"), taxonomy("/api/tags")]).then(function (both) {
+    var cats = both[0], tags = both[1];
+
+    if (cats.length) {
+      var nav = doc.querySelector("[data-cp-nav]");
+      if (nav) {
+        Array.prototype.forEach.call(nav.querySelectorAll("[data-cp-nav-cat]"), function (n) { n.remove(); });
+        var after = nav.firstElementChild;
+        cats.slice(0, 2).forEach(function (c) {
+          var a = link("cp-nav__link", c.slug, c.name, "c");
+          a.setAttribute("data-cp-nav-cat", "");
+          nav.insertBefore(a, after.nextSibling);
+          after = a;
+        });
+      }
+      var drawer = doc.querySelector("[data-cp-drawer-cats]");
+      if (drawer) {
+        Array.prototype.forEach.call(drawer.querySelectorAll("[data-cp-nav-cat]"), function (n) { n.remove(); });
+        cats.forEach(function (c) {
+          var a = link("cp-drawer__link", c.slug, c.name, "c");
+          a.setAttribute("data-cp-nav-cat", "");
+          drawer.appendChild(a);
+        });
+      }
+      listInto(doc.querySelector("[data-cp-foot-cats]"), cats, "c");
+    }
+
+    var topics = doc.querySelector("[data-cp-foot-topics]");
+    var topicGroup = topics ? topics.closest(".cp-foot__group") : null;
+    if (tags.length) {
+      listInto(topics, tags, "t");
+      if (topicGroup) topicGroup.hidden = false;
+    } else if (topicGroup && !topics.querySelector("li")) {
+      topicGroup.hidden = true;
+    }
+  });
+
   var saveKey = "cp-reading-list";
   var savers = doc.querySelectorAll("[data-cp-save]");
   if (savers.length) {

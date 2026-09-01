@@ -128,9 +128,10 @@
 }
 
 .cp-panel__pitch {
+  font-family: var(--cp-display);
   font-size: 16px;
   line-height: 22px;
-  font-weight: var(--cp-w-semi);
+  font-weight: var(--cp-w-display);
   color: var(--cp-ink);
   margin-bottom: 14px;
 }

@@ -29,9 +29,10 @@
 .cp-crumbs__home:hover { background: var(--cp-line); }
 
 .cp-hero__title {
+  font-family: var(--cp-display);
   font-size: 48px;
   line-height: 66px;
-  font-weight: var(--cp-w-semi);
+  font-weight: var(--cp-w-display);
   letter-spacing: normal;
   color: var(--cp-ink);
 }

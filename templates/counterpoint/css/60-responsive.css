@@ -1,8 +1,3 @@
-@media (min-width: 769px) {
-  .cp-icobtn--menu { display: none; }
-  .cp-drawer { display: none; }
-}
-
 @media (max-width: 1180px) {
   .cp-nav { gap: 28px; }
   .cp-foot__group { grid-template-columns: auto minmax(0, 1fr); gap: 0 20px; }
@@ -37,7 +32,8 @@
 @media (max-width: 768px) {
   :root { --cp-gut: 16px; }
 
-  .cp-nav,
+  .cp-nav { display: none; }
+
   .cp-util__link { display: none; }
 
   .cp-util { gap: 0; padding-top: 12px; }

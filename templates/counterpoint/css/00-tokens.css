@@ -18,15 +18,22 @@
   --cp-dark-ink: color-mix(in srgb, var(--cp-ink) 24%, #dfe2ec);
   --cp-dark-line: color-mix(in srgb, var(--cp-ink) 74%, #ffffff);
 
-  --cp-ui: var(--font-heading), "Helvetica Neue", Arial, sans-serif;
-  --cp-text: var(--font-body), "Helvetica Neue", Arial, sans-serif;
+  /* The source asks for Pretendard, every one of those URLs 404s, and its
+     chrome paints in this stack for every visitor. Matching the stack is what
+     makes the chrome identical rather than merely similar. */
+  --cp-ui: -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --cp-display: var(--font-heading), var(--cp-ui);
+  --cp-text: var(--font-body), var(--cp-ui);
 
-  --cp-w-light: var(--wght-heading-light, 300);
-  --cp-w-reg: var(--wght-heading-regular, 400);
-  --cp-w-semi: var(--wght-heading-bold, 600);
-  --cp-w-bold: var(--wght-heading-black, 700);
+  --cp-w-display: var(--wght-heading-bold, 600);
   --cp-t-reg: var(--wght-body-regular, 400);
   --cp-t-bold: var(--wght-body-bold, 700);
+
+  --cp-w-light: 300;
+  --cp-w-reg: 400;
+  --cp-w-med: 500;
+  --cp-w-semi: 600;
+  --cp-w-bold: 700;
 
   --cp-shell: 1240px;
   --cp-gut: 24px;

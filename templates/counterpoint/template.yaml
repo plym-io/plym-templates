@@ -1,16 +1,11 @@
 fonts:
-  # Inter stands in for Pretendard, whose Latin is Inter-derived and which the
-  # source site declares for all of its chrome. Inter is variable, so every
-  # role below arrives in the one file a single weight would have cost.
+  # The two families the source site actually loads. Its chrome asks for
+  # Pretendard, every one of those URLs 404s, and it paints in the system UI
+  # stack instead — which is what --cp-sys reproduces in the CSS.
   heading:
-    family: Inter
+    family: Poppins
     weights:
-      light: 300
-      regular: 400
       bold: 600
-      black: 700
-  # Lato carries the article body. The family has no 500 or 600 face, so only
-  # the two it really ships are requested.
   body:
     family: Lato
     weights:

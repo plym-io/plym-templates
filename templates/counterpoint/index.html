@@ -10,8 +10,20 @@
   {% endif %}
 {% endfor %}
 
+{% set tag = namespace(list=[], slugs=[]) %}
+{% for entry in posts %}
+  {% for item in entry.tags %}
+    {% if item.slug not in tag.slugs %}
+      {% set tag.slugs = tag.slugs + [item.slug] %}
+      {% set tag.list = tag.list + [item] %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
 {% set year = posts[0].published_at.year if posts and posts[0].published_at else 2026 %}
 {% set footer_categories = cat.list %}
+{% set footer_tags = tag.list %}
+{% set nav_categories = cat.list[:2] %}
 {% set nav_current = 'insights' %}
 {% include "_header.html" %}
 

@@ -20,32 +20,45 @@
 
     <div class="cp-util">
       <a class="cp-util__link" href="#cp-contact">Subscribe</a>
-      <span class="cp-util__lang">{{ site.language | upper }}</span>
+      {% if offsite %}<a class="cp-util__link" href="{{ offsite }}">Main site</a>{% endif %}
+      <span class="cp-util__lang">{{ site.language | upper }}{{ ic.caret() }}</span>
     </div>
 
-    <nav class="cp-nav" aria-label="Sections">
+    <nav class="cp-nav" aria-label="Sections" data-cp-nav>
       <a class="cp-nav__link{% if nav_current == 'insights' %} is-current{% endif %}" href="{{ home }}"{% if nav_current == 'insights' %} aria-current="page"{% endif %}>Insights</a>
+      {% for category in nav_categories or [] %}
+        <a class="cp-nav__link" href="{{ home }}#c={{ category.slug }}" data-cp-nav-cat>{{ category.name }}</a>
+      {% endfor %}
       {% if offsite %}<a class="cp-nav__link" href="{{ offsite }}">Main site</a>{% endif %}
       <a class="cp-nav__link" href="#cp-contact">Contact</a>
     </nav>
 
     <div class="cp-head__tools">
+      <button class="cp-icobtn" type="button" data-cp-share aria-label="Share this page">{{ ic.share() }}</button>
       {% if nav_current == 'insights' %}
         <button class="cp-icobtn" type="button" data-cp-search-toggle aria-expanded="false" aria-controls="cp-searchbar" aria-label="Search insights">{{ ic.search() }}</button>
       {% else %}
         <a class="cp-icobtn" href="{{ home }}#search" aria-label="Search insights">{{ ic.search() }}</a>
       {% endif %}
-      <button class="cp-icobtn" type="button" data-cp-share aria-label="Share this page">{{ ic.share() }}</button>
-      <button class="cp-icobtn cp-icobtn--menu" type="button" data-cp-menu aria-expanded="false" aria-controls="cp-drawer" aria-label="Open menu">{{ ic.menu() }}</button>
+      <button class="cp-icobtn" type="button" data-cp-menu aria-expanded="false" aria-controls="cp-drawer" aria-label="Open menu">{{ ic.menu() }}</button>
     </div>
   </div>
 
   <div class="cp-drawer" id="cp-drawer" hidden>
     <div class="cp-shell cp-drawer__inner">
-      <a class="cp-drawer__link" href="{{ home }}">Insights</a>
-      {% if offsite %}<a class="cp-drawer__link" href="{{ offsite }}">Main site</a>{% endif %}
-      <a class="cp-drawer__link" href="#cp-contact">Contact</a>
-      <a class="cp-drawer__link" href="#cp-contact">Subscribe</a>
+      <div class="cp-drawer__col" data-cp-drawer-cats>
+        <p class="cp-drawer__head">Insights</p>
+        <a class="cp-drawer__link" href="{{ home }}">All insights</a>
+        {% for category in nav_categories or [] %}
+          <a class="cp-drawer__link" href="{{ home }}#c={{ category.slug }}" data-cp-nav-cat>{{ category.name }}</a>
+        {% endfor %}
+      </div>
+      <div class="cp-drawer__col">
+        <p class="cp-drawer__head">{{ site.name }}</p>
+        {% if offsite %}<a class="cp-drawer__link" href="{{ offsite }}">Main site</a>{% endif %}
+        <a class="cp-drawer__link" href="#cp-contact">Contact us</a>
+        <a class="cp-drawer__link" href="#cp-contact">Subscribe</a>
+      </div>
     </div>
   </div>
 </header>

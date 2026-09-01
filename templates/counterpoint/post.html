@@ -4,6 +4,8 @@
 
 {% set year = post.published_at.year if post.published_at else 2026 %}
 {% set footer_categories = [post.category] if post.category else [] %}
+{% set footer_tags = post.tags %}
+{% set nav_categories = [post.category] if post.category else [] %}
 {% set nav_current = 'post' %}
 {% include "_header.html" %}
 

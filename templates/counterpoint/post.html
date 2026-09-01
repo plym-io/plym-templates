@@ -11,7 +11,7 @@
   <article class="cp-article">
     <header class="cp-phero">
       <div class="cp-shell cp-phero__inner">
-        <span class="cp-pill">{{ post.category.name if post.category else 'Insight' }}</span>
+        <span class="cp-pill cp-pill--hero">{{ post.category.name if post.category else 'Insight' }}</span>
         <h1 class="cp-phero__title">{{ post.title }}</h1>
         <div class="cp-chips">
           <span class="cp-chip"><span class="cp-chip__ico">{{ ic.clock() }}</span>{{ post.reading_time }} min read</span>
@@ -51,10 +51,8 @@
         <div class="cp-panel">
           <p class="cp-panel__head">Summary</p>
           <dl class="cp-facts">
-            <div><dt>Type</dt><dd>{{ post.category.name if post.category else 'Insight' }}</dd></div>
-            {% if post.published_at %}<div><dt>Published</dt><dd>{{ post.published_at.strftime('%B') }} {{ post.published_at.day }}, {{ post.published_at.year }}</dd></div>{% endif %}
-            <div><dt>Read</dt><dd>{{ post.reading_time }} min</dd></div>
-            <div><dt>Author</dt><dd>{{ post.author.display_name }}</dd></div>
+            <div><dt>Type:</dt><dd>{{ post.category.name if post.category else 'Insight' }}</dd></div>
+            {% if post.published_at %}<div><dt>Published:</dt><dd>{{ post.published_at.strftime('%B') }} {{ post.published_at.day }}, {{ post.published_at.year }}</dd></div>{% endif %}
           </dl>
         </div>
 

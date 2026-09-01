@@ -5,14 +5,13 @@
 
   --cp-prose: color-mix(in srgb, var(--cp-ink) 88%, #2b3a86);
   --cp-muted: color-mix(in srgb, var(--color-secondary) 82%, var(--color-primary));
-  --cp-faint: var(--color-secondary);
+  --cp-quiet: var(--color-secondary);
+  --cp-grey: color-mix(in srgb, var(--color-secondary) 62%, var(--color-primary));
 
   --cp-panel: color-mix(in srgb, var(--cp-ink) 4%, #ffffff);
   --cp-pill-bg: color-mix(in srgb, var(--cp-ink) 9%, #ffffff);
-  --cp-pill-ink: color-mix(in srgb, var(--cp-ink) 40%, #8790c4);
   --cp-line: color-mix(in srgb, var(--cp-ink) 12%, #ffffff);
   --cp-rule: color-mix(in srgb, var(--cp-ink) 22%, #ffffff);
-  --cp-red-deep: color-mix(in srgb, var(--cp-red) 88%, var(--cp-ink));
 
   --cp-dark: var(--cp-ink);
   --cp-dark-field: color-mix(in srgb, var(--cp-ink) 86%, #ffffff);
@@ -22,9 +21,17 @@
   --cp-ui: var(--font-heading), "Helvetica Neue", Arial, sans-serif;
   --cp-text: var(--font-body), "Helvetica Neue", Arial, sans-serif;
 
+  --cp-w-light: var(--wght-heading-light, 300);
+  --cp-w-reg: var(--wght-heading-regular, 400);
+  --cp-w-semi: var(--wght-heading-bold, 600);
+  --cp-w-bold: var(--wght-heading-black, 700);
+  --cp-t-reg: var(--wght-body-regular, 400);
+  --cp-t-bold: var(--wght-body-bold, 700);
+
   --cp-shell: 1240px;
   --cp-gut: 24px;
   --cp-head: 120px;
   --cp-r: 6px;
   --cp-r-lg: 12px;
+  --cp-r-xl: 16px;
 }

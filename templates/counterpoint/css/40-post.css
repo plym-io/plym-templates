@@ -7,15 +7,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
   text-align: center;
 }
 
+.cp-pill--hero {
+  font-size: 10px;
+  line-height: 15px;
+  font-weight: var(--cp-w-bold);
+  color: var(--cp-muted);
+  padding: 2px 8px;
+}
+
 .cp-phero__title {
-  max-width: 1080px;
+  margin-top: 16px;
+  width: 100%;
   font-size: 36px;
-  line-height: 1.375;
-  letter-spacing: -0.015em;
+  line-height: 49.5px;
+  font-weight: var(--cp-w-bold);
+  letter-spacing: normal;
   color: var(--cp-ink);
 }
 
@@ -25,14 +34,16 @@
   justify-content: center;
   gap: 26px;
   flex-wrap: wrap;
-  margin-top: 12px;
+  margin-top: 36px;
 }
 
 .cp-chip {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--cp-w-reg);
   color: var(--cp-ink);
 }
 
@@ -50,9 +61,9 @@
 .cp-body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 40px;
+  gap: 20px;
   align-items: start;
-  padding-block: 52px 8px;
+  padding-block: 48px 0;
 }
 
 .cp-body__main { min-width: 0; }
@@ -62,7 +73,7 @@
   top: calc(var(--cp-head) + 20px);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .cp-panel {
@@ -77,11 +88,11 @@
 }
 
 .cp-panel__head {
-  font-family: var(--cp-ui);
-  font-weight: 600;
   font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--cp-w-bold);
   color: var(--cp-ink);
-  padding-bottom: 10px;
+  padding-bottom: 8px;
   margin-bottom: 16px;
   border-bottom: 1px solid var(--cp-rule);
 }
@@ -89,7 +100,7 @@
 .cp-facts {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .cp-facts > div {
@@ -100,9 +111,9 @@
 }
 
 .cp-facts dt {
-  font-family: var(--cp-ui);
-  font-weight: 600;
   font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--cp-w-semi);
   color: var(--cp-muted);
   flex: none;
 }
@@ -110,6 +121,8 @@
 .cp-facts dd {
   margin: 0;
   font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--cp-w-reg);
   color: var(--cp-ink);
   text-align: right;
 }
@@ -117,6 +130,7 @@
 .cp-panel__pitch {
   font-size: 16px;
   line-height: 22px;
+  font-weight: var(--cp-w-semi);
   color: var(--cp-ink);
   margin-bottom: 14px;
 }
@@ -130,20 +144,21 @@
   padding: 12px 14px;
 }
 
-.cp-field--light::placeholder { color: var(--cp-muted); }
+.cp-field--light::placeholder { color: var(--cp-grey); }
 
 .cp-form--slim .cp-form__note { color: var(--cp-muted); }
 
-.cp-form__note.is-bad { color: var(--cp-red-deep); }
+.cp-form__note.is-bad { color: var(--cp-red); }
 
 .cp-btn--solid {
-  padding: 13px 20px;
+  padding: 12px 20px;
   border: 0;
   background: var(--cp-ink);
   color: #fff;
+  font-weight: var(--cp-w-bold);
 }
 
-.cp-btn--solid:hover:not(:disabled) { background: var(--cp-red-deep); }
+.cp-btn--solid:hover:not(:disabled) { background: var(--cp-red); }
 
 .cp-tags {
   list-style: none;
@@ -170,7 +185,7 @@
   padding: 20px 0;
   cursor: pointer;
   font-family: var(--cp-ui);
-  font-weight: 600;
+  font-weight: var(--cp-w-semi);
   font-size: 17px;
   color: var(--cp-ink);
   list-style: none;
@@ -191,8 +206,9 @@
 
 .cp-faq__item p {
   padding: 0 0 22px;
+  font-family: var(--cp-text);
   font-size: 16px;
-  line-height: 26px;
+  line-height: 24px;
   color: var(--cp-prose);
 }
 
@@ -204,10 +220,10 @@
   display: flex;
   align-items: center;
   gap: 32px;
-  margin-top: 28px;
+  margin-top: 48px;
   padding: 40px;
   background: var(--cp-panel);
-  border-radius: var(--cp-r-lg);
+  border-radius: var(--cp-r-xl);
 }
 
 .cp-author__face {
@@ -222,16 +238,15 @@
   display: grid;
   place-items: center;
   background: var(--cp-pill-bg);
-  color: var(--cp-pill-ink);
-  font-family: var(--cp-ui);
-  font-weight: 600;
+  color: var(--cp-muted);
+  font-weight: var(--cp-w-semi);
   font-size: 40px;
 }
 
 .cp-author__name {
-  font-family: var(--cp-ui);
-  font-weight: 600;
   font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--cp-w-semi);
   color: var(--cp-ink);
 }
 
@@ -260,15 +275,16 @@
 .cp-backrow {
   display: flex;
   justify-content: center;
-  padding-block: 56px 8px;
+  padding-block: 65px 0;
 }
 
 .cp-btn--pill {
-  padding: 14px 30px;
+  padding: 15px 32px;
   border: 1px solid var(--cp-ink);
   border-radius: 999px;
   background: transparent;
   color: var(--cp-ink);
+  font-weight: var(--cp-w-semi);
 }
 
 .cp-btn--pill:hover { background: var(--cp-ink); color: #fff; }

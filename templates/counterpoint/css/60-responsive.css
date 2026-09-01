@@ -1,108 +1,117 @@
-@media (min-width: 981px) {
+@media (min-width: 769px) {
   .cp-icobtn--menu { display: none; }
   .cp-drawer { display: none; }
 }
 
 @media (max-width: 1180px) {
-  .cp-nav { gap: 24px; }
-  .cp-foot__top { grid-template-columns: 1fr 1fr 340px; gap: 36px; }
-  .cp-foot__group { gap: 0 24px; }
+  .cp-nav { gap: 28px; }
+  .cp-foot__group { grid-template-columns: auto minmax(0, 1fr); gap: 0 20px; }
 }
 
 @media (max-width: 980px) {
-  :root { --cp-head: 60px; }
-
-  .cp-head::before { display: none; }
-
-  .cp-head__grid { grid-template-rows: 59px; }
-
-  .cp-brand { grid-area: 1 / 1; }
-
-  .cp-head__tools { grid-area: 1 / 2; }
-
-  .cp-util,
-  .cp-nav { display: none; }
-
-  .cp-brand__word { font-size: 21px; }
-
-  .cp-brand__mark { width: 23px; height: 23px; }
-
-  .cp-brand__logo { height: 26px; }
-
-  .cp-icobtn { width: 36px; height: 36px; padding: 8px; }
-
-  .cp-hero { padding-block: 26px 34px; }
-
-  .cp-hero__title { font-size: 44px; }
-
-  .cp-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 48px 32px;
-  }
-
-  .cp-phero { padding-block: 52px; }
-
-  .cp-phero__title { font-size: 30px; }
+  .cp-nav { gap: 22px; }
+  .cp-nav__link { font-size: 15px; }
 
   .cp-body {
     grid-template-columns: minmax(0, 1fr);
     gap: 48px;
-    padding-block: 40px 8px;
   }
 
   .cp-side {
     position: static;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
     align-items: start;
   }
 
   .cp-foot__top {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
     padding-block: 48px;
   }
 
   .cp-foot__contact { grid-column: 1 / -1; }
 }
 
-@media (max-width: 720px) {
-  :root { --cp-gut: 20px; }
+@media (max-width: 768px) {
+  :root { --cp-gut: 16px; }
 
-  .cp-brand__word { font-size: 19px; }
+  .cp-nav,
+  .cp-util__link { display: none; }
 
-  .cp-head__tools { gap: 2px; }
+  .cp-util { gap: 0; padding-top: 12px; }
 
-  .cp-hero__title { font-size: 34px; }
+  .cp-util__lang {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: var(--cp-w-semi);
+    color: var(--cp-ink);
+  }
 
-  .cp-hero__deck { font-size: 16px; }
+  .cp-brand__word { font-size: 24px; }
 
-  .cp-hero__page { font-size: 20px; }
+  .cp-brand__mark { width: 26px; height: 26px; }
 
-  .cp-filter { padding-block: 26px 18px; }
+  .cp-hero .cp-shell,
+  .cp-phero .cp-shell { padding-inline: 24px; }
 
-  .cp-tabs { gap: 22px; }
+  .cp-hero__title { font-size: 30px; line-height: 41.25px; }
+
+  .cp-hero__page { font-size: 18px; }
 
   .cp-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 44px;
-    padding-block: 36px 8px;
+    gap: 24px;
   }
 
-  .cp-card__title { font-size: 19px; line-height: 29px; }
+  .cp-card {
+    background: var(--cp-bg);
+    border-radius: var(--cp-r);
+    box-shadow: 0 0 0 1px var(--cp-line), 0 6px 18px -12px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    padding-bottom: 44px;
+  }
 
-  .cp-phero { padding-block: 40px; }
+  .cp-card__media {
+    aspect-ratio: auto;
+    height: 208px;
+    border-radius: 0;
+  }
 
-  .cp-phero__title { font-size: 26px; line-height: 1.35; }
+  .cp-card__media img { aspect-ratio: auto; height: 208px; }
 
-  .cp-chips { gap: 16px; }
+  .cp-card__meta { margin: 20px 16px 0; }
+
+  .cp-card__title {
+    margin: 16px 16px 0;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .cp-card__date {
+    margin: 16px 16px 0;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .cp-phero { padding-block: 48px; }
+
+  .cp-phero__title { font-size: 26px; line-height: 36px; }
+
+  .cp-chips { margin-top: 26px; gap: 18px; }
+
+  .cp-body { padding-block: 36px 0; }
 
   .plym-content { text-align: left; }
 
-  .plym-content h2 { font-size: 21px; }
+  .plym-content h2 { font-size: 22px; line-height: 30px; }
 
   .cp-side { grid-template-columns: minmax(0, 1fr); }
 
   .cp-panel { padding: 26px 20px; }
+
+  .cp-h2 { font-size: 28px; line-height: 34px; }
 
   .cp-author { padding-top: 56px; }
 
@@ -110,6 +119,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
+    margin-top: 32px;
     padding: 28px 22px;
   }
 
@@ -124,7 +134,7 @@
 
   .cp-foot__group {
     grid-template-columns: minmax(0, 1fr);
-    gap: 18px;
+    gap: 16px;
   }
 
   .cp-foot__base {
@@ -135,11 +145,11 @@
 
   .cp-foot__copy { margin-right: 0; width: 100%; order: 3; }
 
-  .cp-pager { gap: 4px; padding-block: 40px 8px; }
-
-  .cp-pager__num { min-width: 30px; font-size: 15px; }
+  .cp-pager { gap: 8px; padding-block: 40px 0; }
 }
 
 @media (max-width: 420px) {
   .cp-form__row { grid-template-columns: minmax(0, 1fr); }
+
+  .cp-brand__word { font-size: 20px; }
 }

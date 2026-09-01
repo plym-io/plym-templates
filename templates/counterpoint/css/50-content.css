@@ -2,11 +2,12 @@
   font-family: var(--cp-text);
   font-size: 16px;
   line-height: 24px;
+  font-weight: var(--cp-t-reg);
   color: var(--cp-prose);
   text-align: justify;
 }
 
-.plym-content > * + * { margin-top: 20px; }
+.plym-content > * + * { margin-top: 16px; }
 
 .plym-content h2,
 .plym-content h3,
@@ -14,18 +15,18 @@
 .plym-content h5,
 .plym-content h6 {
   font-family: var(--cp-text);
-  font-weight: 700;
-  letter-spacing: 0;
-  color: var(--cp-ink);
+  font-weight: var(--cp-t-bold);
+  letter-spacing: normal;
+  color: var(--cp-prose);
   text-align: left;
-  margin-top: 40px;
+  margin-top: 32px;
 }
 
-.plym-content h2 { font-size: 22px; line-height: 1.35; }
-.plym-content h3 { font-size: 19px; line-height: 1.4; }
-.plym-content h4 { font-size: 17px; line-height: 1.45; }
+.plym-content h2 { font-size: 24px; line-height: 32px; }
+.plym-content h3 { font-size: 20px; line-height: 28px; }
+.plym-content h4 { font-size: 18px; line-height: 26px; }
 .plym-content h5,
-.plym-content h6 { font-size: 16px; line-height: 1.5; }
+.plym-content h6 { font-size: 16px; line-height: 24px; }
 
 .plym-content .toclink {
   color: inherit;
@@ -34,11 +35,11 @@
 }
 
 .plym-content strong,
-.plym-content b { font-weight: 700; color: var(--cp-ink); }
+.plym-content b { font-weight: var(--cp-t-bold); color: inherit; }
 
 .plym-content a {
-  color: var(--cp-red-deep);
-  font-weight: 700;
+  color: var(--cp-red);
+  font-weight: var(--cp-t-bold);
   text-decoration: none;
   transition: color 0.15s ease;
 }
@@ -63,15 +64,17 @@
   width: 100%;
   aspect-ratio: auto 16 / 9;
   object-fit: contain;
+  object-position: left center;
 }
 
-.plym-content figure { text-align: center; }
+.plym-content figure { text-align: left; }
 
 .plym-content figcaption {
-  margin-top: 10px;
+  margin-top: 8px;
   font-size: 14px;
+  line-height: 20px;
   color: var(--cp-muted);
-  text-align: center;
+  text-align: left;
 }
 
 .plym-content blockquote {
@@ -85,7 +88,7 @@
 .plym-content hr {
   border: 0;
   border-top: 1px solid var(--cp-line);
-  margin-block: 36px;
+  margin-block: 32px;
 }
 
 .plym-content table {
@@ -106,7 +109,7 @@
 
 .plym-content th {
   font-family: var(--cp-ui);
-  font-weight: 600;
+  font-weight: var(--cp-w-semi);
   font-size: 13px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -177,7 +180,7 @@
   cursor: pointer;
   padding: 14px 0;
   font-family: var(--cp-ui);
-  font-weight: 600;
+  font-weight: var(--cp-w-semi);
   color: var(--cp-ink);
 }
 
@@ -217,8 +220,8 @@
 
 .plym-content .footnote-ref,
 .plym-content .footnote-backref {
-  font-weight: 700;
-  color: var(--cp-red-deep);
+  font-weight: var(--cp-t-bold);
+  color: var(--cp-red);
   text-decoration: none;
 }
 
@@ -238,19 +241,20 @@
 .plym-content .admonition.danger,
 .plym-content .admonition.error { --plym-admon: #A62D21; }
 
-.plym-content .admonition-title { font-weight: 600; }
+.plym-content .admonition-title { font-weight: var(--cp-w-semi); }
 
 .plym-content .tabbed-set { text-align: left; }
 
 .plym-content .tabbed-labels > label {
   font-family: var(--cp-ui);
-  font-weight: 600;
+  font-weight: var(--cp-w-semi);
   font-size: 14px;
   color: var(--cp-muted);
 }
 
 .plym-content .plym-gallery img {
   aspect-ratio: auto 16 / 9;
+  object-position: center;
   border-radius: var(--cp-r);
 }
 

@@ -24,7 +24,6 @@
         <span class="cp-crumbs__here" aria-current="page">{{ site.name }}</span>
       </nav>
       <h1 class="cp-hero__title">{% if pagination.page > 1 %}{{ site.name }}<span class="cp-hero__page"> &#8212; page {{ pagination.page }}</span>{% else %}{{ site.name }}{% endif %}</h1>
-      {% if site.description %}<p class="cp-hero__deck">{{ site.description }}</p>{% endif %}
     </div>
   </section>
 
@@ -61,7 +60,7 @@
             </a>
             <div class="cp-card__meta">
               {% if entry.category %}<span class="cp-pill">{{ entry.category.name }}</span>{% endif %}
-              <span class="cp-card__read">{{ entry.reading_time }} min read</span>
+              <button class="cp-save" type="button" data-cp-save="{{ entry.path }}" aria-pressed="false" aria-label="Save &#8220;{{ entry.title }}&#8221; to your reading list">{{ ic.bookmark() }}</button>
             </div>
             <h2 class="cp-card__title"><a href="{{ site.blog_prefix }}/{{ entry.path }}">{{ entry.title }}</a></h2>
             {% if entry.published_at %}

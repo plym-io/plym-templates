@@ -9,8 +9,9 @@ body {
   padding-top: var(--cp-head);
   background: var(--cp-bg);
   color: var(--cp-ink);
-  font-family: var(--cp-text);
+  font-family: var(--cp-ui);
   font-size: 16px;
+  font-weight: var(--cp-w-reg);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -18,8 +19,8 @@ body {
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-family: var(--cp-ui);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: var(--cp-w-semi);
+  letter-spacing: normal;
 }
 
 p, ul, ol, dl, figure { margin: 0; }
@@ -66,8 +67,7 @@ button { cursor: pointer; }
   padding: 12px 20px;
   background: var(--cp-ink);
   color: #fff;
-  font-family: var(--cp-ui);
-  font-weight: 600;
+  font-weight: var(--cp-w-semi);
   font-size: 14px;
 }
 
@@ -75,7 +75,7 @@ button { cursor: pointer; }
 
 .cp-shell {
   width: 100%;
-  max-width: var(--cp-shell);
+  max-width: calc(var(--cp-shell) + 2 * var(--cp-gut));
   margin: 0 auto;
   padding-inline: var(--cp-gut);
 }
@@ -87,8 +87,9 @@ button { cursor: pointer; }
 }
 
 .cp-h2 {
-  font-size: 30px;
-  line-height: 1.25;
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: var(--cp-w-semi);
   color: var(--cp-ink);
 }
 

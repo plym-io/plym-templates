@@ -30,6 +30,26 @@
     });
   }
 
+  var saveKey = "cp-reading-list";
+  var savers = doc.querySelectorAll("[data-cp-save]");
+  if (savers.length) {
+    var readList = function () {
+      try { return JSON.parse(localStorage.getItem(saveKey)) || []; } catch (e) { return []; }
+    };
+    var saved = readList();
+    Array.prototype.forEach.call(savers, function (button) {
+      var path = button.getAttribute("data-cp-save");
+      button.setAttribute("aria-pressed", String(saved.indexOf(path) > -1));
+      button.addEventListener("click", function () {
+        var list = readList();
+        var at = list.indexOf(path);
+        if (at > -1) list.splice(at, 1); else list.push(path);
+        try { localStorage.setItem(saveKey, JSON.stringify(list)); } catch (e) { return; }
+        button.setAttribute("aria-pressed", String(at === -1));
+      });
+    });
+  }
+
   var grid = doc.querySelector("[data-cp-grid]");
   if (grid) {
     var cards = Array.prototype.slice.call(grid.querySelectorAll(".cp-card"));

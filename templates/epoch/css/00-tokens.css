@@ -1,0 +1,44 @@
+:root {
+  --ep-sans: var(--font-heading), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ep-serif: var(--font-body), Charter, Georgia, "Times New Roman", serif;
+  --ep-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --ep-regular: var(--wght-heading-regular, 400);
+  --ep-bold: var(--wght-heading-bold, 600);
+  --ep-body-regular: var(--wght-body-regular, 400);
+
+  --ep-ink: var(--color-primary);
+  --ep-muted: var(--color-secondary);
+  --ep-paper: var(--color-background);
+  --ep-accent: var(--color-accent);
+
+  --ep-ink-soft: color-mix(in srgb, var(--color-primary) 78%, var(--color-background));
+  --ep-rule: color-mix(in srgb, var(--color-primary) 13%, transparent);
+  --ep-rule-soft: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  --ep-tint: color-mix(in srgb, var(--color-primary) 3.5%, var(--color-background));
+  --ep-tint-strong: color-mix(in srgb, var(--color-primary) 6.5%, var(--color-background));
+
+  --ep-good: #186a4b;
+  --ep-note: #2b5c9b;
+  --ep-warn: #8a5a00;
+  --ep-stop: #b0322a;
+
+  --ep-measure: 41rem;
+  --ep-wide: 76rem;
+  --ep-rail: 14rem;
+  --ep-gutter: clamp(1.25rem, 5vw, 2rem);
+
+  --ep-when: 8.5rem;
+  --ep-node: 2.25rem;
+  --ep-line: calc(var(--ep-when) + var(--ep-node) / 2);
+  --ep-entry-pad: 2.5rem;
+  --ep-mark-pad: 0.45rem;
+  --ep-dot: 9px;
+
+  --ep-text: clamp(1.0625rem, 0.99rem + 0.34vw, 1.25rem);
+  --ep-lead: 1.72;
+
+  --ep-radius: 6px;
+  --ep-radius-lg: 10px;
+  --ep-pill: 999px;
+}

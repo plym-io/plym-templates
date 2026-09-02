@@ -1,0 +1,46 @@
+{% set TONES = {
+  'added': 'good', 'add': 'good', 'new': 'good', 'feature': 'good', 'features': 'good',
+  'launched': 'good', 'launch': 'good', 'shipped': 'good',
+  'fixed': 'note', 'fix': 'note', 'fixes': 'note', 'bugfix': 'note', 'bug fixes': 'note',
+  'patch': 'note', 'patches': 'note',
+  'changed': 'accent', 'change': 'accent', 'changes': 'accent', 'improved': 'accent',
+  'improvement': 'accent', 'improvements': 'accent', 'updated': 'accent', 'update': 'accent',
+  'updates': 'accent', 'performance': 'accent',
+  'deprecated': 'warn', 'deprecation': 'warn', 'security': 'warn', 'notice': 'warn',
+  'beta': 'warn', 'experimental': 'warn', 'preview': 'warn',
+  'removed': 'stop', 'removal': 'stop', 'breaking': 'stop', 'breaking change': 'stop',
+  'breaking changes': 'stop'
+} %}
+
+{% macro tone(category) -%}
+{{- TONES.get(category.name | lower | trim, 'plain') if category else 'plain' -}}
+{%- endmacro %}
+
+{% macro version(tags) -%}
+{%- set ns = namespace(found = '') -%}
+{%- for tag in tags -%}
+  {%- set name = tag.name | trim -%}
+  {%- if not ns.found and name | length > 1 and name | length < 20 -%}
+    {%- set head = name[0] -%}
+    {%- if head in '0123456789' and '.' in name -%}
+      {%- set ns.found = name -%}
+    {%- elif head in 'vV' and name[1] in '0123456789' and '.' in name -%}
+      {%- set ns.found = name -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{{- ns.found -}}
+{%- endmacro %}
+
+{% macro badge(category) -%}
+{%- if category %}<span class="ep-badge ep-badge--{{ tone(category) }}">{{ category.name }}</span>{% endif -%}
+{%- endmacro %}
+
+{% macro topics(tags, skip) -%}
+{%- set rest = tags | rejectattr('name', 'equalto', skip) | list if skip else tags -%}
+{%- if rest %}
+<ul class="ep-topics">
+  {% for tag in rest %}<li class="ep-topic">{{ tag.name }}</li>{% endfor %}
+</ul>
+{% endif -%}
+{%- endmacro %}

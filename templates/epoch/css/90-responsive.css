@@ -1,0 +1,77 @@
+@media (max-width: 68rem) {
+  .ep-post-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ep-post-shell > main { grid-column: 1; }
+
+  .ep-rail {
+    grid-column: 1;
+    position: static;
+    max-height: none;
+    overflow: visible;
+    width: 100%;
+    max-width: var(--ep-measure);
+    justify-self: center;
+    padding: 0 0 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--ep-rule);
+  }
+}
+
+@media (max-width: 52rem) {
+  :root {
+    --ep-when: 0rem;
+    --ep-entry-pad: 2rem;
+    --ep-mark-pad: 0.3rem;
+  }
+
+  .ep-main { padding-top: 3rem; }
+
+  .ep-entry {
+    grid-template-columns: var(--ep-node) minmax(0, 1fr);
+    grid-template-areas:
+      "mark when"
+      "mark body";
+  }
+
+  .ep-when {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 0;
+    margin-bottom: 0.6rem;
+  }
+
+  .ep-when-day { font-size: 0.85rem; }
+
+  .ep-title { font-size: 1.3rem; }
+
+  .ep-body { gap: 1.1rem; }
+
+  .ep-thumb { width: 128px; }
+}
+
+@media (max-width: 34rem) {
+  .ep-body {
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+
+  .ep-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  .ep-colophon-in { align-items: flex-start; }
+
+  .ep-colophon-links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .ep-pager { flex-wrap: wrap; }
+
+  .plym-content pre { border-radius: var(--ep-radius); }
+}

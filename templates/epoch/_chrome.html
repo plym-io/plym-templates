@@ -1,0 +1,36 @@
+{% macro chevron() -%}
+<svg class="ep-ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></svg>
+{%- endmacro %}
+
+{% macro host(url) -%}
+{{- url | replace('https://', '') | replace('http://', '') | trim('/') -}}
+{%- endmacro %}
+
+{% macro masthead(site) %}
+<header class="ep-masthead">
+  <div class="ep-shell ep-masthead-in">
+    <a class="ep-wordmark" href="{{ site.blog_prefix or '/' }}">
+      {% if site.logo %}<img class="ep-logo" src="{{ site.logo }}" alt="{{ site.name }}" height="24" width="96">{% else %}{{ site.name }}{% endif %}
+    </a>
+    {% if site.website %}
+    <a class="ep-masthead-link" href="{{ site.website }}">
+      <span>{{ host(site.website) }}</span>{{ chevron() }}
+    </a>
+    {% endif %}
+  </div>
+</header>
+{% endmacro %}
+
+{% macro colophon(site) %}
+<footer class="ep-colophon">
+  <div class="ep-shell ep-colophon-in">
+    <a class="ep-colophon-name" href="{{ site.blog_prefix or '/' }}">{{ site.name }}</a>
+    <span class="ep-colophon-links">
+      <a class="ep-colophon-link" href="{{ site.blog_prefix }}/llms.txt">llms.txt</a>
+      {% if site.website %}
+      <a class="ep-colophon-link" href="{{ site.website }}"><span>{{ host(site.website) }}</span>{{ chevron() }}</a>
+      {% endif %}
+    </span>
+  </div>
+</footer>
+{% endmacro %}

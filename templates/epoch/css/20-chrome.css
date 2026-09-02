@@ -1,0 +1,108 @@
+.ep-masthead {
+  border-bottom: 1px solid var(--ep-rule);
+  background: var(--ep-paper);
+}
+
+.ep-masthead-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4rem;
+}
+
+.ep-wordmark {
+  display: flex;
+  align-items: center;
+  font-family: var(--ep-sans);
+  font-size: 1.0625rem;
+  font-weight: var(--ep-bold);
+  letter-spacing: -0.012em;
+  text-decoration: none;
+}
+
+.ep-logo {
+  display: block;
+  height: 24px;
+  width: auto;
+  aspect-ratio: auto 4 / 1;
+  object-fit: contain;
+}
+
+.ep-masthead-link,
+.ep-colophon-link {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--ep-sans);
+  font-size: 0.82rem;
+  font-weight: var(--ep-bold);
+  color: var(--ep-muted);
+  text-decoration: none;
+}
+
+.ep-masthead-link:hover,
+.ep-colophon-link:hover,
+.ep-colophon-name:hover { color: var(--ep-accent); }
+
+.ep-masthead-link .ep-ic,
+.ep-colophon-link .ep-ic { color: var(--ep-rule); }
+
+.ep-masthead-link:hover .ep-ic,
+.ep-colophon-link:hover .ep-ic { color: currentColor; }
+
+.ep-progress {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 2px;
+  background: var(--ep-rule-soft);
+}
+
+.ep-progress-bar {
+  display: block;
+  height: 100%;
+  background: var(--ep-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+@keyframes ep-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@supports (animation-timeline: scroll()) {
+  .ep-progress-bar {
+    animation: ep-progress linear both;
+    animation-timeline: scroll(root block);
+    animation-duration: auto !important;
+  }
+}
+
+.ep-colophon {
+  margin-top: 6rem;
+  padding: 2.25rem 0 3.25rem;
+  border-top: 1px solid var(--ep-rule);
+}
+
+.ep-colophon-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.ep-colophon-name {
+  font-family: var(--ep-sans);
+  font-size: 0.95rem;
+  font-weight: var(--ep-bold);
+  text-decoration: none;
+}
+
+.ep-colophon-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}

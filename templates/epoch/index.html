@@ -1,0 +1,82 @@
+{% import "_chrome.html" as chrome %}
+{% import "_changelog.html" as cl %}
+
+<a class="ep-skip" href="#main">Skip to content</a>
+
+{{ chrome.masthead(site) }}
+
+<main id="main" class="ep-main">
+  <div class="ep-shell">
+
+    <div class="ep-lede">
+      <h1 class="ep-lede-title">{{ site.name }}</h1>
+      {% if site.description %}<p class="ep-lede-text">{{ site.description }}</p>{% endif %}
+    </div>
+
+    {% if posts %}
+    <ol class="ep-stream">
+      {% set ns = namespace(year = '') %}
+      {% for post in posts %}
+      {% set tone = cl.tone(post.category) %}
+      {% set release = cl.version(post.tags) %}
+      {% set year = post.published_at.strftime('%Y') if post.published_at else '' %}
+      <li class="ep-entry ep-entry--{{ tone }}">
+
+        <div class="ep-when">
+          {% if post.published_at %}
+          <time class="ep-when-day" datetime="{{ post.published_at.isoformat() }}">{{ post.published_at.strftime('%b %-d, %Y' if year != ns.year else '%b %-d') }}</time>
+          {% endif %}
+          {% if release %}<span class="ep-release">{{ release }}</span>{% endif %}
+        </div>
+
+        <div class="ep-mark" aria-hidden="true"><span class="ep-dot"></span></div>
+
+        <div class="ep-body">
+          <div class="ep-body-text">
+            {% if post.category %}{{ cl.badge(post.category) }}{% endif %}
+            <h2 class="ep-title"><a href="{{ site.blog_prefix }}/{{ post.path }}">{{ post.title }}</a></h2>
+            {% if post.excerpt %}<p class="ep-excerpt">{{ post.excerpt }}</p>{% endif %}
+            {{ cl.topics(post.tags, release) }}
+            <p class="ep-meta">
+              <span class="ep-meta-item">{{ post.author.display_name }}</span>
+              <span class="ep-meta-item">{{ post.reading_time }} min read</span>
+            </p>
+          </div>
+          {% if post.cover %}
+          <a class="ep-thumb" href="{{ site.blog_prefix }}/{{ post.path }}" tabindex="-1" aria-hidden="true">
+            <img src="{{ post.cover }}" alt="" width="320" height="214" decoding="async"
+                 {% if loop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+          </a>
+          {% endif %}
+        </div>
+
+      </li>
+      {% set ns.year = year %}
+      {% endfor %}
+    </ol>
+    {% else %}
+    <p class="ep-empty">No entries yet.</p>
+    {% endif %}
+
+    {% if pagination and pagination.pages > 1 %}
+    <nav class="ep-pager" aria-label="Pagination">
+      {% if pagination.prev_url %}
+      <a class="ep-pager-link ep-pager-prev" href="{{ pagination.prev_url }}" rel="prev">
+        <svg class="ep-ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>
+        <span>Newer</span>
+      </a>
+      {% else %}<span></span>{% endif %}
+      <span class="ep-pager-count">Page {{ pagination.page }} of {{ pagination.pages }}</span>
+      {% if pagination.next_url %}
+      <a class="ep-pager-link ep-pager-next" href="{{ pagination.next_url }}" rel="next">
+        <span>Older</span>
+        {{ chrome.chevron() }}
+      </a>
+      {% else %}<span></span>{% endif %}
+    </nav>
+    {% endif %}
+
+  </div>
+</main>
+
+{{ chrome.colophon(site) }}

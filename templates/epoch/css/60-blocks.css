@@ -1,0 +1,34 @@
+.plym-content .admonition {
+  border-radius: var(--ep-radius);
+  border-left-width: 3px;
+}
+
+.plym-content .admonition-title {
+  font-family: var(--ep-sans);
+  font-weight: var(--ep-bold);
+  letter-spacing: 0.08em;
+}
+
+.plym-content .admonition.tip,
+.plym-content .admonition.hint { --plym-admon: #16704f; }
+
+.plym-content .admonition.warning,
+.plym-content .admonition.attention,
+.plym-content .admonition.caution { --plym-admon: #8a5a00; }
+
+.plym-content .admonition.danger,
+.plym-content .admonition.error { --plym-admon: #b0322a; }
+
+.plym-content .admonition.note,
+.plym-content .admonition.important { --plym-admon: #2b5c9b; }
+
+.plym-content .tabbed-labels > label {
+  font-family: var(--ep-sans);
+  font-weight: var(--ep-bold);
+  color: var(--ep-muted);
+}
+
+.plym-content .plym-gallery img {
+  border-radius: var(--ep-radius);
+  aspect-ratio: auto;
+}

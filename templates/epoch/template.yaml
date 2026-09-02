@@ -1,0 +1,19 @@
+fonts:
+  heading:
+    family: Manrope
+    weights:
+      regular: 400
+      bold: 600
+  body:
+    family: Literata
+    weights:
+      regular: 400
+
+colors:
+  primary: "#16181d"
+  secondary: "#63666e"
+  accent: "#0e6b57"
+  background: "#ffffff"
+
+prism:
+  theme: tomorrow

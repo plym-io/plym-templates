@@ -1,0 +1,108 @@
+{% import "_chrome.html" as chrome %}
+{% import "_changelog.html" as cl %}
+
+{% macro toc_list(nodes, depth) %}
+<ul class="ep-rail-list ep-rail-list--{{ depth }}">
+  {% for node in nodes %}
+  <li class="ep-rail-item">
+    <a class="ep-rail-link" href="#{{ node.id }}">{{ node.name | safe }}</a>
+    {% if node.children and depth < 2 %}{{ toc_list(node.children, depth + 1) }}{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+
+{% set tone = cl.tone(post.category) %}
+{% set release = cl.version(post.tags) %}
+
+<a class="ep-skip" href="#main">Skip to content</a>
+
+{{ chrome.masthead(site) }}
+
+<div class="ep-progress" aria-hidden="true"><span class="ep-progress-bar"></span></div>
+
+<div class="ep-shell ep-post-shell">
+
+  {% if post.toc %}
+  <aside class="ep-rail">
+    <nav class="ep-rail-nav" aria-labelledby="ep-rail-heading">
+      <p class="ep-rail-heading" id="ep-rail-heading">In this entry</p>
+      {{ toc_list(post.toc, 1) }}
+    </nav>
+  </aside>
+  {% endif %}
+
+  <main id="main">
+    <article class="ep-post ep-post--{{ tone }}">
+
+      <header class="ep-post-head">
+        <p class="ep-spine">
+          <span class="ep-spine-dot" aria-hidden="true"></span>
+          {% if post.category %}{{ cl.badge(post.category) }}{% endif %}
+          {% if post.published_at %}
+          <time class="ep-spine-date" datetime="{{ post.published_at.isoformat() }}">{{ post.published_at.strftime('%B %-d, %Y') }}</time>
+          {% endif %}
+          {% if release %}<span class="ep-release">{{ release }}</span>{% endif %}
+        </p>
+
+        <h1 class="ep-post-title">{{ post.title }}</h1>
+        {% if post.excerpt %}<p class="ep-post-deck">{{ post.excerpt }}</p>{% endif %}
+
+        <p class="ep-byline">
+          <span class="ep-meta-item ep-byline-name">{{ post.author.display_name }}</span>
+          <span class="ep-meta-item">{{ post.reading_time }} min read</span>
+          {% if post.updated_at and post.published_at and post.updated_at.date() != post.published_at.date() %}
+          <span class="ep-meta-item">Updated <time datetime="{{ post.updated_at.isoformat() }}">{{ post.updated_at.strftime('%b %-d, %Y') }}</time></span>
+          {% endif %}
+        </p>
+      </header>
+
+      {% if post.cover %}
+      <img class="ep-cover" src="{{ post.cover }}" alt="" width="1200" height="675" fetchpriority="high" decoding="async">
+      {% endif %}
+
+      <div class="plym-content">{{ post.content | safe }}</div>
+
+      {% if post.faqs %}
+      <section class="ep-faqs" aria-labelledby="ep-faqs-heading">
+        <h2 class="ep-faqs-heading" id="ep-faqs-heading">Questions</h2>
+        {% for faq in post.faqs %}
+        <details class="ep-faq">
+          <summary class="ep-faq-q">{{ faq.question }}</summary>
+          <div class="ep-faq-a">{{ faq.answer }}</div>
+        </details>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <footer class="ep-post-end">
+        {{ cl.topics(post.tags, release) }}
+
+        <div class="ep-author">
+          {% if post.author.avatar_url %}
+          <img class="ep-author-face" src="{{ post.author.avatar_url }}" alt="" width="44" height="44" loading="lazy" decoding="async">
+          {% endif %}
+          <div class="ep-author-body">
+            <p class="ep-author-kicker">Written by</p>
+            <p class="ep-author-name">{{ post.author.display_name }}</p>
+            {% if post.author.links %}
+            <p class="ep-author-links">
+              {% for link in post.author.links %}<a class="ep-author-link" href="{{ link.url }}">{{ link.type }}</a>{% endfor %}
+            </p>
+            {% endif %}
+          </div>
+        </div>
+
+        <a class="ep-back" href="{{ site.blog_prefix or '/' }}">
+          <svg class="ep-ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>
+          <span>All entries</span>
+        </a>
+      </footer>
+
+    </article>
+  </main>
+</div>
+
+{{ chrome.colophon(site) }}
+
+{% include "_scripts.html" %}
